@@ -1,13 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Icon } from "@iconify/react";
-import { Swiper, SwiperSlide } from "swiper/react";
-
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-
-import { Navigation, Pagination } from "swiper/modules";
 
 const HomeSection = styled.section`
   position: relative;
@@ -145,7 +138,7 @@ const OtherSection = styled.div`
 
   .dots {
     position: absolute;
-    top: 1100px; /* Adjust positioning to be underneath the content */
+    bottom: -155px; /* Adjust positioning to be underneath the content */
     left: 0;
     width: 100%;
     height: 200px;
@@ -156,10 +149,28 @@ const OtherSection = styled.div`
 
   .blue-dot {
     position: absolute;
-    top: 2100px;
+    top: 0;
     width: 100%;
     height: 200px;
 
+    background: url("../images/blue_dot.png");
+    z-index: 1; /* Ensure it stays below the content */
+  }
+  .new-dot {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 200px;
+
+    background: url("../images/new-dot.png");
+    z-index: 1; /* Ensure it stays below the content */
+  }
+
+  .second-blue-dot {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 180px;
     background: url("../images/blue_dot.png");
     z-index: 1; /* Ensure it stays below the content */
   }
@@ -175,6 +186,9 @@ const OtherSection = styled.div`
     margin-right: -40px;
     z-index: 1;
     background: white;
+  }
+  .sideCard-2 {
+    margin-left: -40px;
   }
   .services-section {
     display: flex;
@@ -400,6 +414,7 @@ const Home = () => {
               width: "100vw",
               backgroundColor: "#1c4f96",
               color: "white",
+              position: "relative",
             }}
           >
             <p className="py-14 text-center">
@@ -412,7 +427,7 @@ const Home = () => {
             </p>
 
             {/* Dots background */}
-            <div className="dots"></div>
+
             <div className="flex justify-center gap-7">
               <div className="influence justify-center px-7">
                 <div className="flex justify-between items-center ">
@@ -474,6 +489,7 @@ const Home = () => {
                 </p>
               </div>
             </div>
+            <div className="dots"></div>
           </div>
           <div className="containers">
             <div
@@ -631,7 +647,7 @@ const Home = () => {
               }}
             ></div>
           </div>
-          <div style={{ backgroundColor: "#1c4f96" }}>
+          <div style={{ backgroundColor: "#1c4f96", position: "relative" }}>
             <div className="blue-dot"></div>
             <div className="services-section items-center containers">
               {/* Left Section */}
@@ -997,17 +1013,56 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div style={{backgroundColor: "#1c4f96", color: "white"}} className="flex  justify-between ">
-            <div style={{marginLeft: "135px"}} className="flex flex-col gap-7 my-20 ">
-              <p style={{fontFamily: "roboto", fontWeight:"500", fontSize: "14px"}}>MEMBERS</p>
-              <h2 style={{maxWidth: "365px", fontFamily: "Bricolage Grotesque", fontWeight: "500", fontSize: "40px", lineHeight: "55px"}}>Our Members have influence</h2>
-              <p style={{maxWidth: "377px",fontFamily: "roboto", fontSize: "16px", lineHeight: "24px", color: ""}}>
+          <div
+            style={{
+              marginTop: "100px",
+              backgroundColor: "#1c4f96",
+              color: "white",
+              height: "565px",
+              position: "relative",
+            }}
+            className="flex  justify-between "
+          >
+            <div className="second-blue-dot"></div>
+            <div
+              style={{ marginLeft: "135px" }}
+              className="flex flex-col gap-7 my-20 "
+            >
+              <p
+                style={{
+                  fontFamily: "roboto",
+                  fontWeight: "500",
+                  fontSize: "14px",
+                }}
+              >
+                MEMBERS
+              </p>
+              <h2
+                style={{
+                  maxWidth: "365px",
+                  fontFamily: "Bricolage Grotesque",
+                  fontWeight: "500",
+                  fontSize: "40px",
+                  lineHeight: "55px",
+                }}
+              >
+                Our Members have influence
+              </h2>
+              <p
+                style={{
+                  maxWidth: "377px",
+                  fontFamily: "roboto",
+                  fontSize: "16px",
+                  lineHeight: "24px",
+                  color: "",
+                }}
+              >
                 Get issues put into policy debates and dialogues, engage with
                 key private and public sector stakeholders. Shape the regulatory
                 environment to increase the sector's efficiency and
                 pperformance.
               </p>
-              <div  className="flex gap-7 mt-8">
+              <div className="flex gap-7 mt-12">
                 <div
                   className="flex justify-center items-center round-arrow"
                   style={{
@@ -1029,7 +1084,7 @@ const Home = () => {
                     width: "50px",
                     height: "50px",
                     borderRadius: "50%",
-                    backgroundColor: "white"
+                    backgroundColor: "white",
                   }}
                 >
                   <Icon
@@ -1041,8 +1096,215 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div style={{width: "720px", height: "565px", padding: "0", margin: "0"}}>
-               <img
+            <div
+              style={{
+                width: "720px",
+                height: "565px",
+                padding: "0",
+                margin: "0",
+              }}
+            >
+              <img
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  objectFit: "cover",
+                  display: "block",
+                  objectPosition: "top",
+                }}
+                src="./images/image_2.png"
+                alt="..."
+              />
+            </div>
+          </div>
+          <div
+            style={{ marginTop: "100px" }}
+            className="containers flex flex-col gap-12"
+          >
+            <div className="flex flex-col justify-center items-center gap-5">
+              <h2
+                style={{
+                  color: "#112240",
+                  fontFamily: "Bricolage Grotesque",
+                  fontSize: "24px",
+                  fontWeight: "600px",
+                  lineHeight: "28.8px",
+                }}
+              >
+                Global Partners
+              </h2>
+              <p
+                style={{
+                  color: "#5c6a7f",
+                  fontFamily: "roboto",
+                  fontSize: "16px",
+                  lineHeight: "22.86px",
+                  maxWidth: "555px",
+                }}
+              >
+                Weembrace holistic development and support for employees the aim
+                of being a first-choice employer with our sectors.
+              </p>
+            </div>
+            <div className="flex justify-between gap-5">
+              <div
+                className="flex justify-center items-center"
+                style={{
+                  backgroundColor: "white",
+                  width: "278pxx",
+                  height: "144px",
+                  borderRadius: "6px",
+                  border: "1px solid #e3e6ef",
+                }}
+              >
+                <img
+                  className="my-10 mx-12"
+                  style={{
+                    height: "64px",
+                    width: "181px",
+                    objectFit: "",
+                    display: "block",
+                    objectPosition: "top",
+                  }}
+                  src="./images/rfea.png"
+                  alt="..."
+                />
+              </div>
+              <div
+                className="flex justify-center items-center"
+                style={{
+                  backgroundColor: "white",
+                  width: "278pxx",
+                  height: "144px",
+                  borderRadius: "6px",
+                  border: "1px solid #e3e6ef",
+                }}
+              >
+                <img
+                  className="my-10 mx-12"
+                  style={{
+                    height: "64px",
+                    width: "181px",
+                    objectFit: "cover",
+                    display: "block",
+                    objectPosition: "top",
+                  }}
+                  src="./images/dezeen.png"
+                  alt="..."
+                />
+              </div>
+              <div
+                className="flex justify-center items-center"
+                style={{
+                  backgroundColor: "white",
+                  width: "278pxx",
+                  height: "144px",
+                  borderRadius: "6px",
+                  border: "1px solid #e3e6ef",
+                }}
+              >
+                <img
+                  className="my-10 mx-12"
+                  style={{
+                    height: "64px",
+                    width: "181px",
+                    objectFit: "cover",
+                    display: "block",
+                    objectPosition: "top",
+                  }}
+                  src="./images/award.png"
+                  alt="..."
+                />
+              </div>
+              <div
+                className="flex justify-center items-center"
+                style={{
+                  backgroundColor: "white",
+                  width: "278pxx",
+                  height: "144px",
+                  borderRadius: "6px",
+                  border: "1px solid #e3e6ef",
+                }}
+              >
+                <img
+                  className="my-10 mx-12"
+                  style={{
+                    height: "64px",
+                    width: "181px",
+                    objectFit: "cover",
+                    display: "block",
+                    objectPosition: "top",
+                  }}
+                  src="./images/rfea.png"
+                  alt="..."
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: "100px",
+              backgroundColor: "#eef5ff",
+              position: "relative",
+            }}
+          >
+            <div className="new-dot"></div>
+            <div className="containers flex flex-col gap-12 py-20 pt-32">
+              <div className="flex justify-between items-center">
+                <div className="flex flex-col gap-3">
+                  <p
+                    style={{
+                      color: "#56bf2a",
+                      fontSize: "14px",
+                      fontWeight: "800",
+                      fontFamily: "roboto",
+                    }}
+                  >
+                    TESTIMONIALS
+                  </p>
+                  <h2
+                    style={{
+                      color: "#112240",
+                      fontWeight: "700",
+                      fontSize: "45px",
+                      fontFamily: "Bricolage Grotesque",
+                      lineHeight: "55px",
+                      maxWidth: "350px",
+                    }}
+                  >
+                    What people say about us?
+                  </h2>
+                </div>
+                <div style={{ fontFamily: "roboto", width: "382px" }}>
+                  <p
+                    style={{
+                      color: "#5c6a7f",
+                      fontSize: "16px",
+                      lineHeight: "24px",
+                    }}
+                  >
+                    Lorem ipsum dolor sit amet consectetur. Convallis sed mauris
+                    orci velit sed morbi id integer. Massa velit in netus velit.
+                    At velit ut posuere aliquam. Nulla.
+                  </p>
+                </div>
+              </div>
+              <div
+                className="flex pr-20 justify-between items-center "
+                style={{
+                  backgroundColor: "white",
+                  height: "359px",
+                  borderRadius: "10px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "392px",
+                    height: "359px",
+                    borderRadius: "10px 0 10px 0",
+                  }}
+                >
+                  <img
                     style={{
                       height: "100%",
                       width: "100%",
@@ -1050,10 +1312,385 @@ const Home = () => {
                       display: "block",
                       objectPosition: "top",
                     }}
-                    src="./images/image_2.png"
+                    src="./images/image_3.png"
                     alt="..."
                   />
+                </div>
+                <div className="flex flex-col gap-6">
+                  <p
+                    style={{
+                      color: "#112240",
+                      fontSize: "20px",
+                      fontFamily: "roboto",
+                      lineHeight: "30px",
+                      width: "580px",
+                    }}
+                  >
+                    Lorem ipsum dolor sit amet consectetur. At mi accumsan
+                    egestas mi odio integer fusce consectetur est. Sed ultrices
+                    ultricies nascetur nunc nulla. Proin urna sodales lectus
+                    tellus at vitae. Quisque id hendrerit arcu mauris nisi
+                    mauris lacus. Eget arcu scelerisque amet in odio turpis.
+                    Donec blandit in adipiscing.
+                  </p>
+                  <div className="flex justify-between items-center">
+                    <div
+                      className="flex flex-col gap-"
+                      style={{ fontFamily: "roboto" }}
+                    >
+                      <p
+                        style={{
+                          fontWeight: "500",
+                          fontSize: "12px",
+                          color: "#5c6a7f",
+                        }}
+                      >
+                        MD - STARK LOGIC
+                      </p>
+                      <p
+                        style={{
+                          fontWeight: "800",
+                          fontSize: "20px",
+                          color: "#112240",
+                        }}
+                      >
+                        Donald Salvor
+                      </p>
+                      <p className="flex gap-3">
+                        <Icon
+                          icon="material-symbols:star"
+                          width="17.27"
+                          height="15"
+                          style={{ color: "#e0a416", fontWeight: "900" }}
+                        />
+                        <Icon
+                          icon="material-symbols:star"
+                          width="17.27"
+                          height="15"
+                          style={{ color: "#e0a416", fontWeight: "900" }}
+                        />
+                        <Icon
+                          icon="material-symbols:star"
+                          width="17.27"
+                          height="15"
+                          style={{ color: "#e0a416", fontWeight: "900" }}
+                        />
+                        <Icon
+                          icon="material-symbols:star"
+                          width="17.27"
+                          height="15"
+                          style={{ color: "#e0a416", fontWeight: "900" }}
+                        />
+                        <Icon
+                          icon="material-symbols:star"
+                          width="17.27"
+                          height="15"
+                          style={{ color: "#e0a416", fontWeight: "900" }}
+                        />
+                      </p>
+                    </div>
+                    <div>
+                      <div className="flex gap-7 ">
+                        <div
+                          className="flex justify-center items-center"
+                          style={{
+                            width: "50px",
+                            height: "50px",
+                            borderRadius: "50%",
+                            backgroundColor: "#1c4f964d",
+                          }}
+                        >
+                          <Icon
+                            icon="solar:arrow-right-outline"
+                            width="28"
+                            height="28"
+                            style={{ color: "black" }}
+                          />
+                        </div>
+                        <div
+                          className="flex justify-center items-center"
+                          style={{
+                            width: "50px",
+                            height: "50px",
+                            borderRadius: "50%",
+                            backgroundColor: "#1c4f96",
+                          }}
+                        >
+                          <Icon
+                            icon="solar:arrow-right-outline"
+                            width="28"
+                            height="28"
+                            style={{ color: "black" }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
+          <div className="containers">
+            <div
+              className="flex flex-row-reverse gap-32 justify-between items-center"
+              style={{ marginTop: "100px", marginBottom: "100px" }}
+            >
+              <div className="flex flex-row-reverse">
+                <div
+                  style={{
+                    fontFamily: "Bricolage Grotesque",
+                    color: "#112240",
+                    overflow: "hidden",
+                    borderRadius: "5px",
+                  }}
+                  className="sideCard sideCard-2 flex flex-col justify-center items-center"
+                >
+                  <div
+                    style={{
+                      position: "relative",
+                      background: "#56bf2a",
+                      width: "150px",
+                      height: "150px",
+                      borderRadius: "50%",
+                      top: "-45px", // Move it upwards by half of its height
+                      left: "-30px", // Move it to the left by half of its width
+                      zIndex: "-1",
+                      marginBottom: "-5px",
+                      transform: "translate(-10%, -15%)", // Ensures that half of the circle goes beyond the corner
+                    }}
+                  ></div>
+
+                  <p
+                    style={{
+                      marginTop: "-130px",
+                      fontSize: "20px",
+                      fontWeight: "700",
+                      fontFamily: "Bricolage Grotesque",
+                      lineHeight: "28.8px",
+                      maxWidth: "102.48px",
+                      color: "#112240",
+                    }}
+                  >
+                    Join us in making a difference
+                  </p>
+                </div>
+                <div style={{ height: "558px", width: "464px" }}>
+                  <img
+                    style={{
+                      height: "100%",
+                      width: "100%",
+                      objectFit: "contain",
+                      display: "block",
+                      objectPosition: "top",
+                    }}
+                    src="./images/image_1.png"
+                    alt="..."
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-5">
+                <p
+                  style={{
+                    fontSize: "14px",
+                    fontFamily: "roboto",
+                    fontWeight: "800",
+                    color: "#56bf2a",
+                    lineHeight: "16.41px",
+                  }}
+                >
+                  THE VOICE OF ROAD TRANSPORT
+                </p>
+                <h2
+                  style={{
+                    lineHeight: "55px",
+                    color: "#112240",
+                    fontWeight: "700",
+                    fontFamily: "Bricolage Grotesque",
+                    marginTop: "31px",
+                    fontSize: "45px",
+                    maxWidth: "353px",
+                  }}
+                >
+                  RUA Commuter Safety Pass
+                </h2>
+                <p
+                  style={{
+                    lineHeight: "24px",
+                    color: "#5c6a7f",
+                    width: "405px",
+                    fontFamily: "roboto",
+                    fontSize: "18px",
+                  }}
+                >
+                  Lorem ipsum dolor sit amet consectetur. Aliquam aliquam purus
+                  adipiscing a suspendisse malesuada risus non ut. Lobortis eget
+                  euismod nisi massa ipsum. Sed ut turpis donec euismod vel
+                  mauris at. Arcu amet purus consequat magna arcu nunc. Varius
+                  eget ullamcorper interdum proin ultrices egestas.
+                </p>
+                <button
+                  style={{ marginTop: "20px" }}
+                  className="flex justify-around items-center"
+                >
+                  <div>Read More</div>
+                  <div
+                    className="flex justify-center items-center"
+                    style={{
+                      backgroundColor: "white",
+                      width: "24px",
+                      height: "24px",
+                      borderRadius: "50%",
+                    }}
+                  >
+                    <Icon
+                      icon="weui:arrow-filled"
+                      width="5.56"
+                      height="14"
+                      style={{ color: "#56bf2a" }}
+                    />
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              height: "745px",
+              backgroundColor: "#1c4f96",
+              color: "white",
+              position: "relative",
+            }}
+          >
+            <div className="flex justify-between items-center mx-10  my-20">
+              <div className="flex flex-col gap-8 ml-20">
+                <h2
+                  style={{
+                    fontFamily: "Bricolage Grotesque",
+                    fontSize: "38px",
+                    lineHeight: "48px",
+                    fontWeight: "800",
+                    maxWidth: "480px",
+                  }}
+                >
+                  Road and Commuter Safety Web Application
+                </h2>
+                <p
+                  style={{
+                    fontFamily: "Inter",
+                    fontSize: "16px",
+                    lineHeight: "26px",
+                    width: "445px",
+                  }}
+                >
+                  Lorem ipsum dolor sit amet consectetur. Tristique dapibus erat
+                  pulvinar eleifend. Mauris in elementum morbi tempus eu. Id
+                  vestibulum id lectus ante ut hac ullamcorper. Nunc erat
+                  viverra pharetra donec pretium id. Donec sed commodo sed
+                  pretium vel at.
+                </p>
+                <div className="flex flex-col gap-6">
+                  <p
+                    className="text-white text-[16px] leading-[26px] font-inter underline"
+                    style={{
+                      textDecorationThickness: "2px",
+                      textUnderlineOffset: "4px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Visit Help Center
+                  </p>
+                  <p
+                    className="text-white text-[16px] leading-[26px] font-inter underline"
+                    style={{
+                      textDecorationThickness: "2px",
+                      textUnderlineOffset: "4px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Contact Support
+                  </p>
+                  <p
+                    className="text-white text-[16px] leading-[26px] font-inter underline"
+                    style={{
+                      textDecorationThickness: "2px",
+                      textUnderlineOffset: "4px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Webinars
+                  </p>
+                  <p
+                    className="text-white text-[16px] leading-[26px] font-inter underline"
+                    style={{
+                      textDecorationThickness: "2px",
+                      textUnderlineOffset: "4px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Blog
+                  </p>
+                </div>
+
+                <div style={{ marginTop: "40px" }} className="flex gap-8">
+                  <button
+                    style={{ width: "auto", cursor: "pointer"}}
+                    className="flex justify-around gap-3  items-center"
+                  >
+                    <div style={{ fontSize: "15px" }}>Create Account</div>
+                    <div
+                      className="flex justify-center items-center"
+                      style={{
+                        backgroundColor: "white",
+                        width: "24px",
+                        height: "24px",
+                        borderRadius: "50%",
+                      }}
+                    >
+                      <Icon
+                        icon="weui:arrow-filled"
+                        width="5.56"
+                        height="14"
+                        style={{ color: "#56bf2a" }}
+                      />
+                    </div>
+                  </button>
+                  <button
+                    style={{
+                      fontSize: "15px",
+                      background: "transparent",
+                      border: "1px solid white",
+                      cursor: "pointer"
+                    }}
+                  >
+                    Download App
+                  </button>
+                </div>
+              </div>
+              <div
+                style={{
+                  width: "558px",
+                  height: "683px",
+                  marginTop: "40px",
+                  marginBottom: "40px",
+                  borderRadius: "22px",
+                }}
+              >
+                <img
+                  style={{
+                    height: "100%",
+                    borderRadius: "22px",
+                    width: "100%",
+                    objectFit: "cover",
+                    display: "block",
+                    objectPosition: "top",
+                  }}
+                  src="./images/image_4.png"
+                  alt="..."
+                />
+              </div>
+            </div>
+            <div className="second-blue-dot"></div>
           </div>
         </div>
       </OtherSection>
