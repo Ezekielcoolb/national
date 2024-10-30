@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Icon } from "@iconify/react";
+import { Link } from "react-router-dom";
 
-const Nav = () => {
+const NavBar = () => {
     const [clicked, setClicked] = useState(false)
 
     const handleClick = () => {
@@ -98,11 +99,11 @@ const Nav = () => {
             style={{}}
             className={clicked? "navbar active " : "flex flex-row navbar gap-3 flex-grow justify-between items-center w-full"}
           >
-            <p>Home</p>
-            <p>About us</p>
-            <p>Membership</p>
-            <p>News & Media</p>
-            <p>Contact</p>
+            <Link to="/"><p>Home</p></Link>
+            <Link to="/about"><p>About us</p></Link>
+            <Link to="/"> <p>Membership</p></Link>
+            <Link to="/"><p>News & Media</p></Link>
+            <Link to="/"> <p>Contact</p></Link>
           </div>
         </div>
 
@@ -150,4 +151,4 @@ const Nav = () => {
     </div>
   );
 };
-export default Nav;
+export default NavBar;

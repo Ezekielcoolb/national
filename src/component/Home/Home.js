@@ -10,7 +10,7 @@ const HomeSection = styled.section`
   height: 700px; /* Full height */
   display: flex;
   padding-left: 135px;
-  padding-top: 161px;
+  padding-top: 100px;
   align-items: center;
 //   justify-content: center;
   color: white;
@@ -47,7 +47,7 @@ const HomeSection = styled.section`
     font-size: 14px;
     font-weight: 800;
     font-family: Inter;
-    margin-bottom: 10px;
+    margin-bottom: 25px;
   }
 
   .buttons {
@@ -131,7 +131,7 @@ const OtherSection = styled.div`
     border-radius: 8px;
     border: 1px solid #e3e6ef;
     background: white;
-    color: black;
+    
     position: relative; /* Make sure influence is positioned relative */
     z-index: 2; /* Make sure it's above the .dots */
   }
@@ -165,7 +165,7 @@ const OtherSection = styled.div`
     background: url("../images/new-dot.png");
     z-index: 1; /* Ensure it stays below the content */
   }
-     .dot-now {
+  .dot-now {
     position: absolute;
     top: -120px;
     width: 100%;
@@ -191,13 +191,24 @@ const OtherSection = styled.div`
     gap: 0px;
     border-radius: 5px 0px 0px 0px;
     opacity: 0px;
-    margin-top: 300px;
-    margin-right: -40px;
+    position: absolute;
+    bottom: 60px;
+    left: -10px;
     z-index: 1;
     background: white;
   }
   .sideCard-2 {
-    margin-left: -40px;
+    box-shadow: 0px 20px 100px 0px #0000001a;
+    width: 180px;
+    height: 197px;
+    gap: 0px;
+    border-radius: 5px 0px 0px 0px;
+    opacity: 0px;
+    position: absolute;
+    bottom: 60px;
+    right:  -40px;
+    z-index: 1;
+    background: white;
   }
   .services-section {
     display: flex;
@@ -285,6 +296,7 @@ const OtherSection = styled.div`
     // padding: 40px;
     background-color: #1c4f96;
     color: white;
+    gap: 20px;
   }
 
   .services-info {
@@ -332,7 +344,9 @@ const OtherSection = styled.div`
   .image-overlay:nth-child(2) {
     background-image: url("../images/road-2.jpg");
   }
-
+.btn-hidden {
+display: none;
+}
   /* Gradient overlay on the images */
   .overlay-gradient {
     position: absolute;
@@ -369,8 +383,7 @@ const OtherSection = styled.div`
   .logic-shadow {
     box-shadow: 0px 15px 50px 0px #00000014;
     boder-radius: 15px;
-    width: 580px;
-    height: 427px;
+  
   }
 `;
 
@@ -389,10 +402,10 @@ const Home = () => {
   return (
     <div>
       <HomeSection>
-        <div className="content">
-          <p>WELCOME TO ROAD USERS ASSOCIATION</p>
-          <h1>The National Road Transport Organization.</h1>
-          <div className="buttons">
+        <div className="content homecontent">
+          <p style={{color: "white"}}>WELCOME TO ROAD USERS ASSOCIATION</p>
+          <h1 style={{color: "white"}}>The National Road Transport Organization.</h1>
+          <div className="buttons btn">
             <button className="flex justify-around items-center">
               <div>Get Started</div>
               <div
@@ -502,10 +515,10 @@ const Home = () => {
           </div>
           <div className="containers">
             <div
-              className="flex gap-32 justify-between items-center"
+              className="flex gap-14 justify-between items-center voice"
               style={{ marginTop: "152px", marginBottom: "100px" }}
             >
-              <div className="flex">
+              <div style={{position: "relative"}}>
                 <div
                   style={{
                     fontFamily: "Bricolage Grotesque",
@@ -550,7 +563,7 @@ const Home = () => {
                     years of existence
                   </p>
                 </div>
-                <div style={{ height: "558px", width: "464px" }}>
+                <div className="voice-img" style={{marginLeft: "90px", height: "558px", width: "464px" }}>
                   <img
                     style={{
                       height: "100%",
@@ -565,7 +578,7 @@ const Home = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-5 voice-div">
                 <p
                   style={{
                     fontSize: "14px",
@@ -576,7 +589,7 @@ const Home = () => {
                 >
                   THE VOICE OF ROAD TRANSPORT
                 </p>
-                <h2
+                <h2 className=""
                   style={{
                     lineHeight: "55px",
                     color: "#112240",
@@ -584,7 +597,7 @@ const Home = () => {
                     fontFamily: "Bricolage Grotesque",
                     marginTop: "15px",
                     fontSize: "45px",
-                    maxWidth: "453px",
+                    width: "453px",
                   }}
                 >
                   Lorem ipsum dolor sit amet consectetur.
@@ -593,7 +606,7 @@ const Home = () => {
                   style={{
                     lineHeight: "24px",
                     color: "#5c6a7f",
-                    maxWidth: "431px",
+                    width: "431px",
                   }}
                 >
                   Lorem ipsum dolor sit amet consectetur. In ac facilisi
@@ -669,7 +682,7 @@ const Home = () => {
                   and everyone else involved in road transport at regional and
                   national levels.
                 </p>
-                <button className="flex justify-around items-center">
+                <button className="flex justify-around items-center btn-show">
                   <div>Get in Touch</div>
                   <div
                     className="flex justify-center items-center"
@@ -738,23 +751,43 @@ const Home = () => {
                   </div>
                 </div>
               </div>
+              <button className="flex justify-around items-center btn-hidden">
+                  <div>Get in Touch</div>
+                  <div
+                    className="flex justify-center items-center"
+                    style={{
+                      backgroundColor: "white",
+                      width: "24px",
+                      height: "24px",
+                      borderRadius: "50%",
+                    }}
+                  >
+                    <Icon
+                      icon="weui:arrow-filled"
+                      width="5.56"
+                      height="14"
+                      style={{ color: "#56bf2a" }}
+                    />
+                  </div>
+                </button>
             </div>
           </div>
           <div>
             <div
               style={{ paddingTop: "100px" }}
-              className="flex gap-7 justify-between items-center containers"
+              className="stats flex gap-7 justify-between items-center containers"
             >
-              <div className="logic-shadow">
+              <div className="logic-shadow  ">
                 <div className="flex">
                   <div
+                  
                     style={{
                       width: "290px",
                       height: "214px",
                       borderRight: "1px solid #e3e6ef",
                       borderBottom: "1px solid #e3e6ef",
                     }}
-                    className="flex flex-col justify-center items-center"
+                    className=" logic-box-1 flex flex-col justify-center items-center"
                   >
                     <p
                       style={{
@@ -784,7 +817,7 @@ const Home = () => {
                       height: "214px",
                       borderBottom: "1px solid #e3e6ef",
                     }}
-                    className="flex flex-col justify-center items-center"
+                    className=" logic-box-1 flex flex-col justify-center items-center"
                   >
                     <p
                       style={{
@@ -809,14 +842,14 @@ const Home = () => {
                     </p>
                   </div>
                 </div>
-                <div className="flex">
+                <div className="flex ">
                   <div
                     style={{
                       width: "290px",
                       height: "214px",
                       borderRight: "1px solid #e3e6ef",
                     }}
-                    className="flex flex-col justify-center items-center"
+                    className=" logic-box-1 flex flex-col justify-center items-center"
                   >
                     <p
                       style={{
@@ -842,7 +875,7 @@ const Home = () => {
                   </div>
                   <div
                     style={{ width: "290px", height: "214px" }}
-                    className="flex flex-col justify-center items-center"
+                    className=" logic-box-1 flex flex-col justify-center items-center"
                   >
                     <p
                       style={{
@@ -1030,12 +1063,12 @@ const Home = () => {
               height: "565px",
               position: "relative",
             }}
-            className="flex  justify-between "
+            className="flex  justify-between member-div"
           >
             <div className="second-blue-dot"></div>
             <div
               style={{ marginLeft: "135px" }}
-              className="flex flex-col gap-7 my-20 "
+              className="member-info flex flex-col gap-7 my-20 "
             >
               <p
                 style={{
@@ -1058,6 +1091,7 @@ const Home = () => {
                 Our Members have influence
               </h2>
               <p
+              className="member-p"
                 style={{
                   maxWidth: "377px",
                   fontFamily: "roboto",
@@ -1106,6 +1140,7 @@ const Home = () => {
               </div>
             </div>
             <div
+            className="member-img"
               style={{
                 width: "720px",
                 height: "565px",
@@ -1155,98 +1190,102 @@ const Home = () => {
                 of being a first-choice employer with our sectors.
               </p>
             </div>
-            <div className="flex justify-between gap-5">
-              <div
-                className="flex justify-center items-center"
-                style={{
-                  backgroundColor: "white",
-                  width: "278pxx",
-                  height: "144px",
-                  borderRadius: "6px",
-                  border: "1px solid #e3e6ef",
-                }}
-              >
-                <img
-                  className="my-10 mx-12"
+            <div className="flex justify-between gap-5 global-img-div">
+              <div className="flex justify-between gap-5">
+                <div
+                  className="flex justify-center items-center"
                   style={{
-                    height: "64px",
-                    width: "181px",
-                    objectFit: "",
-                    display: "block",
-                    objectPosition: "top",
+                    backgroundColor: "white",
+                    width: "278pxx",
+                    height: "144px",
+                    borderRadius: "6px",
+                    border: "1px solid #e3e6ef",
                   }}
-                  src="./images/rfea.png"
-                  alt="..."
-                />
+                >
+                  <img
+                    className="my-10 mx-12 global-img"
+                    style={{
+                      height: "64px",
+                      width: "181px",
+                      objectFit: "",
+                      display: "block",
+                      objectPosition: "top",
+                    }}
+                    src="./images/rfea.png"
+                    alt="..."
+                  />
+                </div>
+                <div
+                  className="flex justify-center items-center"
+                  style={{
+                    backgroundColor: "white",
+                    width: "278pxx",
+                    height: "144px",
+                    borderRadius: "6px",
+                    border: "1px solid #e3e6ef",
+                  }}
+                >
+                  <img
+                    className="my-10 mx-12 global-img"
+                    style={{
+                      height: "64px",
+                      width: "181px",
+                      objectFit: "cover",
+                      display: "block",
+                      objectPosition: "top",
+                    }}
+                    src="./images/dezeen.png"
+                    alt="..."
+                  />
+                </div>
               </div>
-              <div
-                className="flex justify-center items-center"
-                style={{
-                  backgroundColor: "white",
-                  width: "278pxx",
-                  height: "144px",
-                  borderRadius: "6px",
-                  border: "1px solid #e3e6ef",
-                }}
-              >
-                <img
-                  className="my-10 mx-12"
+              <div className="flex justify-between gap-5">
+                <div
+                  className="flex justify-center items-center"
                   style={{
-                    height: "64px",
-                    width: "181px",
-                    objectFit: "cover",
-                    display: "block",
-                    objectPosition: "top",
+                    backgroundColor: "white",
+                    width: "278pxx",
+                    height: "144px",
+                    borderRadius: "6px",
+                    border: "1px solid #e3e6ef",
                   }}
-                  src="./images/dezeen.png"
-                  alt="..."
-                />
-              </div>
-              <div
-                className="flex justify-center items-center"
-                style={{
-                  backgroundColor: "white",
-                  width: "278pxx",
-                  height: "144px",
-                  borderRadius: "6px",
-                  border: "1px solid #e3e6ef",
-                }}
-              >
-                <img
-                  className="my-10 mx-12"
+                >
+                  <img
+                    className="my-10 mx-12 global-img"
+                    style={{
+                      height: "64px",
+                      width: "181px",
+                      objectFit: "cover",
+                      display: "block",
+                      objectPosition: "top",
+                    }}
+                    src="./images/award.png"
+                    alt="..."
+                  />
+                </div>
+                <div
+                  className="flex justify-center items-center"
                   style={{
-                    height: "64px",
-                    width: "181px",
-                    objectFit: "cover",
-                    display: "block",
-                    objectPosition: "top",
+                    backgroundColor: "white",
+                    width: "278pxx",
+                    height: "144px",
+                    borderRadius: "6px",
+                    border: "1px solid #e3e6ef",
                   }}
-                  src="./images/award.png"
-                  alt="..."
-                />
-              </div>
-              <div
-                className="flex justify-center items-center"
-                style={{
-                  backgroundColor: "white",
-                  width: "278pxx",
-                  height: "144px",
-                  borderRadius: "6px",
-                  border: "1px solid #e3e6ef",
-                }}
-              >
-                <img
-                  className="my-10 mx-12"
-                  style={{
-                    height: "64px",
-                    width: "181px",
-                    objectFit: "cover",
-                    display: "block",
-                    objectPosition: "top",
-                  }}
-                  src="./images/rfea.png"
-                  alt="..."
-                />
+                >
+                  <img
+                    className="my-10 mx-12 global-img"
+                    style={{
+                      height: "64px",
+                      width: "181px",
+                      objectFit: "cover",
+                      display: "block",
+                      objectPosition: "top",
+                    }}
+                    src="./images/rfea.png"
+                    alt="..."
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -1259,7 +1298,7 @@ const Home = () => {
           >
             <div className="new-dot"></div>
             <div className="containers flex flex-col gap-12 py-20 pt-32">
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center testimonal-div">
                 <div className="flex flex-col gap-3">
                   <p
                     style={{
@@ -1284,7 +1323,7 @@ const Home = () => {
                     What people say about us?
                   </h2>
                 </div>
-                <div style={{ fontFamily: "roboto", width: "382px" }}>
+                <div style={{ fontFamily: "roboto", width: "382px" }} className="testy-p">
                   <p
                     style={{
                       color: "#5c6a7f",
@@ -1299,7 +1338,7 @@ const Home = () => {
                 </div>
               </div>
               <div
-                className="flex pr-20 justify-between items-center "
+                className="flex gap-5 pr-5 justify-between items-center testimonial-img-div"
                 style={{
                   backgroundColor: "white",
                   height: "359px",
@@ -1325,7 +1364,7 @@ const Home = () => {
                     alt="..."
                   />
                 </div>
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 testimonial-img-p">
                   <p
                     style={{
                       color: "#112240",
@@ -1439,12 +1478,13 @@ const Home = () => {
               </div>
             </div>
           </div>
+
           <div className="containers">
             <div
-              className="flex flex-row-reverse gap-32 justify-between items-center"
-              style={{ marginTop: "100px", marginBottom: "100px" }}
+              className="flex flex-row-reverse gap-14 justify-between items-center voice"
+              style={{ marginTop: "152px", marginBottom: "100px" }}
             >
-              <div className="flex flex-row-reverse">
+              <div style={{position: "relative"}}>
                 <div
                   style={{
                     fontFamily: "Bricolage Grotesque",
@@ -1452,7 +1492,7 @@ const Home = () => {
                     overflow: "hidden",
                     borderRadius: "5px",
                   }}
-                  className="sideCard sideCard-2 flex flex-col justify-center items-center"
+                  className="sideCard-2 flex flex-col justify-center items-center"
                 >
                   <div
                     style={{
@@ -1464,26 +1504,32 @@ const Home = () => {
                       top: "-45px", // Move it upwards by half of its height
                       left: "-30px", // Move it to the left by half of its width
                       zIndex: "-1",
-                      marginBottom: "-5px",
+                      marginBottom: "-50px",
                       transform: "translate(-10%, -15%)", // Ensures that half of the circle goes beyond the corner
                     }}
                   ></div>
-
                   <p
                     style={{
-                      marginTop: "-130px",
-                      fontSize: "20px",
+                      fontSize: "90px",
                       fontWeight: "700",
-                      fontFamily: "Bricolage Grotesque",
-                      lineHeight: "28.8px",
-                      maxWidth: "102.48px",
-                      color: "#112240",
+                      lineHeight: "80px",
+                      marginTop: "-100px",
                     }}
                   >
-                    Join us in making a difference
+                    12
+                  </p>
+                  <p
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "500",
+                      lineHeight: "22px",
+                      maxWidth: "102.48px",
+                    }}
+                  >
+                    years of existence
                   </p>
                 </div>
-                <div style={{ height: "558px", width: "464px" }}>
+                <div className="voice-img" style={{marginRight: "90px", height: "558px", width: "464px" }}>
                   <img
                     style={{
                       height: "100%",
@@ -1498,50 +1544,46 @@ const Home = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-5 voice-div">
                 <p
                   style={{
                     fontSize: "14px",
-                    fontFamily: "roboto",
                     fontWeight: "800",
                     color: "#56bf2a",
-                    lineHeight: "16.41px",
+                    lineHeight: "16.94px",
                   }}
                 >
                   THE VOICE OF ROAD TRANSPORT
                 </p>
-                <h2
+                <h2 className=""
                   style={{
                     lineHeight: "55px",
                     color: "#112240",
                     fontWeight: "700",
                     fontFamily: "Bricolage Grotesque",
-                    marginTop: "31px",
+                    marginTop: "15px",
                     fontSize: "45px",
-                    maxWidth: "353px",
+                    width: "453px",
                   }}
                 >
-                  RUA Commuter Safety Pass
+                  Lorem ipsum dolor sit amet consectetur.
                 </h2>
                 <p
                   style={{
                     lineHeight: "24px",
                     color: "#5c6a7f",
-                    width: "405px",
-                    fontFamily: "roboto",
-                    fontSize: "18px",
+                    width: "431px",
                   }}
                 >
-                  Lorem ipsum dolor sit amet consectetur. Aliquam aliquam purus
-                  adipiscing a suspendisse malesuada risus non ut. Lobortis eget
-                  euismod nisi massa ipsum. Sed ut turpis donec euismod vel
-                  mauris at. Arcu amet purus consequat magna arcu nunc. Varius
-                  eget ullamcorper interdum proin ultrices egestas.
+                  Lorem ipsum dolor sit amet consectetur. In ac facilisi
+                  ultrices nulla tempus neque in. Pharetra volutpat turpis
+                  parturient a egestas sed nulla nisl egestas. Nisl nunc massa
+                  at id. Cursus eu urna dolor convallis auctor vitae
+                  scelerisque. Lobortis mauris auctor placerat magnis. Cras
+                  montes habitant leo sed. Habitant sapien urna risus nibh
+                  viverra vestibulum nec. Felis id id a aliquet a eu.
                 </p>
-                <button
-                  style={{ marginTop: "20px" }}
-                  className="flex justify-around items-center"
-                >
+                <button className="flex justify-around items-center">
                   <div>Read More</div>
                   <div
                     className="flex justify-center items-center"
@@ -1563,7 +1605,9 @@ const Home = () => {
               </div>
             </div>
           </div>
+
           <div
+          className="road"
             style={{
               height: "745px",
               backgroundColor: "#1c4f96",
@@ -1571,8 +1615,8 @@ const Home = () => {
               position: "relative",
             }}
           >
-            <div className="flex justify-between items-center mx-10  my-20">
-              <div className="flex flex-col gap-8 ml-20">
+            <div className="road-div flex justify-between items-center mx-10  my-20">
+              <div className="road-div-1 flex flex-col gap-8 ml-20">
                 <h2
                   style={{
                     fontFamily: "Bricolage Grotesque",
@@ -1677,6 +1721,7 @@ const Home = () => {
                 </div>
               </div>
               <div
+              className="road-img"
                 style={{
                   width: "558px",
                   height: "683px",
@@ -1716,6 +1761,7 @@ const Home = () => {
               BLOG & INSIGHTS
             </p>
             <h2
+            className="latest"
               style={{
                 fontSize: "45px",
                 fontWeight: "700",
@@ -1728,7 +1774,267 @@ const Home = () => {
             >
               Latest News & Articles
             </h2>
-            <div className="containers flex justify-between gap-3">
+            <div className="latest-1 containers flex justify-between gap-3">
+              <div className="latest-2 flex justify-between gap-3">
+                <div
+                  style={{
+                    width: "370px",
+                    height: "560.88px",
+                    border: " 1px solid #E3E6EF",
+                    borderRadius: "15px",
+                    background: "#FFFFFF01",
+                    position: "relative",
+                  }}
+                >
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "20px",
+                      left: "20px",
+                      width: "80px",
+                      height: "89px",
+                    }}
+                  >
+                    <div
+                      className=""
+                      style={{
+                        width: "80px",
+                        height: "62px",
+                        background: "#1c4f96",
+                        color: "#FFFFFF",
+                      }}
+                    >
+                      <p
+                        style={{
+                          fontFamily: "Manrope",
+                          fontWeight: "800",
+                          fontSize: "30px",
+                          textAlign: "center",
+                        }}
+                      >
+                        16
+                      </p>
+                    </div>
+                    <div
+                      style={{ background: "#FFFFFF" }}
+                      className="flex justify-center items-center"
+                    >
+                      <p
+                        style={{
+                          fontFamily: "Manrope",
+                          fontWeight: "600",
+                          fontSize: "11px",
+                        }}
+                      >
+                        June, 2013
+                      </p>
+                    </div>
+                  </div>
+                  <div style={{ width: "370px", height: "320px" }}>
+                    <img
+                      style={{
+                        height: "100%",
+                        borderRadius: "15px 15px 0px 0px",
+                        width: "100%",
+                        objectFit: "cover",
+                        display: "block",
+                        objectPosition: "top",
+                      }}
+                      src="./images/image_5.png"
+                      alt="..."
+                    />
+                  </div>
+                  <div className="flex flex-col gap-5 m-6">
+                    <div
+                      className="flex gap-5"
+                      style={{
+                        fontSize: "14px",
+                        color: "#5c6a7f",
+                        fontFamily: "Roboto",
+                      }}
+                    >
+                      <p>Mr Dunos</p>
+                      <p className="flex gap-2">
+                        {" "}
+                        <Icon
+                          icon="uil:comments"
+                          width="16.13"
+                          height="14"
+                          style={{ fontWeight: "900", color: "#1c4f96" }}
+                        />{" "}
+                        0 Comments
+                      </p>
+                    </div>
+                    <p
+                      style={{
+                        fontSize: "24px",
+                        fontWeight: "700",
+                        lineHeight: "30px",
+                        color: "#112240",
+                      }}
+                    >
+                      Lorem ipsum dolor sit amet consectetur. Ut fermentum.
+                    </p>
+                    <button
+                      className="flex justify-between items-center"
+                      style={{
+                        background: "transparent",
+                        width: "300px",
+                        height: "50px",
+                        border: "1px solid #E3E6EF",
+                        borderRadius: "100px",
+                      }}
+                    >
+                      <p
+                        style={{
+                          fontFamily: "Roboto",
+                          fontSize: "14px",
+                          lineHeight: "19.6px",
+                          fontWeight: "500",
+                          color: "#56bf2a",
+                        }}
+                      >
+                        View Post
+                      </p>
+                      <Icon
+                        icon="formkit:arrowright"
+                        width="18.97"
+                        height="8.8"
+                        style={{ color: "#56bf2a" }}
+                      />
+                    </button>
+                  </div>
+                </div>
+                <div
+                  style={{
+                    width: "370px",
+                    height: "560.88px",
+                    border: "1px solid #E3E6EF",
+                    borderRadius: "15px",
+                    background: "#FFFFFF01",
+                    position: "relative",
+                  }}
+                >
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "20px",
+                      left: "20px",
+                      width: "80px",
+                      height: "89px",
+                    }}
+                  >
+                    <div
+                      className=""
+                      style={{
+                        width: "80px",
+                        height: "62px",
+                        background: "#1c4f96",
+                        color: "#FFFFFF",
+                      }}
+                    >
+                      <p
+                        style={{
+                          fontFamily: "Manrope",
+                          fontWeight: "800",
+                          fontSize: "30px",
+                          textAlign: "center",
+                        }}
+                      >
+                        16
+                      </p>
+                    </div>
+                    <div
+                      style={{ background: "#FFFFFF" }}
+                      className="flex justify-center items-center"
+                    >
+                      <p
+                        style={{
+                          fontFamily: "Manrope",
+                          fontWeight: "600",
+                          fontSize: "11px",
+                        }}
+                      >
+                        June, 2013
+                      </p>
+                    </div>
+                  </div>
+                  <div style={{ width: "370px", height: "320px" }}>
+                    <img
+                      style={{
+                        height: "100%",
+                        borderRadius: "15px 15px 0px 0px",
+                        width: "100%",
+                        objectFit: "cover",
+                        display: "block",
+                        objectPosition: "top",
+                      }}
+                      src="./images/image_6.png"
+                      alt="..."
+                    />
+                  </div>
+                  <div className="flex flex-col gap-5 m-6">
+                    <div
+                      className="flex gap-5"
+                      style={{
+                        fontSize: "14px",
+                        color: "#5c6a7f",
+                        fontFamily: "Roboto",
+                      }}
+                    >
+                      <p>Mr Dunos</p>
+                      <p className="flex gap-2">
+                        {" "}
+                        <Icon
+                          icon="uil:comments"
+                          width="16.13"
+                          height="14"
+                          style={{ fontWeight: "900", color: "#1c4f96" }}
+                        />{" "}
+                        0 Comments
+                      </p>
+                    </div>
+                    <p
+                      style={{
+                        fontSize: "24px",
+                        fontWeight: "700",
+                        lineHeight: "30px",
+                        color: "#112240",
+                      }}
+                    >
+                      Lorem ipsum dolor sit amet consectetur. Ut fermentum.
+                    </p>
+                    <button
+                      className="flex justify-between items-center"
+                      style={{
+                        background: "transparent",
+                        width: "300px",
+                        height: "50px",
+                        border: "1px solid #E3E6EF",
+                        borderRadius: "100px",
+                      }}
+                    >
+                      <p
+                        style={{
+                          fontFamily: "Roboto",
+                          fontSize: "14px",
+                          lineHeight: "19.6px",
+                          fontWeight: "500",
+                          color: "#56bf2a",
+                        }}
+                      >
+                        View Post
+                      </p>
+                      <Icon
+                        icon="formkit:arrowright"
+                        width="18.97"
+                        height="8.8"
+                        style={{ color: "#56bf2a" }}
+                      />
+                    </button>
+                  </div>
+                </div>
+              </div>
               <div
                 style={{
                   width: "370px",
@@ -1749,236 +2055,38 @@ const Home = () => {
                   }}
                 >
                   <div
-                  className=""
+                    className=""
                     style={{
                       width: "80px",
                       height: "62px",
                       background: "#1c4f96",
-                      color: "#FFFFFF"
-                    }}
-                  >
-                    <p style={{fontFamily: "Manrope", fontWeight: "800", fontSize: "30px", textAlign: "center"}}>16</p>
-                  </div>
-                  <div style={{background: "#FFFFFF"}} className="flex justify-center items-center">
-                    <p style={{fontFamily:"Manrope", fontWeight: "600", fontSize: "11px"}}>June, 2013</p>
-                  </div>
-                </div>
-                <div style={{ width: "370px", height: "320px" }}>
-                  <img
-                    style={{
-                      height: "100%",
-                      borderRadius: "15px 15px 0px 0px",
-                      width: "100%",
-                      objectFit: "cover",
-                      display: "block",
-                      objectPosition: "top",
-                    }}
-                    src="./images/image_5.png"
-                    alt="..."
-                  />
-                </div>
-                <div className="flex flex-col gap-5 m-6">
-                  <div
-                    className="flex gap-5"
-                    style={{
-                      fontSize: "14px",
-                      color: "#5c6a7f",
-                      fontFamily: "Roboto",
-                    }}
-                  >
-                    <p>Mr Dunos</p>
-                    <p className="flex gap-2">
-                      {" "}
-                      <Icon
-                        icon="uil:comments"
-                        width="16.13"
-                        height="14"
-                        style={{ fontWeight: "900", color: "#1c4f96" }}
-                      />{" "}
-                      0 Comments
-                    </p>
-                  </div>
-                  <p
-                    style={{
-                      fontSize: "24px",
-                      fontWeight: "700",
-                      lineHeight: "30px",
-                      color: "#112240",
-                    }}
-                  >
-                    Lorem ipsum dolor sit amet consectetur. Ut fermentum.
-                  </p>
-                  <button
-                    className="flex justify-between items-center"
-                    style={{
-                      background: "transparent",
-                      width: "300px",
-                      height: "50px",
-                      border: "1px solid #E3E6EF",
-                      borderRadius: "100px",
+                      color: "#FFFFFF",
                     }}
                   >
                     <p
                       style={{
-                        fontFamily: "Roboto",
-                        fontSize: "14px",
-                        lineHeight: "19.6px",
-                        fontWeight: "500",
-                        color: "#56bf2a",
+                        fontFamily: "Manrope",
+                        fontWeight: "800",
+                        fontSize: "30px",
+                        textAlign: "center",
                       }}
                     >
-                      View Post
-                    </p>
-                    <Icon
-                      icon="formkit:arrowright"
-                      width="18.97"
-                      height="8.8"
-                      style={{ color: "#56bf2a" }}
-                    />
-                  </button>
-                </div>
-              </div>
-              <div
-                style={{
-                  width: "370px",
-                  height: "560.88px",
-                  border: "1px solid #E3E6EF",
-                  borderRadius: "15px",
-                  background: "#FFFFFF01",
-                  position: "relative",
-                }}
-              >
-              <div
-                  style={{
-                    position: "absolute",
-                    top: "20px",
-                    left: "20px",
-                    width: "80px",
-                    height: "89px",
-                  }}
-                >
-                  <div
-                  className=""
-                    style={{
-                      width: "80px",
-                      height: "62px",
-                      background: "#1c4f96",
-                      color: "#FFFFFF"
-                    }}
-                  >
-                    <p style={{fontFamily: "Manrope", fontWeight: "800", fontSize: "30px", textAlign: "center"}}>16</p>
-                  </div>
-                  <div style={{background: "#FFFFFF"}} className="flex justify-center items-center">
-                    <p style={{fontFamily:"Manrope", fontWeight: "600", fontSize: "11px"}}>June, 2013</p>
-                  </div>
-                </div>
-                <div style={{ width: "370px", height: "320px" }}>
-                  <img
-                    style={{
-                      height: "100%",
-                      borderRadius: "15px 15px 0px 0px",
-                      width: "100%",
-                      objectFit: "cover",
-                      display: "block",
-                      objectPosition: "top",
-                    }}
-                    src="./images/image_6.png"
-                    alt="..."
-                  />
-                </div>
-                <div className="flex flex-col gap-5 m-6">
-                  <div
-                    className="flex gap-5"
-                    style={{
-                      fontSize: "14px",
-                      color: "#5c6a7f",
-                      fontFamily: "Roboto",
-                    }}
-                  >
-                    <p>Mr Dunos</p>
-                    <p className="flex gap-2">
-                      {" "}
-                      <Icon
-                        icon="uil:comments"
-                        width="16.13"
-                        height="14"
-                        style={{ fontWeight: "900", color: "#1c4f96" }}
-                      />{" "}
-                      0 Comments
+                      16
                     </p>
                   </div>
-                  <p
-                    style={{
-                      fontSize: "24px",
-                      fontWeight: "700",
-                      lineHeight: "30px",
-                      color: "#112240",
-                    }}
-                  >
-                    Lorem ipsum dolor sit amet consectetur. Ut fermentum.
-                  </p>
-                  <button
-                    className="flex justify-between items-center"
-                    style={{
-                      background: "transparent",
-                      width: "300px",
-                      height: "50px",
-                      border: "1px solid #E3E6EF",
-                      borderRadius: "100px",
-                    }}
+                  <div
+                    style={{ background: "#FFFFFF" }}
+                    className="flex justify-center items-center"
                   >
                     <p
                       style={{
-                        fontFamily: "Roboto",
-                        fontSize: "14px",
-                        lineHeight: "19.6px",
-                        fontWeight: "500",
-                        color: "#56bf2a",
+                        fontFamily: "Manrope",
+                        fontWeight: "600",
+                        fontSize: "11px",
                       }}
                     >
-                      View Post
+                      June, 2013
                     </p>
-                    <Icon
-                      icon="formkit:arrowright"
-                      width="18.97"
-                      height="8.8"
-                      style={{ color: "#56bf2a" }}
-                    />
-                  </button>
-                </div>
-              </div>
-              <div
-                style={{
-                  width: "370px",
-                  height: "560.88px",
-                  border: " 1px solid #E3E6EF",
-                  borderRadius: "15px",
-                  background: "#FFFFFF01",
-                  position: "relative",
-                }}
-              >
-              <div
-                  style={{
-                    position: "absolute",
-                    top: "20px",
-                    left: "20px",
-                    width: "80px",
-                    height: "89px",
-                  }}
-                >
-                  <div
-                  className=""
-                    style={{
-                      width: "80px",
-                      height: "62px",
-                      background: "#1c4f96",
-                      color: "#FFFFFF"
-                    }}
-                  >
-                    <p style={{fontFamily: "Manrope", fontWeight: "800", fontSize: "30px", textAlign: "center"}}>16</p>
-                  </div>
-                  <div style={{background: "#FFFFFF"}} className="flex justify-center items-center">
-                    <p style={{fontFamily:"Manrope", fontWeight: "600", fontSize: "11px"}}>June, 2013</p>
                   </div>
                 </div>
                 <div style={{ width: "370px", height: "320px" }}>
@@ -2058,37 +2166,92 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col justify-center items-center" style={{height: "357px", background: "#eef5ff", marginTop: "220px", position: "relative"}}>
-          <div className="dot-now"></div>
-            <div className="flex flex-col justify-center items-center gap-6" 
-            style={{color: "white",background: "#56bf2a", width: "1170px", height: "367px", borderRadius: "12px", position: "absolute", top: "-120px"}}>
-              <h2 style={{fontFamily: "Bricolage Grotesque", fontWeight: "600", fontSize: "50px", width: "412px", lineHeight: "54.57px", textAlign: "center"}}>
-              Join us, become a member today.</h2>
-              <p style={{width: "412px", fontFamily: "Roboto", fontSize: "18px", lineHeight: "26px", textAlign: "center"}}>Embrace holistic development and support 
-              for employee the aim of being a first-choice</p>
-              <div className="flex gap-4">
-              <button className="flex justify-between items-center gap-2" style={{background: "#1c4f96", width: "200px", height: "55px", borderRadius: "700px"}}>
-              <p>Get Started </p>
-               <div
-                      className="flex justify-center items-center"
-                      style={{
-                        backgroundColor: "white",
-                        width: "24px",
-                        height: "24px",
-                        borderRadius: "50%",
-                      }}
-                    >
-                      <Icon
-                        icon="weui:arrow-filled"
-                        width="5.56"
-                        height="14"
-                        style={{ color: "#56bf2a" }}
-                      />
-                </div>
-              </button>
-              <button  style={{color: "#56bf2a", background: "white", width: "200px", height: "55px", borderRadius: "700px"}}>
-              <p>Get Started </p>
-              </button>
+          <div
+            className="flex flex-col justify-center items-center"
+            style={{
+              height: "357px",
+              background: "#eef5ff",
+              marginTop: "220px",
+              position: "relative",
+            }}
+          >
+            <div className="dot-now"></div>
+            <div
+              className="flex flex-col justify-center items-center gap-6"
+              style={{
+                color: "white",
+                background: "#56bf2a",
+                width: "1170px",
+                height: "367px",
+                borderRadius: "12px",
+                position: "absolute",
+                top: "-120px",
+              }}
+            >
+              <h2 
+              className="join-div-h2"
+                style={{
+                  fontFamily: "Bricolage Grotesque",
+                  fontWeight: "600",
+                  fontSize: "50px",
+                  width: "412px",
+                  lineHeight: "54.57px",
+                  textAlign: "center",
+                }}
+              >
+                Join us, become a member today.
+              </h2>
+              <p
+                style={{
+                  width: "412px",
+                  fontFamily: "Roboto",
+                  fontSize: "18px",
+                  lineHeight: "26px",
+                  textAlign: "center",
+                }}
+              >
+                Embrace holistic development and support for employee the aim of
+                being a first-choice
+              </p>
+              <div className="flex gap-4 join-btn">
+                <button
+                  className="flex justify-between items-center gap-2"
+                  style={{
+                    background: "#1c4f96",
+                    width: "200px",
+                    height: "55px",
+                    borderRadius: "700px",
+                  }}
+                >
+                  <p>Get Started </p>
+                  <div
+                    className="flex justify-center items-center"
+                    style={{
+                      backgroundColor: "white",
+                      width: "24px",
+                      height: "24px",
+                      borderRadius: "50%",
+                    }}
+                  >
+                    <Icon
+                      icon="weui:arrow-filled"
+                      width="5.56"
+                      height="14"
+                      style={{ color: "#56bf2a" }}
+                    />
+                  </div>
+                </button>
+                <button
+                  style={{
+                    color: "#56bf2a",
+                    background: "white",
+                    width: "200px",
+                    height: "55px",
+                    borderRadius: "700px",
+                  }}
+                >
+                  <p>Get Started </p>
+                </button>
               </div>
             </div>
           </div>
