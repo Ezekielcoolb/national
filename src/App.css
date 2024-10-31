@@ -12,6 +12,25 @@ html, body {
 .App {
   
 }
+button {
+  width: 183.19px;
+  height: 55px;
+  font-family: Inter;
+  font-weight: 600;
+  line-height: 19.36px;
+  padding: 0.8rem 1.5rem;
+  font-size: 16px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+  background: #56bf2a;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
 nav {
   position: fixed; /* Fix the navigation bar at the top */
   top: 0; /* Position it at the top of the viewport */
@@ -26,7 +45,9 @@ nav {
   .latest-1 {
     display: block;
   }
-  
+  .membership-div {
+    margin-left: 70px !important;
+  }
   .voice-div h2 {
     width: 100% !important;
     font-size: 30px !important;
@@ -47,7 +68,9 @@ nav {
   }
 }
 @media (max-width: 1041px) {
-  
+  .membership-div {
+    margin-left: 40px !important;
+  }
   .road-div-1 {
     margin-left: 10px !important;
   }
@@ -58,7 +81,33 @@ nav {
     display: none;
   }
 }
-@media (max-width: 991px) {
+@media (max-width: 992px) {
+  .membership {
+    flex-direction: column-reverse;
+    height: auto !important;
+    align-items: flex-start !important;
+    padding-bottom: 50px;
+    padding-top: 30px;
+  }
+  .membership-div {
+    margin-left: 128px !important;
+  }
+  .membership-img {
+    width: 100% !important;
+    height: 497px !important;
+  }
+  .membership-img img {
+    object-fit: contain !important;
+  }
+  .about-btn {
+    width: 200px !important;
+  }
+  .about-img-1 {
+    width: 408px !important;
+  }
+  .about-img-2 {
+    width: 190px !important;
+  }
   .footer-block {
     flex-direction: column;
   }
@@ -104,6 +153,10 @@ nav {
   }
   .member-p {
     max-width: 577px !important;
+  }
+  .member-div-2 {
+    flex-direction: column;
+    height: auto !important;
   }
   .member-div {
     flex-direction: column-reverse;
@@ -182,6 +235,28 @@ nav {
   }
 }
 @media (max-width: 768px) {
+  .vission {
+    height: auto !important;
+  }
+  .vission-div {
+    display: block;
+  }
+  .mission {
+    padding-top: 30px;
+  }
+  .vission-p {
+    max-width: 500px;
+  }
+  .about-btn {
+    margin-top: 60px;
+    margin-bottom: -60px;
+  }
+  .about-img-1 {
+    width: 358px !important;
+  }
+  .about-img-2 {
+    width: 180px !important;
+  }
   .testimonal-div {
     display: block;
   }
@@ -192,6 +267,12 @@ nav {
   .testy-p {
     width: 100% !important;
     margin-top: 10px;
+  }
+  .membership-div-2 {
+    flex-direction: column;
+  }
+  .who-become {
+    margin-left: -100px !important;
   }
   .global-img-div {
     display: block;
@@ -215,8 +296,23 @@ nav {
     gap: 5px !important;
     margin-left: -20px !important;
   }
+  .membership-div {
+    margin-left: 118px !important;
+  }
 }
 @media (max-width: 678px) {
+  .membership-div {
+    margin-left: 40px !important;
+  }
+  .about-img {
+    flex-direction: column;
+  }
+  .about-img-3, .about-img-1  {
+    width: 100% !important;
+  }
+  .about-img-2 {
+    width: 49% !important;
+  }
   .homecontent {
     margin-top: -100px !important;
   }
@@ -225,6 +321,12 @@ nav {
   }
 }
 @media (max-width: 576px) {
+  .who-become {
+    margin-left: 0px !important;
+  }
+  .vission-h2 {
+    font-size: 40px !important;
+  }
   .sideCard {
     left: 50px !important;
   }
@@ -303,6 +405,9 @@ nav {
   }
   .footer-div-3 {
     flex-direction: column;
+  }
+  .membership-div {
+    margin-left: 20px !important;
   }
   /* .D-1 {
     width: 20px !important;

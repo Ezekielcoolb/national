@@ -3,9 +3,11 @@ import styled from "styled-components";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 const FooterRap = styled.div`
+
   height: 606px;
   background: #1c4f96;
   color: white;
+  bottom: 0px;
   position: relative;
   .footer-1 {
     border-bottom: 1px solid #ffffff1a;
@@ -163,78 +165,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div
-          className="flex justify-between py-10 footer-gone"
-          style={{ fontFamily: "Roboto", fontSize: "16px" }}
-        >
-          <div style={{ lineHeight: "24px", width: "242px" }}>
-            <p>
-              Over the years, our commitment to excellence and passion for our
-              has been recognized.
-            </p>
-          </div>
-          <div
-            className=" flex flex-col gap-4"
-            style={{ fontSize: "16px", color: "#FFFFFF8C" }}
-          >
-            <p style={{ color: "white", fontWeight: "700", fontSize: "20px" }}>
-              Explore
-            </p>
-            <p>About Us</p>
-            <p>Our Team</p>
-            <p>Upcoming Events</p>
-            <p>Latest News</p>
-            <p>Contact</p>
-          </div>
-          <div
-            className=" flex flex-col gap-4 "
-            style={{ fontSize: "16px", color: "#FFFFFF8C" }}
-          >
-            <p style={{ color: "white", fontWeight: "700", fontSize: "20px" }}>
-              Departments
-            </p>
-            <p>Jobs & Unemployment</p>
-            <p>Business & Industry</p>
-            <p>Roads & Transport</p>
-            <p>Colture & Recreation</p>
-            <p>Health & Medical</p>
-          </div>
-          <div
-            className=" flex flex-col gap-4 "
-            style={{ fontSize: "16px", color: "#FFFFFF8C" }}
-          >
-            <p style={{ color: "white", fontWeight: "700", fontSize: "20px" }}>
-              Contact
-            </p>
-            <p className="flex gap-2 items-center">
-              <Icon
-                icon="mdi:email-open-outline"
-                width="13"
-                height="13"
-                style={{ color: "#FFFFFF8C" }}
-              />
-              info@roadusersassociation.com
-            </p>
-            <p className="flex gap-2 items-center">
-              <Icon
-                icon="fluent:call-24-filled"
-                width="13"
-                height="13"
-                style={{ color: "#FFFFFF8C" }}
-              />
-              +2347464531, +2345546864
-            </p>
-            <p className="flex gap-2 items-center">
-              <Icon
-                icon="material-symbols:add-location-alt-outline-rounded"
-                width="13"
-                height="13"
-                style={{ color: "#FFFFFF8C" }}
-              />
-              112 Allen Avenue Ikeja, Lagos Nigeria
-            </p>
-          </div>
-        </div>
+       
         <div
           className="flex justify-center items-center"
           style={{

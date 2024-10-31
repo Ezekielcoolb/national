@@ -87,25 +87,7 @@ const HomeSection = styled.section`
 `;
 const OtherSection = styled.div`
   font-family: Inter;
-  button {
-    width: 183.19px;
-    height: 55px;
-    font-family: Inter;
-    font-weight: 600;
-    line-height: 19.36px;
-    padding: 0.8rem 1.5rem;
-    font-size: 16px;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: white;
-    background: #56bf2a;
-
-    &:hover {
-      opacity: 0.8;
-    }
-  }
+ 
 
   .D-1 {
     background: linear-gradient(90deg, #f3f4f7 0%, rgba(254, 253, 253, 0) 100%);
@@ -1165,7 +1147,7 @@ const Home = () => {
             style={{ marginTop: "100px" }}
             className="containers flex flex-col gap-12"
           >
-            <div className="flex flex-col justify-center items-center gap-5">
+            <div style={{textAlign: "center"}} className="flex flex-col justify-center items-center gap-5">
               <h2
                 style={{
                   color: "#112240",
@@ -2223,7 +2205,11 @@ const Home = () => {
                     borderRadius: "700px",
                   }}
                 >
-                  <p>Get Started </p>
+                  <p style={{
+                    fontFamily: "Roboto",
+                    fontSize: "16px",
+                    fontWeight: "500"
+                  }}>Get Started </p>
                   <div
                     className="flex justify-center items-center"
                     style={{
@@ -2250,7 +2236,11 @@ const Home = () => {
                     borderRadius: "700px",
                   }}
                 >
-                  <p>Get Started </p>
+                  <p style={{
+                    fontFamily: "Roboto",
+                    fontSize: "16px",
+                    fontWeight: "500"
+                  }}>Get in Touch </p>
                 </button>
               </div>
             </div>
