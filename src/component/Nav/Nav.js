@@ -102,8 +102,8 @@ const NavBar = () => {
             <Link to="/"><p>Home</p></Link>
             <Link to="/about"><p>About us</p></Link>
             <Link to="/members"> <p>Membership</p></Link>
-            <Link to="/"><p>News & Media</p></Link>
-            <Link to="/"> <p>Contact</p></Link>
+            <Link to="/news&media"><p>News & Media</p></Link>
+            <Link to="/news/events"> <p>Contact</p></Link>
           </div>
         </div>
 

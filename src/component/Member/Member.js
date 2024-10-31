@@ -16,6 +16,15 @@ const MemberRap = styled.div`
     backdrop-filter: blur(5px);
     background: #ffffff33;
   }
+      .dot-now {
+    position: absolute;
+    top: -120px;
+    width: 100%;
+    height: 200px;
+
+    background: url("../images/new-dot.png");
+    z-index: 1; /* Ensure it stays below the content */
+  }
 `;
 
 const Members = () => {

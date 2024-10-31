@@ -22,6 +22,15 @@ const AboutRap = styled.div`
     background: url("../images/blue_dot.png");
     z-index: 1; /* Ensure it stays below the content */
   }
+      .dot-now {
+    position: absolute;
+    top: -120px;
+    width: 100%;
+    height: 200px;
+
+    background: url("../images/new-dot.png");
+    z-index: 1; /* Ensure it stays below the content */
+  }
 `;
 
 const About = () => {
