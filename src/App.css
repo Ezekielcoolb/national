@@ -31,6 +31,7 @@ button {
     opacity: 0.8;
   }
 }
+
 nav {
   position: fixed; /* Fix the navigation bar at the top */
   top: 0; /* Position it at the top of the viewport */
@@ -61,6 +62,23 @@ nav {
 }
 
 @media (max-width: 1200px) {
+  .event-block {
+    flex-direction: column !important;
+  }
+  .event-div {
+    max-width: 100% !important;
+  }
+  .event-block-2 {
+    flex-direction: row;
+    gap: 200px;
+    margin-top: 70px;
+  }
+  .share-post {
+    margin-top: 0px !important;
+  }
+  .publish {
+    margin-top: 70px !important;
+  }
   .media-grid {
     grid-template-columns: repeat(2, 1fr);
 }
@@ -258,6 +276,9 @@ nav {
   }
 }
 @media (max-width: 768px) {
+  .event-block-2 {
+    gap: 100px !important;
+  }
   .media-grid {
     grid-template-columns: 1fr;
 }
@@ -348,6 +369,9 @@ nav {
   }
 }
 @media (max-width: 576px) {
+  .event-block-2 {
+    gap: 50px !important;
+  }
   .who-become {
     margin-left: 0px !important;
   }
@@ -373,6 +397,16 @@ nav {
   }
 }
 @media (max-width: 480px) {
+  .event-block-2 {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .share-post {
+    margin-top: 30px !important;
+  }
+  .publish {
+    margin-top: 10px !important;
+  }
   .join-div-h2 {
     font-size: 40px !important;
   }
