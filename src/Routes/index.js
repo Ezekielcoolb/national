@@ -5,6 +5,8 @@ import About from "../component/About/About";
 import Members from "../component/Member/Member";
 import NewsMedia from "../component/News/News";
 import Events from "../component/News/Event";
+import Project from "../component/News/Project";
+import Contact from "../component/Contact/Contact";
 
 
 
@@ -20,7 +22,9 @@ export default function Routers () {
                         {path: "/about", element: <About />},
                         {path: "/members", element: <Members />},
                         {path: "/news&media", element: <NewsMedia />},
-                        {path: "/news&events", element: <Events />}
+                        {path: "/news&events", element: <Events />},
+                        {path: "/news&others", element: <Project />},
+                        {path: "/contact", element: <Contact />}
                     ]
                 }
             ]

@@ -9,7 +9,7 @@ const AboutRap = styled.div`
     left: 0;
     width: 100%;
     height: 200px;
-    background: url("../images/dot-img.png");
+    background: url("../images/media_dot.png");
    
     z-index: 1; /* Ensure it stays below the content */
   }
@@ -44,7 +44,7 @@ const About = () => {
   return (
     <AboutRap>
       <div>
-        <div style={{position: "relative"}} className=" py-24  flex flex-col gap-20">
+        <div style={{position: "relative"}} className=" py-14  flex flex-col gap-20">
             <div className="dots"></div>
             <div className="flex flex-col gap-8 justify-center items-center">
                 <p style={{
@@ -65,9 +65,10 @@ const About = () => {
                 }}>We’re on a mission to
                 empower investors worldwide</h2>
                 <p style={{
-                    fontSize: "24px",
+                    fontSize: "16px",
                     fontWeight: "400",
-                    fontFamily: "Roboto",
+                    fontFamily:
+                    "SF Pro Text, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
                     lineHeight: "24px",
                     textAlign: "center",
                     maxWidth: "610px",

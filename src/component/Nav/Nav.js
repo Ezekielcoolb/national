@@ -99,11 +99,48 @@ const NavBar = () => {
             style={{}}
             className={clicked? "navbar active " : "flex flex-row navbar gap-3 flex-grow justify-between items-center w-full"}
           >
-            <Link to="/"><p>Home</p></Link>
-            <Link to="/about"><p>About us</p></Link>
-            <Link to="/members"> <p>Membership</p></Link>
-            <Link to="/news&media"><p>News & Media</p></Link>
-            <Link to="/news/events"> <p>Contact</p></Link>
+            <Link to="/"><p className="nav-link-border">Home</p></Link>
+            <Link to="/about"><p className="nav-link-border">About us</p></Link>
+            <Link to="/members"> <p className="nav-link-border">Membership</p></Link>
+            <Link to="/news&media"><p className="nav-link-border">News & Media</p></Link>
+            <Link to="/contact"> <p className="nav-link-border">Contact</p></Link>
+            <div id="nav-call-hidden" className="flex justify-center items-center nav-contact">
+            <div >
+              <Icon
+                icon="solar:phone-calling-linear"
+                width="30"
+                height="30"
+                style={{ color: "#56BF2A" }}
+              />
+            </div>
+            <div >
+              <p className="nav-call" style={{ fontSize: "12px" }}>Call us:</p>
+              <a
+                style={{
+                  fontWeight: "700",
+                  textDecoration: "none",
+                  color: "#1C4F96",
+                }}
+                href=""
+              >
+                +234 812354656
+              </a>
+            </div>
+            </div>
+            <div
+              className="p-5 flex justify-center items-center nav-mobile-btn"
+              style={{
+                color: "white",
+                fontWeight: "700",
+                height: "55px",
+                width: "180px",
+                borderRadius: "20px",
+                backgroundColor: "#1C4F96",
+              }}
+            >
+              JOIN US
+            </div>
+          
           </div>
         </div>
 
@@ -132,7 +169,7 @@ const NavBar = () => {
             </div>
           </div>
           <div
-            className="p-5 flex justify-center items-center"
+            className="p-5 flex justify-center items-center nav-join-btn nav-btn"
             style={{
               color: "white",
               fontWeight: "700",
@@ -147,7 +184,7 @@ const NavBar = () => {
         </div>
       </div>
     </nav>
-    <div style={{marginTop: "129px"}}></div>
+    <div className="extra-nav" style={{marginTop: "129px"}}></div>
     </div>
   );
 };

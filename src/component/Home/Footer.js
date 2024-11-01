@@ -25,8 +25,8 @@ const FooterRap = styled.div`
     display: none;
     }
 
-    @media (max-width: 991px) {
-     height: 806px;
+    @media (max-width: 992px) {
+     height: auto !important;
         .footer-hidden {
         display: flex;
         }
@@ -87,7 +87,7 @@ const Footer = () => {
           className=" flex justify-between py-10 footer-block"
           style={{ fontFamily: "Roboto", fontSize: "16px" }}
         >
-          <div className="flex  gap-3 justify-between">
+          <div  style={{width: "43%"}} className="flex  gap-3 justify-between footer-div-5">
             <div style={{ lineHeight: "24px", width: "242px" }}>
               <p>
                 Over the years, our commitment to excellence and passion for our
@@ -110,7 +110,7 @@ const Footer = () => {
               <p>Contact</p>
             </div>
           </div>
-          <div className="flex  justify-between footer-div-3">
+          <div style={{width: "43%"}}  className="flex  justify-between footer-div-3">
             <div
               className=" flex flex-col gap-4 "
               style={{ fontSize: "16px", color: "#FFFFFF8C" }}

@@ -42,7 +42,9 @@ nav {
 .nav-mobile {
   display: none;
 }
-
+#nav-call-hidden {
+  display: none;
+}
 .media-grid {
   display: grid;
   gap: 16px;
@@ -60,8 +62,14 @@ nav {
   height: 100%;
   object-fit: cover;
 }
+.nav-mobile-btn {
+  display: none;
+}
 
 @media (max-width: 1200px) {
+  .project-img-div {
+    width: 926px !important;
+  }
   .event-block {
     flex-direction: column !important;
   }
@@ -108,27 +116,46 @@ nav {
   }
 }
 @media (max-width: 1041px) {
+  .nav-btn {
+    height: 55px;
+    width: 140px !important;
+  }
   .membership-div {
     margin-left: 40px !important;
   }
   .road-div-1 {
     margin-left: 10px !important;
   }
-  #nav-contact-col {
-    display: block;
-  }
   .nav-call {
     display: none;
   }
+  .footer-div-3, .footer-div-5 {
+    width: 47% !important;
+  }
 }
 @media (max-width: 992px) {
-
+  .contact-block {
+    flex-direction: column;
+    gap: 100px;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .contact-div {
+    width: 100% !important;
+  }
+  .slide {
+    min-width: 500px !important;
+    height: 475px !important;
+  }
   .membership {
     flex-direction: column-reverse;
     height: auto !important;
     align-items: flex-start !important;
     padding-bottom: 50px;
     padding-top: 30px;
+  }
+  .project-img-div {
+    width: 740px !important;
   }
   .membership-div {
     margin-left: 128px !important;
@@ -229,32 +256,53 @@ nav {
     height: 170px !important;
     gap: 10px !important;
   }
+  nav {
+    height: 100px !important;
+  }
   #top-nav, #nav-call-div  {
     display: none;
   }
   .nav-mobile {
     display: block;
   }
+  .nav-mobile-btn {
+    display: flex;
+  }
   #nav {
     flex-direction: row-reverse;
+  }
+  .extra-nav {
+    margin-top: 100px !important;
   }
   .navbar {
     display: flex;
     flex-direction: column !important;
     align-items:flex-start !important;
     justify-content: flex-start !important;
+    gap: 30px;
     position: fixed;
-    top: 90px;
-    left: -300px;
-    width: 300px;
+    top: 100px;
+    left: -700px;
+    width: 70%;
     height: 100vh;
-    background: #2a3239;
-    color: white;
+    background-color: #ffffff;
+    font-size: 20px;
+    
     box-shadow: 0 40px 60px rgba(0,0,0,0.1);
-    padding: 40px 0 0 20px;
+    padding: 40px 0 0 60px;
     transition: 0.3s ease-in-out;
   }
-
+  .nav-link-border {
+    border-bottom: 1px solid #1122401F;
+    width: 400px;
+    padding-bottom: 10px;
+  }
+  #nav-call-hidden {
+    display: flex;
+  }
+  .nav-join-btn {
+    display: none;
+  }
   .navbar.active {
     left: 0px;
   }
@@ -267,8 +315,15 @@ nav {
   .stats {
     flex-direction: column !important;
   }
+  .footer-div-3, .footer-div-5 {
+    width: 100% !important;
+  }
 }
 @media (max-width: 790px)  {
+  .project-img-div {
+    width: 640px !important;
+    height: 450px !important;
+  }
   .influence {
     width: 200px !important;
     height: 150px !important;
@@ -348,7 +403,15 @@ nav {
   }
 }
 @media (max-width: 678px) {
-
+  .nav-link-border {
+  
+    width: 300px;
+   
+  }
+  .project-img-div {
+    width: 500px !important;
+    height: 400px !important;
+  }
   .membership-div {
     margin-left: 40px !important;
   }
@@ -369,6 +432,19 @@ nav {
   }
 }
 @media (max-width: 576px) {
+  .nav-link-border {
+  
+    width: 200px;
+   
+  }
+  .slide {
+    min-width: 420px !important;
+    height: 445px !important;
+  }
+  .project-img-div {
+    width: 450px !important;
+    height: 350px !important;
+  }
   .event-block-2 {
     gap: 50px !important;
   }
@@ -397,6 +473,25 @@ nav {
   }
 }
 @media (max-width: 480px) {
+  .navbar {
+    width: 90% !important;
+  }
+  .nav-link-border {
+  
+    width: 100% !important;
+   
+  }
+  .contact-input {
+    width: 90% !important;
+  }
+  .slide {
+    min-width: 370px !important;
+    height: 415px !important;
+  }
+  .project-img-div {
+    width: 350px !important;
+    height: 350px !important;
+  }
   .event-block-2 {
     flex-direction: column !important;
     gap: 10px !important;
@@ -475,6 +570,7 @@ nav {
     height: 20px !important;
   } */
 }
+
 @media (max-width: 400px) {
   .image-item {
     width: 320px;
@@ -496,8 +592,22 @@ nav {
     left: 30px !important;
     bottom: 40px !important;
   }
+  .footer-1 {
+    flex-direction: column;
+    gap: 10px;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
 }
-@media (max-width: 361px) {
+@media (max-width: 381px) {
+  .slide {
+    min-width: 310px !important;
+    height: 395px !important;
+  }
+  .project-img-div {
+    width: 300px !important;
+    height: 320px !important;
+  }
   .sideCard-2 {
     
     bottom:  100px !important;

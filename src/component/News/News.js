@@ -13,6 +13,15 @@ const MediaRap = styled.div`
     background: url("../images/media_dot.png");
     z-index: 1; /* Ensure it stays below the content */
   }
+     .dot-now {
+    position: absolute;
+    top: -120px;
+    width: 100%;
+    height: 200px;
+
+    background: url("../images/new-dot.png");
+    z-index: 1; /* Ensure it stays below the content */
+  }
 `;
 
 const NewsMedia = () => {
@@ -1213,13 +1222,13 @@ const NewsMedia = () => {
     } else if (type === "event") {
       navigate("/news&events");
     } else if (type === "others") {
-      navigate("/others");
+      navigate("/news&others");
     }
   };
   return (
     <MediaRap>
       <div>
-        <div className="py-20" style={{ position: "relative" }}>
+        <div className="py-14" style={{ position: "relative" }}>
           <div className="media-dot"></div>
           <div className="flex flex-col gap-6">
             <p
