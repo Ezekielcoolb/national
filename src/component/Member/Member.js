@@ -48,8 +48,8 @@ const Members = () => {
   return (
     <MemberRap>
         <div>
-            <div style={{height: "578px",background: "#eef5ff", position: "relative"}} className="flex gap-3 justify-between items-center membership">
-                <div className="flex flex-col gap-8 ml-32 membership-div">
+            <div style={{height: "578px",background: "#eef5ff", position: "relative"}} className="flex gap-5 py-10 justify-between items-center membership">
+                <div className="flex flex-col gap-8 contains membership-div">
                 <p
                     style={{
                     fontFamily: "Roboto",
@@ -121,8 +121,8 @@ const Members = () => {
                 </div>
                 <div className="new-dot"></div>
             </div>
-            <div style={{marginTop: "100px"}} className="containers  flex justify-between gap-10 items-center membership-div-2">
-                <div className="flex flex-col gap-7 ml-8 who-become">
+            <div style={{marginTop: "100px"}} className="containers  flex justify-between gap-10 items-center flex-wrap">
+                <div className="flex flex-col gap-7 ">
                     <p style={{
                         fontFamily: "Roboto",
                         fontWeight: "700",
@@ -146,7 +146,7 @@ const Members = () => {
                     }}>Lorem ipsum dolor sit amet consectetur. Elementum 
                         diam bibendum vitae nulla faucibus est faucibus. Et.</p>
                 </div>
-                <div className="mr-8" style={{maxWidth: "560px"}}>
+                <div className="" style={{maxWidth: "560px"}}>
                     <div  onClick={handleClick} style={{
                         cursor: "pointer", 
                         borderBottom: "1px solid #E3E6EF",
@@ -268,12 +268,12 @@ const Members = () => {
               height: "565px",
               position: "relative",
             }}
-            className="flex flex-row-reverse justify-between member-div-2"
+            className="flex  justify-between member-div"
           >
             <div className="second-blue-dot"></div>
             <div
-              style={{ marginLeft: "135px" }}
-              className="member-info flex flex-col gap-7 my-20 "
+             
+              className=" contains member-info flex flex-col gap-7 my-20 "
             >
               <p
                 style={{
@@ -312,13 +312,11 @@ const Members = () => {
               </p>
               <div className="flex gap-7 mt-12">
                 <div
-                  className="flex  justify-center items-center round-arrow"
+                  className="flex justify-center items-center round-arrow"
                   style={{
                     width: "50px",
                     height: "50px",
                     borderRadius: "50%",
-                   
-                    
                   }}
                 >
                   <Icon
@@ -397,8 +395,8 @@ const Members = () => {
                 of being a first-choice employer with our sectors.
               </p>
             </div>
-            <div className="flex justify-between gap-5 global-img-div">
-              <div className="flex justify-between gap-5">
+           
+              <div className="flex justify-center items-center flex-wrap gap-5">
                 <div
                   className="flex justify-center items-center"
                   style={{
@@ -445,8 +443,6 @@ const Members = () => {
                     alt="..."
                   />
                 </div>
-              </div>
-              <div className="flex justify-between gap-5">
                 <div
                   className="flex justify-center items-center"
                   style={{
@@ -493,8 +489,8 @@ const Members = () => {
                     alt="..."
                   />
                 </div>
-              </div>
-            </div>
+              </div>      
+           
           </div>
           <div
             className="flex flex-col justify-center items-center"

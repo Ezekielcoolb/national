@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { Icon } from "@iconify/react";
 
@@ -9,7 +9,7 @@ const HomeSection = styled.section`
   background-position: center;
   height: 700px; /* Full height */
   display: flex;
-  padding-left: 135px;
+  padding-left: 125px;
   padding-top: 100px;
   align-items: center;
 //   justify-content: center;
@@ -84,6 +84,7 @@ const HomeSection = styled.section`
       }
     }
   }
+   
 `;
 const OtherSection = styled.div`
   font-family: Inter;
@@ -120,10 +121,10 @@ const OtherSection = styled.div`
 
   .dots {
     position: absolute;
-    bottom: -155px; /* Adjust positioning to be underneath the content */
+    bottom: -100px; /* Adjust positioning to be underneath the content */
     left: 0;
     width: 100%;
-    height: 200px;
+    height: 170px;
     background: url("../images/dot-img.png");
     background-color: white;
     z-index: 1; /* Ensure it stays below the content */
@@ -188,7 +189,7 @@ const OtherSection = styled.div`
     opacity: 0px;
     position: absolute;
     bottom: 60px;
-    right:  -40px;
+    right:  -100px;
     z-index: 1;
     background: white;
   }
@@ -234,7 +235,7 @@ const OtherSection = styled.div`
   .services-section {
     display: flex;
     justify-content: space-between;
-    padding: 40px;
+    padding: 40px 0px;
     background-color: #0d4a88;
     color: white;
   }
@@ -271,18 +272,19 @@ const OtherSection = styled.div`
   }
 
   /* General styling for the services section */
-  .services-section {
+ .services-section {
     display: flex;
     justify-content: space-between;
     padding-top: 100px;
-    // padding: 40px;
     background-color: #1c4f96;
     color: white;
-    gap: 20px;
-  }
+    gap: 20px; /* Adds space between .services-info and .image-section */
+    overflow: hidden; /* Ensures that overflow is limited to the scroll area */
+}
 
   .services-info {
     max-width: 312px;
+     flex-shrink: 0;
   }
 
   .services-info h3 {
@@ -303,10 +305,16 @@ const OtherSection = styled.div`
   }
 
   /* Styling for the image section with two images */
-  .image-section {
+ .image-section {
     display: flex;
-    gap: 20px; /* Space between the two images */
-  }
+    flex-grow: 1; /* Allows image-section to take up remaining space */
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    gap: 20px;
+     flex-shrink: 0;
+    padding-bottom: 10px; /* Adds space at the bottom to avoid scrollbar overlap */
+}
 
   .image-overlay {
     position: relative;
@@ -324,6 +332,9 @@ const OtherSection = styled.div`
 
   /* Second image (Road Traffic Management) */
   .image-overlay:nth-child(2) {
+    background-image: url("../images/road-2.jpg");
+  }
+     .image-overlay:nth-child(3) {
     background-image: url("../images/road-2.jpg");
   }
 .btn-hidden {
@@ -364,8 +375,10 @@ display: none;
   }
   .logic-shadow {
     box-shadow: 0px 15px 50px 0px #00000014;
-    boder-radius: 15px;
-  
+
+    border-radius: 15px; 
+    overflow: hidden;
+    margin: 5px
   }
 `;
 
@@ -380,6 +393,20 @@ const Home = () => {
   const handleIsClicked = () => {
     setIsClicked(!isClicked);
   };
+
+ // Create a ref for the scrollable container
+ const scrollContainerRef = useRef(null);
+
+ // Function to scroll the container to the next image
+ const scrollNext = () => {
+   if (scrollContainerRef.current) {
+     scrollContainerRef.current.scrollBy({
+       left: 1000, // Adjust this value based on your image width
+       behavior: "smooth",
+     });
+   }
+ };
+ 
 
   return (
     <div>
@@ -430,9 +457,9 @@ const Home = () => {
               </a>
             </p>
 
-            {/* Dots background */}
+        
 
-            <div className="flex justify-center gap-7">
+            <div className="flex containers justify-between gap-7">
               <div className="influence justify-center px-7">
                 <div className="flex justify-between items-center ">
                   <img
@@ -497,10 +524,10 @@ const Home = () => {
           </div>
           <div className="containers">
             <div
-              className="flex gap-14 justify-between items-center voice"
-              style={{ marginTop: "152px", marginBottom: "100px" }}
+              className="flex gap-10  justify-between items-center voice"
+              style={{ marginTop: "100px", marginBottom: "100px" }}
             >
-              <div style={{position: "relative"}}>
+              <div className="img-voice-div" style={{position: "relative"}}>
                 <div
                   style={{
                     fontFamily: "Bricolage Grotesque",
@@ -579,7 +606,7 @@ const Home = () => {
                     fontFamily: "Bricolage Grotesque",
                     marginTop: "15px",
                     fontSize: "45px",
-                    width: "453px",
+                    maxWidth: "453px",
                   }}
                 >
                   Lorem ipsum dolor sit amet consectetur.
@@ -588,7 +615,7 @@ const Home = () => {
                   style={{
                     lineHeight: "24px",
                     color: "#5c6a7f",
-                    width: "431px",
+                    maxWidth: "431px",
                   }}
                 >
                   Lorem ipsum dolor sit amet consectetur. In ac facilisi
@@ -621,41 +648,43 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div
-            className="flex justify-center items-center gap-8"
-            style={{ backgroundColor: "#eef5ff", height: "135.19px" }}
-          >
+          <div className="flex justify-center items-center "  style={{ backgroundColor: "#eef5ff", height: "135.19px" }}>
             <div
-              style={{
-                borderTop: "4px solid #1c4f96",
-                width: "50.83px",
-                height: "4px",
-              }}
-            ></div>
-            <p
-              style={{
-                fontFamily: "Bricolage Grotesque",
-                fontSize: "24px",
-                textAlign: "center",
-                fontWeight: "500px",
-                color: "#112240",
-              }}
+              className="flex justify-center items-center gap-8 containers"
+             
             >
-              Lorem ipsum dolor sit amet consectetur. Odio viverra massa.
-            </p>
-            <div
-              style={{
-                borderTop: "4px solid #1c4f96",
-                width: "50.83px",
-                height: "4px",
-              }}
-            ></div>
+              <div
+                style={{
+                  borderTop: "4px solid #1c4f96",
+                  width: "50.83px",
+                  height: "4px",
+                }}
+              ></div>
+              <p
+                style={{
+                  fontFamily: "Bricolage Grotesque",
+                  fontSize: "24px",
+                  textAlign: "center",
+                  fontWeight: "500px",
+                  color: "#112240",
+                }}
+              >
+                Lorem ipsum dolor sit amet consectetur. Odio viverra massa.
+              </p>
+              <div
+                style={{
+                  borderTop: "4px solid #1c4f96",
+                  width: "50.83px",
+                  height: "4px",
+                }}
+              ></div>
+            </div>
           </div>
           <div style={{ backgroundColor: "#1c4f96", position: "relative" }}>
             <div className="blue-dot"></div>
-            <div className="services-section items-center containers">
+            <div className="services-section gap-10  items-center ">
               {/* Left Section */}
-              <div className="services-info flex flex-col gap-5">
+              <div className="contains services-info flex flex-col gap-5">
                 <h3>SERVICES</h3>
                 <h1>What we do</h1>
                 <p>
@@ -664,7 +693,7 @@ const Home = () => {
                   and everyone else involved in road transport at regional and
                   national levels.
                 </p>
-                <button className="flex justify-around items-center btn-show">
+                <button className="flex justify-around items-center">
                   <div>Get in Touch</div>
                   <div
                     className="flex justify-center items-center"
@@ -686,9 +715,9 @@ const Home = () => {
               </div>
 
               {/* Right Section - Two Images with Gradient and Text */}
-              <div className="image-section">
+                      <div className="image-section" ref={scrollContainerRef} style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", scrollBehavior: "smooth" }}>
                 {/* First Image */}
-                <div className="image-overlay">
+                <div className="image-overlay" style={{ scrollSnapAlign: "start" }}>
                   <div className="overlay-gradient"></div>
                   <div className="text-content px-5 gap-12 flex justify-between">
                     <h2>Road Safety Management</h2>
@@ -699,6 +728,7 @@ const Home = () => {
                         height: "50px",
                         borderRadius: "50%",
                       }}
+                     
                     >
                       <Icon
                         icon="solar:arrow-right-outline"
@@ -711,7 +741,7 @@ const Home = () => {
                 </div>
 
                 {/* Second Image */}
-                <div className="image-overlay">
+                <div className="image-overlay" style={{ scrollSnapAlign: "start" }}>
                   <div className="overlay-gradient"></div>
                   <div className="text-content px-5 gap-12 flex justify-between">
                     <h2>Road Traffic Management</h2>
@@ -722,6 +752,31 @@ const Home = () => {
                         height: "50px",
                         borderRadius: "50%",
                       }}
+                     
+                    >
+                      <Icon
+                        icon="solar:arrow-right-outline"
+                        width="28"
+                        height="28"
+                        style={{ color: "black" }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Third Image */}
+                <div className="image-overlay" style={{ scrollSnapAlign: "start" }}>
+                  <div className="overlay-gradient"></div>
+                  <div className="text-content px-5 gap-12 flex justify-between">
+                    <h2>Traffic  Solutions</h2>
+                    <div
+                      className="flex justify-center items-center round-arrow"
+                      style={{
+                        width: "50px",
+                        height: "50px",
+                        borderRadius: "50%",
+                      }}
+                     
                     >
                       <Icon
                         icon="solar:arrow-right-outline"
@@ -733,34 +788,16 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              <button className="flex justify-around items-center btn-hidden">
-                  <div>Get in Touch</div>
-                  <div
-                    className="flex justify-center items-center"
-                    style={{
-                      backgroundColor: "white",
-                      width: "24px",
-                      height: "24px",
-                      borderRadius: "50%",
-                    }}
-                  >
-                    <Icon
-                      icon="weui:arrow-filled"
-                      width="5.56"
-                      height="14"
-                      style={{ color: "#56bf2a" }}
-                    />
-                  </div>
-                </button>
+             
             </div>
           </div>
           <div>
             <div
-              style={{ paddingTop: "100px" }}
-              className="stats flex gap-7 justify-between items-center containers"
+              style={{ paddingTop: "100px", gap: "20px" }}
+              className=" flex stats justify-between items-center containers"
             >
-              <div className="logic-shadow  ">
-                <div className="flex">
+              <div className="logic-shadow">
+                <div className="flex logic-wrap">
                   <div
                   
                     style={{
@@ -824,7 +861,7 @@ const Home = () => {
                     </p>
                   </div>
                 </div>
-                <div className="flex ">
+                <div className="flex logic-wrap">
                   <div
                     style={{
                       width: "290px",
@@ -885,7 +922,7 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              <div>
+              <div style={{Maxwidth: "493px"}}>
                 <h2
                   style={{
                     maxWidth: "500px",
@@ -935,7 +972,7 @@ const Home = () => {
                   </div>
 
                   {isClicked ? (
-                    <p style={{ maxWidth: "482px" }}>
+                    <p style={{ maxWidth: "472px" }}>
                       Lorem ipsum dolor sit amet consectetur. Eget gravide
                       fermentum viverra mi. At ipsum convallis tortor laculis
                       viverra dignissim velit ultrices. Diam fringilla risus mi
@@ -983,7 +1020,7 @@ const Home = () => {
                   </div>
 
                   {isOpen ? (
-                    <p style={{ maxWidth: "482px" }}>
+                    <p style={{ maxWidth: "472px" }}>
                       At ipsum convallis tortor laculis viverra dignissim velit
                       ultrices. Diam fringilla risus mi eget natoque.
                     </p>
@@ -1026,7 +1063,7 @@ const Home = () => {
                   </div>
 
                   {clicked ? (
-                    <p style={{ maxWidth: "482px" }}>
+                    <p style={{ maxWidth: "472px" }}>
                       Lorem ipsum dolor sit amet consectetur. Eget gravide
                       fermentum viverra mi.
                     </p>
@@ -1049,8 +1086,8 @@ const Home = () => {
           >
             <div className="second-blue-dot"></div>
             <div
-              style={{ marginLeft: "135px" }}
-              className="member-info flex flex-col gap-7 my-20 "
+             
+              className=" contains member-info flex flex-col gap-7 my-20 "
             >
               <p
                 style={{
@@ -1172,8 +1209,8 @@ const Home = () => {
                 of being a first-choice employer with our sectors.
               </p>
             </div>
-            <div className="flex justify-between gap-5 global-img-div">
-              <div className="flex justify-between gap-5">
+           
+              <div className="flex justify-center items-center flex-wrap gap-5">
                 <div
                   className="flex justify-center items-center"
                   style={{
@@ -1220,8 +1257,6 @@ const Home = () => {
                     alt="..."
                   />
                 </div>
-              </div>
-              <div className="flex justify-between gap-5">
                 <div
                   className="flex justify-center items-center"
                   style={{
@@ -1268,8 +1303,8 @@ const Home = () => {
                     alt="..."
                   />
                 </div>
-              </div>
-            </div>
+              </div>      
+           
           </div>
           <div
             style={{
@@ -1280,7 +1315,7 @@ const Home = () => {
           >
             <div className="new-dot"></div>
             <div className="containers flex flex-col gap-12 py-20 pt-32">
-              <div className="flex justify-between items-center testimonal-div">
+              <div className="flex justify-between gap-5 items-center flex-wrap">
                 <div className="flex flex-col gap-3">
                   <p
                     style={{
@@ -1327,7 +1362,7 @@ const Home = () => {
                   borderRadius: "10px",
                 }}
               >
-                <div
+                <div className="testi-img"
                   style={{
                     width: "392px",
                     height: "359px",
@@ -1463,8 +1498,8 @@ const Home = () => {
 
           <div className="containers">
             <div
-              className="flex flex-row-reverse gap-14 justify-between items-center voice"
-              style={{ marginTop: "152px", marginBottom: "100px" }}
+              className="flex gap-10 flex-row-reverse  justify-between items-center voice"
+              style={{ marginTop: "100px", marginBottom: "100px" }}
             >
               <div style={{position: "relative"}}>
                 <div
@@ -1484,34 +1519,27 @@ const Home = () => {
                       height: "150px",
                       borderRadius: "50%",
                       top: "-45px", // Move it upwards by half of its height
-                      left: "-30px", // Move it to the left by half of its width
+                      left: "-40px", // Move it to the left by half of its width
                       zIndex: "-1",
                       marginBottom: "-50px",
                       transform: "translate(-10%, -15%)", // Ensures that half of the circle goes beyond the corner
                     }}
                   ></div>
+                 
                   <p
                     style={{
-                      fontSize: "90px",
+                      fontSize: "24px",
                       fontWeight: "700",
-                      lineHeight: "80px",
-                      marginTop: "-100px",
+                      fontFamily: "Bricolage Grotesque",
+                      lineHeight: "24px",
+                      maxWidth: "130px",
+                      marginTop: "-75px"
                     }}
                   >
-                    12
-                  </p>
-                  <p
-                    style={{
-                      fontSize: "20px",
-                      fontFamily: "500",
-                      lineHeight: "22px",
-                      maxWidth: "102.48px",
-                    }}
-                  >
-                    years of existence
+                   Join us in making a difference
                   </p>
                 </div>
-                <div className="voice-img" style={{marginRight: "90px", height: "558px", width: "464px" }}>
+                <div className="voice-img" style={{ height: "558px", width: "464px" }}>
                   <img
                     style={{
                       height: "100%",
@@ -1545,7 +1573,7 @@ const Home = () => {
                     fontFamily: "Bricolage Grotesque",
                     marginTop: "15px",
                     fontSize: "45px",
-                    width: "453px",
+                    maxWidth: "453px",
                   }}
                 >
                   Lorem ipsum dolor sit amet consectetur.
@@ -1554,7 +1582,7 @@ const Home = () => {
                   style={{
                     lineHeight: "24px",
                     color: "#5c6a7f",
-                    width: "431px",
+                    maxWidth: "431px",
                   }}
                 >
                   Lorem ipsum dolor sit amet consectetur. In ac facilisi
@@ -1589,7 +1617,7 @@ const Home = () => {
           </div>
 
           <div
-          className="road"
+          className="road "
             style={{
               height: "745px",
               backgroundColor: "#1c4f96",
@@ -1597,8 +1625,8 @@ const Home = () => {
               position: "relative",
             }}
           >
-            <div className="road-div flex justify-between items-center mx-10  my-20">
-              <div className="road-div-1 flex flex-col gap-8 ml-20">
+            <div className="contains road-div flex justify-between items-center mx-10  my-20">
+              <div className="road-div-1 flex flex-col gap-8 ">
                 <h2
                   style={{
                     fontFamily: "Bricolage Grotesque",
@@ -1756,8 +1784,8 @@ const Home = () => {
             >
               Latest News & Articles
             </h2>
-            <div className="latest-1 containers flex justify-between gap-3">
-              <div className="latest-2 flex justify-between gap-3">
+            <div className="containers flex flex-wrap justify-center items-center gap-3">
+             
                 <div
                   style={{
                     width: "370px",
@@ -2016,7 +2044,7 @@ const Home = () => {
                     </button>
                   </div>
                 </div>
-              </div>
+             
               <div
                 style={{
                   width: "370px",

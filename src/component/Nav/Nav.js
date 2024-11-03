@@ -29,7 +29,7 @@ const NavBar = () => {
           fontFamily: "roboto",
         }}
       >
-        <div className="flex justify-between items-center gap-5">
+        <div className="top-address flex justify-between items-center gap-5">
           <div>
             <p>info@roadusersassociation.com</p>
           </div>
@@ -37,33 +37,41 @@ const NavBar = () => {
             <p>112 Allen Avenue Ikeja Lagos Nigeria</p>
           </div>
         </div>
-        <div className="flex justify-between items-center gap-10">
-          <p className="">Complaints / Login</p>
+        <div className="login-div flex justify-between items-center gap-10">
+          <p className=""><span><Link to="#">Complaints</Link></span> / <span><Link to="#">Login</Link></span></p>
           <div className="flex justify-between gap-3.5">
+            <Link to="#">
             <Icon
               icon="entypo-social:twitter"
               width="14.36"
               height="14"
-              style={{ color: "white" }}
+              style={{ color: "white",  }}
             />
+            </Link>
+            <Link to="#">
             <Icon
               icon="mdi:facebook"
               width="14.36"
               height="14"
               style={{ color: "white" }}
             />
+            </Link>
+            <Link to="#">
             <Icon
               icon="mdi:instagram"
               width="14.36"
               height="14"
               style={{ color: "white" }}
             />
+            </Link>
+            <Link to="#">
             <Icon
               icon="ph:pinterest-logo"
               width="14.36"
               height="14"
               style={{ color: "white" }}
             />
+            </Link>
           </div>
         </div>
       </div>
@@ -74,7 +82,7 @@ const NavBar = () => {
           fontWeight: "500",
           color: "#5C6A7F",
         }}
-        className="flex px-8 text-base items-center py-3 justify-between "
+        className="flex px-3 text-base items-center py-3 justify-between "
       >
         <div id="nav" className="flex  flex-row justify-between items-center gap-7 flex-nowrap">
             <div className="flex gap-">
@@ -82,6 +90,7 @@ const NavBar = () => {
             <div className="nav-mobile" onClick={handleClick}>
                         {clicked ? <Icon width="50px" height="50px"  icon="prime:times" /> : <Icon width="50px" height="50px" icon="mdi-light:menu" />}
                     </div>
+         <Link to="/">
           <img
             style={{
               height: "50.91px",
@@ -93,11 +102,12 @@ const NavBar = () => {
             src="./images/Frame.png"
             alt="..."
           />
+          </Link>
             </div>
           <div
           id="#navbar"
             style={{}}
-            className={clicked? "navbar active " : "flex flex-row navbar gap-3 flex-grow justify-between items-center w-full"}
+            className={clicked? "navbar active" : "flex flex-row navbar gap-3 flex-grow justify-between items-center w-full"}
           >
             <Link to="/"><p className="nav-link-border">Home</p></Link>
             <Link to="/about"><p className="nav-link-border">About us</p></Link>
@@ -127,19 +137,7 @@ const NavBar = () => {
               </a>
             </div>
             </div>
-            <div
-              className="p-5 flex justify-center items-center nav-mobile-btn"
-              style={{
-                color: "white",
-                fontWeight: "700",
-                height: "55px",
-                width: "180px",
-                borderRadius: "20px",
-                backgroundColor: "#1C4F96",
-              }}
-            >
-              JOIN US
-            </div>
+           
           
           </div>
         </div>
@@ -168,19 +166,21 @@ const NavBar = () => {
               </a>
             </div>
           </div>
-          <div
-            className="p-5 flex justify-center items-center nav-join-btn nav-btn"
-            style={{
-              color: "white",
-              fontWeight: "700",
-              height: "55px",
-              width: "180px",
-              borderRadius: "20px",
-              backgroundColor: "#1C4F96",
-            }}
-          >
-            JOIN US
-          </div>
+          <Link to="#">
+            <div
+              className="p-5 flex justify-center items-center  nav-btn"
+              style={{
+                color: "white",
+                fontWeight: "700",
+                height: "55px",
+                width: "180px",
+                borderRadius: "20px",
+                backgroundColor: "#1C4F96",
+              }}
+            >
+              JOIN US
+            </div>
+          </Link>
         </div>
       </div>
     </nav>

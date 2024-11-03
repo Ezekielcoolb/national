@@ -86,7 +86,7 @@ const Project = () => {
     <ProjectRap>
       <div>
         <div className="media-dot"></div>
-        <div style={{marginTop: "200px"}} className="flex flex-col justify-center items-center gap-5">
+        <div style={{marginTop: "200px"}} className="containers flex flex-col justify-center items-center gap-5">
           <p
             style={{
               fontFamily: "Roboto",
@@ -130,7 +130,7 @@ const Project = () => {
           </p>
         </div>
         <div
-          className="flex justify-center items-center project-img-div"
+          className="containers flex justify-center items-center project-img-div"
           style={{
             paddingTop: "80px",
             width: "1096px",
@@ -152,7 +152,7 @@ const Project = () => {
           />
         </div>
         <div
-          className="flex flex-col py-24 gap-5"
+          className="containers flex flex-col py-24 gap-5"
           style={{
             marginTop: "80px",
             fontSize: "16px",
@@ -212,7 +212,7 @@ const Project = () => {
           </div>
         </div>
         <div
-          className="flex flex-col py-24 gap-5"
+          className="containers flex flex-col py-24 gap-5"
           style={{
             marginTop: "80px",
             fontSize: "16px",
@@ -241,7 +241,7 @@ const Project = () => {
           </p>
          
         </div>
-        <div
+          <div
             className="flex flex-col justify-center items-center"
             style={{
               height: "357px",

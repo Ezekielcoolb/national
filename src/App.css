@@ -7,7 +7,13 @@
 html, body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden; 
+overflow-x: hidden;
+}
+html::-webkit-scrollbar {
+  display: none;
+}
+body::-webkit-scrollbar {
+  display: none;
 }
 .App {
   
@@ -65,8 +71,29 @@ nav {
 .nav-mobile-btn {
   display: none;
 }
+.containers {
+ 
+
+  margin-right: 125px;
+  margin-left: 125px;
+  
+}
+.contains {
+  margin-left: 125px !important;
+}
+.contain {
+  margin-right: 125px !important;
+}
+
 
 @media (max-width: 1200px) {
+  .services-section {
+    flex-direction: column-reverse;
+    align-items: flex-start !important;
+  }
+  .services-info {
+    max-width: 700px !important;
+  }
   .project-img-div {
     width: 926px !important;
   }
@@ -107,15 +134,23 @@ nav {
     width: 300px !important;
   }
   
-  .image-overlay {
-    width: 341px !important; 
-    height: 392px !important;
-  }
+  
   .member-img {
     width: 600px !important;
   }
+  .containers {
+    margin-right: 70px !important;
+    margin-left: 70px !important;
+  }
+  .contains {
+    margin-left: 70px !important;
+  }
+  .contain {
+    margin-right: 70px !important;
+  }
 }
 @media (max-width: 1041px) {
+ 
   .nav-btn {
     height: 55px;
     width: 140px !important;
@@ -134,6 +169,10 @@ nav {
   }
 }
 @media (max-width: 992px) {
+  .image-overlay {
+    width: 320px !important; 
+    height: 392px !important;
+  }
   .contact-block {
     flex-direction: column;
     gap: 100px;
@@ -147,21 +186,21 @@ nav {
     min-width: 500px !important;
     height: 475px !important;
   }
+  .event-image {
+    width: 80% !important;
+  }
   .membership {
     flex-direction: column-reverse;
     height: auto !important;
     align-items: flex-start !important;
-    padding-bottom: 50px;
-    padding-top: 30px;
+    
   }
   .project-img-div {
     width: 740px !important;
   }
-  .membership-div {
-    margin-left: 128px !important;
-  }
+  
   .membership-img {
-    width: 100% !important;
+   
     height: 497px !important;
   }
   .membership-img img {
@@ -213,14 +252,12 @@ nav {
     width: 150px !important;
     height: 50px !important;
   }
-  .member-info {
-    margin-left: 60px !important;
-  }
+ 
   .member-img {
     width: 100% !important;
   }
   .member-p {
-    max-width: 577px !important;
+    max-width: 90% !important;
   }
   .member-div-2 {
     flex-direction: column;
@@ -230,36 +267,36 @@ nav {
     flex-direction: column-reverse;
     height: auto !important;
   }
-  .services-section {
-    display: block !important;
-  }
+  
   .btn-show {
     display: none;
     
   }
-  .image-overlay {
-    width: 391px !important; 
-    height:372px !important;
-  }
+
   .btn-hidden {
     display: flex !important;
     margin-top: 20px;
   }
   .voice {
     flex-direction: column;
+    align-items: flex-start;
   }
   .voice-div > p {
-    width:  100% !important;
+    max-width:  100% !important;
   }
   .influence {
     width: 230px !important;
     height: 170px !important;
     gap: 10px !important;
   }
-  nav {
-    height: 100px !important;
+ 
+ .login-div {
+  width: 100% !important;
+ }
+  .top-address {
+    display: none;
   }
-  #top-nav, #nav-call-div  {
+   #nav-call-div  {
     display: none;
   }
   .nav-mobile {
@@ -281,7 +318,7 @@ nav {
     justify-content: flex-start !important;
     gap: 30px;
     position: fixed;
-    top: 100px;
+    top: 129px;
     left: -700px;
     width: 70%;
     height: 100vh;
@@ -291,6 +328,9 @@ nav {
     box-shadow: 0 40px 60px rgba(0,0,0,0.1);
     padding: 40px 0 0 60px;
     transition: 0.3s ease-in-out;
+  }
+  .navbar.active {
+    left: 0px;
   }
   .nav-link-border {
     border-bottom: 1px solid #1122401F;
@@ -303,20 +343,27 @@ nav {
   .nav-join-btn {
     display: none;
   }
-  .navbar.active {
-    left: 0px;
-  }
+
   .homecontent h1 {
     font-size: 55px !important;
   }
-  .services-info {
-    max-width: 100% !important;
-  }
+ 
   .stats {
     flex-direction: column !important;
+    align-items: flex-start !important;
   }
   .footer-div-3, .footer-div-5 {
     width: 100% !important;
+  }
+  .containers {
+    margin-right: 100px !important;
+    margin-left: 100px !important;
+  }
+  .contains {
+    margin-left: 100px !important;
+  }
+  .contain, .member-contain {
+    margin-right: 100px !important;
   }
 }
 @media (max-width: 790px)  {
@@ -330,7 +377,14 @@ nav {
     gap: 10px !important;
   }
 }
+
 @media (max-width: 768px) {
+  .logic-wrap {
+    flex-wrap: wrap;
+  }
+  .logic-box-1 {
+    width: 100% !important;
+  }
   .event-block-2 {
     gap: 100px !important;
   }
@@ -401,8 +455,19 @@ nav {
   .membership-div {
     margin-left: 118px !important;
   }
+  
 }
 @media (max-width: 678px) {
+  .voice-img {
+    height: 470px !important;
+    width: 90% !important;
+    
+  }
+  
+  .containers {
+    margin-right: 70px !important;
+    margin-left: 70px !important;
+  }
   .nav-link-border {
   
     width: 300px;
@@ -427,11 +492,24 @@ nav {
   .homecontent {
     margin-top: -100px !important;
   }
-  .sideCard-2 {
-    right: 50px !important;
+  .event-image {
+    width: 100% !important;
   }
 }
 @media (max-width: 576px) {
+#top-nav {
+  margin-left: 0% !important;
+}
+  .contains {
+    margin-left: 40px !important;
+  }
+  .contain {
+    margin-right: 40px !important;
+  }
+  .containers {
+    margin-right: 40px !important;
+    margin-left: 40px !important;
+  }
   .nav-link-border {
   
     width: 200px;
@@ -455,7 +533,17 @@ nav {
     font-size: 40px !important;
   }
   .sideCard {
-    left: 50px !important;
+    left: 10px !important;
+  }
+  .sideCard-2 {
+    right: -60px !important;
+  }
+  .voice-img {
+    margin-right: 10px !important;
+    width: 90% !important;
+  }
+  .img-voice-div  {
+    margin-right: 20px !important;
   }
   .homecontent {
     margin-left: -90px !important;
@@ -473,6 +561,9 @@ nav {
   }
 }
 @media (max-width: 480px) {
+  .testi-img {
+    width: 320px !important;
+  }
   .navbar {
     width: 90% !important;
   }
@@ -510,19 +601,17 @@ nav {
 
   }
   .sideCard-2 {
-    right: 90px !important;
-    bottom:  20px !important;
+    right: 0px !important;
+    bottom:  40px !important;
   }
   .stats h2 {
     font-size: 25px !important;
   }
-  .logic-shadow {
-    margin-left: 20px !important;
-  }
-  .logic-box-1 {
+ 
+  /* .logic-box-1 {
     width: 180px !important;
     height: 184px !important;
-  }
+  } */
   .text-content {
     left: 5px !important;
    
@@ -531,10 +620,7 @@ nav {
     font-size: 16px !important;
   }
 
-  .sideCard {
-    left: 90px !important;
-    bottom: 20px !important;
-  }
+  
   .homecontent h1 {
     font-size: 45px !important;
   }
@@ -585,8 +671,8 @@ nav {
   }
   .voice-img {
     height: 470px !important;
-    width: 370px !important;
-    margin-left: 30px !important;
+    /* width: 370px !important; */
+    
   }
   .sideCard {
     left: 30px !important;
@@ -618,8 +704,8 @@ nav {
   }
   .voice-img {
     height: 450px !important;
-    width: 300px !important;
-    margin-left: 30px !important;
+    /* width: 300px !important; */
+  
   }
   .sideCard {
     left: 30px !important;
@@ -629,41 +715,4 @@ nav {
   }
 }
 
-.containers {
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
-  margin-right: auto;
-  margin-left: auto;
-  overflow: hidden; 
-}
-@media (min-width: 576px) {
-  .containers {
-    max-width: 540px;
-  }
-}
 
-@media (min-width: 768px) {
-  .containers {
-    max-width: 720px;
-  }
-}
-
-@media (min-width: 992px) {
-  .containers {
-    max-width: 960px;
-  }
- 
-}
-
-@media (min-width: 1200px) {
-  .containers {
-    max-width: 1140px;
-  }
-}
-
-@media (min-width: 1400px) {
-  .containers {
-    max-width: 1320px;
-  }
-}

@@ -1,13 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { Link } from "react-router-dom";
 
 const FooterRap = styled.div`
 
-  height: 606px;
+ 
   background: #1c4f96;
   color: white;
-  bottom: 0px;
+  bottom: 0;
   position: relative;
   .footer-1 {
     border-bottom: 1px solid #ffffff1a;
@@ -21,20 +22,7 @@ const FooterRap = styled.div`
     background: url("../images/footer-dot.png");
     z-index: 1; /* Ensure it stays below the content */
   }
-    .footer-hidden {
-    display: none;
-    }
-
-    @media (max-width: 992px) {
-     height: auto !important;
-        .footer-hidden {
-        display: flex;
-        }
-        .footer-gone {
-        display: none;
-        }
-
-    }
+  
   @media (max-width: 480px) {
    height: auto;
   }
@@ -44,7 +32,8 @@ const Footer = () => {
   return (
     <FooterRap>
       <div className="containers p-12">
-        <div className="flex justify-between pb-8 items-center footer-1">
+        <div className="flex justify-between pb-8 gap-5  items-center flex-wrap footer-1">
+          <Link to="/">
           <img
             style={{
               height: "92.62px",
@@ -56,38 +45,46 @@ const Footer = () => {
             src="./images/footer-img.png"
             alt="..."
           />
+          </Link>
           <div className="flex gap-5 justify-between items-center">
+          <Link to="#">
             <Icon
               icon="ri:facebook-fill"
               width="11.58"
               height="18"
               style={{ color: "white" }}
             />
+            </Link>
+            <Link to="#">
             <Icon
               icon="mdi:twitter"
               width="11.58"
               height="18"
               style={{ color: "white" }}
             />
+            </Link>
+            <Link to="#">
             <Icon
               icon="mdi:instagram"
               width="11.58"
               height="18"
               style={{ color: "white" }}
             />
+            </Link>
+            <Link to="#">
             <Icon
               icon="mdi:instagram"
               width="11.58"
               height="18"
               style={{ color: "white" }}
             />
+            </Link>
           </div>
         </div>
         <div
-          className=" flex justify-between py-10 footer-block"
+          className=" flex flex-wrap gap-5 justify-between py-10 "
           style={{ fontFamily: "Roboto", fontSize: "16px" }}
         >
-          <div  style={{width: "43%"}} className="flex  gap-3 justify-between footer-div-5">
             <div style={{ lineHeight: "24px", width: "242px" }}>
               <p>
                 Over the years, our commitment to excellence and passion for our
@@ -109,8 +106,6 @@ const Footer = () => {
               <p>Latest News</p>
               <p>Contact</p>
             </div>
-          </div>
-          <div style={{width: "43%"}}  className="flex  justify-between footer-div-3">
             <div
               className=" flex flex-col gap-4 "
               style={{ fontSize: "16px", color: "#FFFFFF8C" }}
@@ -164,7 +159,6 @@ const Footer = () => {
               </p>
             </div>
           </div>
-        </div>
        
         <div
           className="flex justify-center items-center"

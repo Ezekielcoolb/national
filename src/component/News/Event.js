@@ -23,14 +23,14 @@ const Events = () => {
       <div>
         <div
           style={{
-            height: "320px",
+            height: "auto",
             background: "#1c4f96",
             color: "white",
             paddingTop: "80px",
             paddingBottom: "80px",
           }}
         >
-          <div className="flex flex-col justify-center items-center">
+          <div className="flex flex-col justify-center items-center containers">
             <p
               style={{
                 fontFamily: "Roboto",
@@ -58,7 +58,7 @@ const Events = () => {
         </div>
         <div
           style={{ marginTop: "100px" }}
-          className="event-block flex justify-between containers px-20"
+          className="event-block flex justify-between gap-10 containers "
         >
           <div
             className="flex flex-col gap-6 event-div"
@@ -70,7 +70,7 @@ const Events = () => {
               color: "#5c6a7f",
             }}
           >
-            <div
+            <div className="event-image"
               style={{ width: "680px", height: "400px", borderRadius: "12px" }}
             >
               <img

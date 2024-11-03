@@ -31,6 +31,15 @@ const AboutRap = styled.div`
     background: url("../images/new-dot.png");
     z-index: 1; /* Ensure it stays below the content */
   }
+    .new-dot {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 200px;
+
+    background: url("../images/new-dot.png");
+    z-index: 1; /* Ensure it stays below the content */
+  }
 `;
 
 const About = () => {
@@ -44,7 +53,7 @@ const About = () => {
   return (
     <AboutRap>
       <div>
-        <div style={{position: "relative"}} className=" py-14  flex flex-col gap-20">
+        <div style={{position: "relative"}} className="containers py-14  flex flex-col gap-20">
             <div className="dots"></div>
             <div className="flex flex-col gap-8 justify-center items-center">
                 <p style={{
@@ -150,7 +159,7 @@ const About = () => {
                 </div>
             </div>
         </div>
-        <div className="py-20 vission" style={{height: "619px",position: "relative", backgroundColor: "#1c4f96", color: "white"}}>
+        <div className="py-14" style={{position: "relative", backgroundColor: "#1c4f96", color: "white"}}>
             <div className="containers">
                 <p style={{
                     fontFamily: "roboto",
@@ -167,7 +176,7 @@ const About = () => {
                     maxWidth: "944px"
                 }}>The Pan-African leader connecting societies with safe, efficient,
                 mobility and logistics</h2>
-                <div className="my-24 gap-3 flex justify-between items-end vission-div">
+                <div className="my-24 gap-8 flex justify-between  items-end flex-wrap">
                     <div style={{
                         borderLeft: "1px solid #DCDCE3",
                     }}
@@ -209,7 +218,7 @@ const About = () => {
                     <button 
                     className="about-btn flex justify-center items-center"
                     style={{
-                        width: "138px",
+                        width: "200px",
                         height: "40px",
                         backdropFilter:" blur(6.199999809265137px)",
                         borderRadius: "59px",
@@ -224,11 +233,11 @@ const About = () => {
             </div>
             <div className="blue-dot"></div>
         </div>
-        <div
+        <div 
             style={{ marginTop: "100px" }}
             className="containers flex flex-col gap-12"
           >
-            <div className="flex justify-center gap-5">
+            <div className="flex justify-between gap-5">
                 <div style={{
                     width: "575px",
                     height: "395px",
@@ -289,8 +298,8 @@ const About = () => {
                 of being a first-choice employer with our sectors.
               </p>
             </div>
-            <div className="flex justify-between gap-5 global-img-div">
-              <div className="flex justify-between gap-5">
+            <div className="flex justify-between flex-wrap gap-5">
+              
                 <div
                   className="flex justify-center items-center"
                   style={{
@@ -337,8 +346,6 @@ const About = () => {
                     alt="..."
                   />
                 </div>
-              </div>
-              <div className="flex justify-between gap-5">
                 <div
                   className="flex justify-center items-center"
                   style={{
@@ -385,7 +392,8 @@ const About = () => {
                     alt="..."
                   />
                 </div>
-              </div>
+           
+              
             </div>
         </div>
         <div
@@ -397,7 +405,7 @@ const About = () => {
           >
             <div className="new-dot"></div>
             <div className="containers flex flex-col gap-12 py-20 pt-32">
-              <div className="flex justify-between items-center testimonal-div">
+              <div className="flex justify-between gap-5 items-center flex-wrap">
                 <div className="flex flex-col gap-3">
                   <p
                     style={{
@@ -444,7 +452,7 @@ const About = () => {
                   borderRadius: "10px",
                 }}
               >
-                <div
+                <div className="testi-img"
                   style={{
                     width: "392px",
                     height: "359px",
@@ -576,7 +584,7 @@ const About = () => {
                 </div>
               </div>
             </div>
-        </div>
+          </div>
         <div
             className="flex flex-col justify-center items-center"
             style={{
