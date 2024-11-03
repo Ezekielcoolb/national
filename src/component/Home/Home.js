@@ -1134,7 +1134,7 @@ const Home = () => {
                   }}
                 >
                   <Icon
-                    icon="solar:arrow-right-outline"
+                    icon="solar:arrow-left-outline"
                     width="28"
                     height="28"
                     style={{ color: "black" }}
@@ -1466,7 +1466,7 @@ const Home = () => {
                           }}
                         >
                           <Icon
-                            icon="solar:arrow-right-outline"
+                            icon="solar:arrow-left-outline"
                             width="28"
                             height="28"
                             style={{ color: "black" }}
@@ -1695,7 +1695,7 @@ const Home = () => {
                   </p>
                 </div>
 
-                <div style={{ marginTop: "40px" }} className="flex gap-8">
+                <div style={{ marginTop: "40px" }} className="flex flex-wrap gap-8">
                   <button
                     style={{ width: "auto", cursor: "pointer" }}
                     className="flex justify-around gap-3  items-center"

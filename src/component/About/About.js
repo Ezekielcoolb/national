@@ -556,7 +556,7 @@ const About = () => {
                           }}
                         >
                           <Icon
-                            icon="solar:arrow-right-outline"
+                            icon="solar:arrow-left-outline"
                             width="28"
                             height="28"
                             style={{ color: "black" }}
@@ -584,7 +584,7 @@ const About = () => {
                 </div>
               </div>
             </div>
-          </div>
+        </div>
         <div
             className="flex flex-col justify-center items-center"
             style={{
@@ -681,7 +681,7 @@ const About = () => {
                 </button>
               </div>
             </div>
-          </div>
+        </div>
       </div>
     </AboutRap>
   );

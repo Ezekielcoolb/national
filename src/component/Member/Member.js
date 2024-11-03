@@ -320,7 +320,7 @@ const Members = () => {
                   }}
                 >
                   <Icon
-                    icon="solar:arrow-right-outline"
+                    icon="solar:arrow-left-outline"
                     width="28"
                     height="28"
                     style={{ color: "black" }}
