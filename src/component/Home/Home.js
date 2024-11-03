@@ -1182,7 +1182,7 @@ const Home = () => {
           </div>
           <div
             style={{ marginTop: "100px" }}
-            className="containers flex flex-col gap-12"
+            className=" flex flex-col gap-12"
           >
             <div style={{textAlign: "center"}} className="flex flex-col justify-center items-center gap-5">
               <h2
@@ -1784,7 +1784,7 @@ const Home = () => {
             >
               Latest News & Articles
             </h2>
-            <div className="containers flex flex-wrap justify-center items-center gap-3">
+            <div className=" flex flex-wrap justify-center items-center gap-3">
              
                 <div
                   style={{
