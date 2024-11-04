@@ -546,8 +546,14 @@ nav {
     width: 38px !important;
     height: 38px !important;
   }
+  .contact-btn {
+    width: 350px !important;
+  }
 }
 @media (max-width: 480px) {
+  .contact-btn {
+    width: 300px !important;
+  }
   .join {
     width: 150px !important;
   }
@@ -655,6 +661,9 @@ nav {
 }
 
 @media (max-width: 400px) {
+  .contact-btn {
+    width: 250px !important;
+  }
   .image-item {
     width: 320px;
     height: 368px;

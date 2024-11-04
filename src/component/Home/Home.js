@@ -536,7 +536,7 @@ const Home = () => {
           </div>
           <div className="containers">
             <div
-              className="flex gap-10  justify-between items-center voice"
+              className="flex gap-4  justify-between items-center voice"
               style={{ marginTop: "100px", marginBottom: "100px" }}
             >
               <div className="img-voice-div" style={{position: "relative"}}>

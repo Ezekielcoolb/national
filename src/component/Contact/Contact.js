@@ -203,7 +203,7 @@ const Contact = () => {
                   />
                 </div>
                 <button
-                  className="flex flex justify-center items-center"
+                  className="flex flex justify-center items-center contact-btn"
                   style={{
                     marginTop: "20px",
                     width: "397px",
