@@ -694,7 +694,7 @@ const Home = () => {
           </div>
           <div style={{ backgroundColor: "#1c4f96", position: "relative" }}>
             <div className="blue-dot"></div>
-            <div style={{overflowX: "hidden"}} className="services-section gap-10  items-center ">
+            <div style={{overflowX: "hidden"}} className="services-section gap-10 contains items-center ">
               {/* Left Section */}
               <div className="services-info flex flex-col gap-5">
                 <h3>SERVICES</h3>
@@ -728,7 +728,7 @@ const Home = () => {
 
               {/* Right Section - Two Images with Gradient and Text */}
               <div className="image-overflow" >
-                  <div className="image-section contains"  style={{ display: "flex", width: "fit-content" }}>
+                  <div className="image-section"  style={{ display: "flex", width: "fit-content" }}>
                 {/* First Image */}
                 <div className="image-overlay" style={{ }}>
                   <div className="overlay-gradient"></div>
