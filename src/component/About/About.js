@@ -142,7 +142,7 @@ const About = () => {
                              height: "231px",
                              borderRadius: "12px"
                         }}>
-                            <h3 style={{
+                            <h3 className="number-25" style={{
                                 fontFamily: "Bricolage Grotesque",
                                 fontWeight: "800",
                                 fontSize: "75px",

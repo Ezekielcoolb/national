@@ -598,6 +598,9 @@ nav {
     flex-direction: column;
 
   }
+  .number-25 {
+    font-size: 65px !important;
+  }
   .sideCard-2 {
     right: 0px !important;
     bottom:  40px !important;
