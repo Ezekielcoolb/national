@@ -593,6 +593,10 @@ nav {
   .publish {
     margin-top: 10px !important;
   }
+  .image-overlay {
+    width: 300px !important; /* Adjust width as needed */
+    height: 421px;
+  }
   .join-div-h2 {
     font-size: 40px !important;
   }
