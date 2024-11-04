@@ -233,11 +233,12 @@ const About = () => {
             </div>
             <div className="blue-dot"></div>
         </div>
+        
         <div 
             style={{ marginTop: "100px" }}
-            className="flex flex-col gap-12"
+            className=" flex flex-col gap-12"
           >
-            <div className="flex justify-between gap-5">
+          <div  className="containers flex justify-between gap-5">
                 <div style={{
                     width: "575px",
                     height: "395px",
@@ -272,7 +273,7 @@ const About = () => {
                     />
 
                 </div>
-            </div>
+          </div>
             <div style={{textAlign: "center"}} className="flex flex-col justify-center items-center gap-5">
               <h2
                 style={{
@@ -298,7 +299,7 @@ const About = () => {
                 of being a first-choice employer with our sectors.
               </p>
             </div>
-            <div className="flex justify-between flex-wrap gap-5">
+            <div className="flex justify-center items-center flex-wrap gap-5">
               
                 <div
                   className="flex justify-center items-center"
