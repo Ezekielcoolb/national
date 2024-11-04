@@ -113,9 +113,7 @@ nav {
   .latest-1 {
     display: block;
   }
-  .membership-div {
-    margin-left: 70px !important;
-  }
+
   .voice-div h2 {
     width: 100% !important;
     font-size: 30px !important;
@@ -148,9 +146,7 @@ nav {
     height: 55px;
     width: 140px !important;
   }
-  .membership-div {
-    margin-left: 40px !important;
-  }
+ 
  
   .nav-call {
     display: none;
@@ -190,11 +186,13 @@ nav {
   }
   
   .membership-img {
-   
+    width: 90% !important;
+    
     height: 497px !important;
   }
   .membership-img img {
-    object-fit: contain !important;
+    
+ 
   }
   .about-btn {
     width: 200px !important;
@@ -445,9 +443,7 @@ nav {
     gap: 5px !important;
     margin-left: -20px !important;
   }
-  .membership-div {
-    margin-left: 118px !important;
-  }
+ 
   
 }
 @media (max-width: 678px) {
@@ -470,9 +466,7 @@ nav {
     width: 500px !important;
     height: 400px !important;
   }
-  .membership-div {
-    margin-left: 40px !important;
-  }
+  
   .about-img {
     flex-direction: column;
   }
@@ -650,9 +644,7 @@ nav {
   .footer-div-3 {
     flex-direction: column;
   }
-  .membership-div {
-    margin-left: 20px !important;
-  }
+ 
   /* .D-1 {
     width: 20px !important;
     height: 20px !important;

@@ -113,7 +113,7 @@ const Members = () => {
                     </div>
                 </button>
                 </div>
-                <div className="membership-img" style={{
+                <div className="membership-img contains" style={{
                     width: "722px",
                     height: "578px",
                 }}>
