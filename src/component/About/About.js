@@ -235,7 +235,7 @@ const About = () => {
         </div>
         <div 
             style={{ marginTop: "100px" }}
-            className="containers flex flex-col gap-12"
+            className="flex flex-col gap-12"
           >
             <div className="flex justify-between gap-5">
                 <div style={{
