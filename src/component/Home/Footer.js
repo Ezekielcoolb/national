@@ -31,7 +31,7 @@ const FooterRap = styled.div`
 const Footer = () => {
   return (
     <FooterRap>
-      <div className="containers p-12">
+      <div className="containers py-12">
         <div className="flex justify-between pb-8 gap-5  items-center flex-wrap footer-1">
           <Link to="/">
           <img
