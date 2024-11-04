@@ -86,7 +86,7 @@ const Project = () => {
     <ProjectRap>
       <div>
         <div className="media-dot"></div>
-        <div style={{marginTop: "160px"}} className="containers flex flex-col justify-center items-center gap-5">
+        <div style={{marginTop: "140px"}} className="containers flex flex-col justify-center items-center gap-5">
           <p
             style={{
               fontFamily: "Roboto",
