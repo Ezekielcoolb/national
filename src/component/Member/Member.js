@@ -25,6 +25,14 @@ const MemberRap = styled.div`
     background: url("../images/new-dot.png");
     z-index: 1; /* Ensure it stays below the content */
   }
+      .second-blue-dot {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 180px;
+    background: url("../images/blue_dot.png");
+    z-index: 1; /* Ensure it stays below the content */
+  }
 `;
 
 const Members = () => {
@@ -260,6 +268,7 @@ const Members = () => {
                    </div>
                 </div>
             </div>
+           
             <div
             style={{
               marginTop: "100px",
@@ -366,6 +375,7 @@ const Members = () => {
               />
             </div>
           </div>
+
           <div
             style={{ marginTop: "100px" }}
             className="containers flex flex-col gap-12"
