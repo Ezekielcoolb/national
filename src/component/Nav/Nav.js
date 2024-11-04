@@ -17,11 +17,11 @@ const NavBar = () => {
   }, [pathname]);
 
   return (
-    <div>
+   
 
     <nav
       className="flex flex-col"
-      style={{ width: "100vw", height: "129px" }}
+      style={{ width: "100%", height: "129px" }}
     >
       <div
       id="top-nav"
@@ -175,7 +175,7 @@ const NavBar = () => {
           </div>
           <Link to="#">
             <div
-              className="p-5 flex justify-center items-center  "
+              className="p-5 flex justify-center items-center join "
               style={{
                 color: "white",
                 fontWeight: "700",
@@ -190,9 +190,10 @@ const NavBar = () => {
           </Link>
         </div>
       </div>
+    
     </nav>
-    <div className="extra-nav" style={{marginTop: "129px"}}></div>
-    </div>
+    
+   
   );
 };
 export default NavBar;

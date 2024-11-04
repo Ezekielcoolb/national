@@ -37,7 +37,7 @@ button {
 }
 
 nav {
-  position: fixed; /* Fix the navigation bar at the top */
+  position: sticky; /* Fix the navigation bar at the top */
   top: 0; /* Position it at the top of the viewport */
   box-shadow: 0 5px 15px rgba(0,0,0,0.06);
   z-index: 1000; /* Ensure it appears above other content */
@@ -85,13 +85,8 @@ nav {
 
 
 @media (max-width: 1200px) {
-  .services-section {
-    flex-direction: column;
-    align-items: flex-start !important;
-  }
-  .services-info {
-    max-width: 700px !important;
-  }
+ 
+ 
   .project-img-div {
     width: 926px !important;
   }
@@ -358,6 +353,16 @@ nav {
   .contain, .member-contain {
     margin-right: 100px !important;
   }
+  .services-section {
+    flex-direction: column;
+   
+  }
+  .image-section {
+    flex-wrap: wrap;
+  }
+  .services-info {
+    max-width: 700px !important;
+  }
 }
 @media (max-width: 790px)  {
   .project-img-div {
@@ -435,9 +440,7 @@ nav {
   .text-content h2 {
     font-size: 20px !important;
   }
-  .image-overlay {
-   
-  }
+ 
   .influence {
     width: 170px !important;
     height: 120px !important;
@@ -553,6 +556,13 @@ nav {
   }
 }
 @media (max-width: 480px) {
+  .join {
+    width: 150px !important;
+  }
+  .image-overlay {
+    width: 320px !important; /* Adjust width as needed */
+    height: 421px;
+  }
   .testi-img {
     width: 280px !important;
   }
