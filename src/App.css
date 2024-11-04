@@ -86,7 +86,7 @@ nav {
 
 @media (max-width: 1200px) {
   .services-section {
-    flex-direction: column-reverse;
+    flex-direction: column;
     align-items: flex-start !important;
   }
   .services-info {
@@ -299,9 +299,7 @@ nav {
   .nav-mobile {
     display: block;
   }
-  .nav-mobile-btn {
-    display: flex;
-  }
+ 
   #nav {
     flex-direction: row-reverse;
   }
@@ -337,9 +335,7 @@ nav {
   #nav-call-hidden {
     display: flex;
   }
-  .nav-join-btn {
-    display: none;
-  }
+ 
 
   .homecontent h1 {
     font-size: 55px !important;

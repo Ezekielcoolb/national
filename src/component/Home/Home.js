@@ -303,7 +303,30 @@ const OtherSection = styled.div`
     font-size: 16px;
     line-height: 24px;
   }
+.image-overflow {
+overflow-x: auto;
+}
+.image-overflow::-webkit-scrollbar {
+    width: 5px;  /* Width of the vertical scrollbar */
+    height: 7px; /* Height of the horizontal scrollbar */
+}
 
+/* The scrollbar track (background) */
+.image-overflow.image-overflow::-webkit-scrollbar-track {
+    background:  #1c4f96;
+}
+
+/* The draggable handle (thumb) */
+.image-overflow::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px; /* Rounded edges */
+    border: 2px solid #1c4f96; /* Optional to create a padding effect */
+}
+
+/* Hover state of the thumb */
+.image-overflow::-webkit-scrollbar-thumb:hover {
+    background-color: #f1f1f1;
+}
   /* Styling for the image section with two images */
  .image-section {
     display: flex;
@@ -312,6 +335,7 @@ const OtherSection = styled.div`
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     gap: 20px;
+    width: fit-content;
      flex-shrink: 0;
     padding-bottom: 10px; /* Adds space at the bottom to avoid scrollbar overlap */
 }
@@ -394,19 +418,7 @@ const Home = () => {
     setIsClicked(!isClicked);
   };
 
- // Create a ref for the scrollable container
- const scrollContainerRef = useRef(null);
 
- // Function to scroll the container to the next image
- const scrollNext = () => {
-   if (scrollContainerRef.current) {
-     scrollContainerRef.current.scrollBy({
-       left: 1000, // Adjust this value based on your image width
-       behavior: "smooth",
-     });
-   }
- };
- 
 
   return (
     <div>
@@ -682,7 +694,7 @@ const Home = () => {
           </div>
           <div style={{ backgroundColor: "#1c4f96", position: "relative" }}>
             <div className="blue-dot"></div>
-            <div className="services-section gap-10  items-center ">
+            <div style={{overflowX: "hidden"}} className="services-section gap-10  items-center ">
               {/* Left Section */}
               <div className="contains services-info flex flex-col gap-5">
                 <h3>SERVICES</h3>
@@ -715,9 +727,10 @@ const Home = () => {
               </div>
 
               {/* Right Section - Two Images with Gradient and Text */}
-                      <div className="image-section" ref={scrollContainerRef} style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", scrollBehavior: "smooth" }}>
+              <div className="image-overflow" >
+                  <div className="image-section"  style={{ display: "flex", width: "fit-content" }}>
                 {/* First Image */}
-                <div className="image-overlay" style={{ scrollSnapAlign: "start" }}>
+                <div className="image-overlay" style={{ }}>
                   <div className="overlay-gradient"></div>
                   <div className="text-content px-5 gap-12 flex justify-between">
                     <h2>Road Safety Management</h2>
@@ -741,7 +754,7 @@ const Home = () => {
                 </div>
 
                 {/* Second Image */}
-                <div className="image-overlay" style={{ scrollSnapAlign: "start" }}>
+                <div className="image-overlay" style={{ }}>
                   <div className="overlay-gradient"></div>
                   <div className="text-content px-5 gap-12 flex justify-between">
                     <h2>Road Traffic Management</h2>
@@ -765,7 +778,7 @@ const Home = () => {
                 </div>
 
                 {/* Third Image */}
-                <div className="image-overlay" style={{ scrollSnapAlign: "start" }}>
+                <div className="image-overlay" style={{ }}>
                   <div className="overlay-gradient"></div>
                   <div className="text-content px-5 gap-12 flex justify-between">
                     <h2>Traffic  Solutions</h2>
@@ -788,7 +801,7 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-             
+             </div>
             </div>
           </div>
           <div>

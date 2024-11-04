@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Icon } from "@iconify/react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+
 
 const NavBar = () => {
     const [clicked, setClicked] = useState(false)
@@ -9,6 +10,12 @@ const NavBar = () => {
     const handleClick = () => {
         setClicked(!clicked)
     }
+    
+  const {pathname} = useLocation()
+  useEffect(() => {
+    setClicked(false); 
+  }, [pathname]);
+
   return (
     <div>
 
@@ -109,11 +116,11 @@ const NavBar = () => {
             style={{}}
             className={clicked? "navbar active" : "flex flex-row navbar gap-3 flex-grow justify-between items-center w-full"}
           >
-            <Link to="/"><p className="nav-link-border">Home</p></Link>
-            <Link to="/about"><p className="nav-link-border">About us</p></Link>
-            <Link to="/members"> <p className="nav-link-border">Membership</p></Link>
-            <Link to="/news&media"><p className="nav-link-border">News & Media</p></Link>
-            <Link to="/contact"> <p className="nav-link-border">Contact</p></Link>
+            <Link to="/" ><p className="nav-link-border">Home</p></Link>
+            <Link to="/about" ><p className="nav-link-border">About us</p></Link>
+            <Link to="/members" > <p className="nav-link-border">Membership</p></Link>
+            <Link to="/news&media" ><p className="nav-link-border">News & Media</p></Link>
+            <Link to="/contact" > <p className="nav-link-border">Contact</p></Link>
             <div id="nav-call-hidden" className="flex justify-center items-center nav-contact">
             <div >
               <Icon
@@ -168,7 +175,7 @@ const NavBar = () => {
           </div>
           <Link to="#">
             <div
-              className="p-5 flex justify-center items-center  nav-btn"
+              className="p-5 flex justify-center items-center  "
               style={{
                 color: "white",
                 fontWeight: "700",
