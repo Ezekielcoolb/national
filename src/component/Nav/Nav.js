@@ -181,7 +181,7 @@ const NavBar = () => {
                 fontWeight: "700",
                 height: "55px",
                 width: "180px",
-                borderRadius: "20px",
+                borderRadius: "100px",
                 backgroundColor: "#1C4F96",
               }}
             >
