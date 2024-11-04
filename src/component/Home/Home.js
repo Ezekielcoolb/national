@@ -1638,7 +1638,7 @@ const Home = () => {
               position: "relative",
             }}
           >
-            <div className="contains road-div flex justify-between items-center mx-10  my-20">
+            <div className="contains road-div flex justify-between items-center mr-10  my-20">
               <div className="road-div-1 flex flex-col gap-8 ">
                 <h2
                   style={{
