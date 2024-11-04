@@ -28,7 +28,7 @@ const Contact = () => {
     <ContactRap>
       <div style={{ position: "relative" }}>
         <div className="media-dot"></div>
-        <div className=" containers contact-block flex justify-between items-center  py-32 gap-3">
+        <div className=" containers contact-block flex justify-between items-center  py-28 gap-3">
           <div>
             <div className="flex flex-col gap-3">
               <p
