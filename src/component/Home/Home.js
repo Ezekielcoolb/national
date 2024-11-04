@@ -1195,7 +1195,7 @@ const Home = () => {
           </div>
           <div
             style={{ marginTop: "100px" }}
-            className=" flex flex-col gap-12"
+            className="containers flex flex-col gap-12"
           >
             <div style={{textAlign: "center"}} className="flex flex-col justify-center items-center gap-5">
               <h2
