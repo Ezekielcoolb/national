@@ -350,6 +350,9 @@ flex-wrap: nowrap;
     padding-bottom: 20px;
     border-radius: 10px;
   }
+  .pop{
+    
+  }
   .parking-table,
   .all-commuter-div {
     width: 50%;
