@@ -7,6 +7,8 @@ import NewsMedia from "../component/News/News";
 import Events from "../component/News/Event";
 import Project from "../component/News/Project";
 import Contact from "../component/Contact/Contact";
+import UserDashboardLayout from "../Controller/userController";
+import UserDashboard from "../UserPages/UserDashboard";
 
 
 
@@ -25,6 +27,14 @@ export default function Routers () {
                         {path: "/news&events", element: <Events />},
                         {path: "/news&others", element: <Project />},
                         {path: "/contact", element: <Contact />}
+                    ]
+                },
+                {
+                    path : "/users",
+                    element: <UserDashboardLayout />,
+                    children:  [
+                        {path: "/users/dashboard", element: <UserDashboard />},
+                       
                     ]
                 }
             ]

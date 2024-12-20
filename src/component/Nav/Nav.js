@@ -173,7 +173,7 @@ const NavBar = () => {
               </a>
             </div>
           </div>
-          <Link to="#">
+          <Link to="/users/dashboard">
             <div
               className="p-5 flex justify-center items-center join "
               style={{
