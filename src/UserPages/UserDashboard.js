@@ -1,8 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import MapRoad from "./Map";
 import { Link } from "react-router-dom";
+import LodgeRidePopup from "./AllPopup/LodgeRidePopup";
+import LodgeItemPopup from "./AllPopup/LodgeItemPopup"
+import { useDispatch, useSelector } from "react-redux";
+import { setComplainVisible, setCreatedComplain, setCreatedCrime, setCreatedEmergency, setCreatedItem, setCreatedRide, setCrimeVisible, setDropdownVisible, setEmergencyVisible, setItemVisible } from "../Redux/appSlice";
+import LodgeComplain from "./AllPopup/LodgeComplain";
+import EmergencyReport from "./AllPopup/EmergencyReportPop";
+import ReportCrimePop from "./AllPopup/ReportCrimePop";
 
 const DashboardRap = styled.div`
   width: 100%;
@@ -486,14 +493,217 @@ const Dashboard = () => {
         "Bitcoin Mini Showdown Puts New York on Front Lines of a Green Fight",
     },
   ];
+  const dropdownRef = useRef(null);
   const [showAll, setShowAll] = useState(false);
   const [allLatest, setAllLatest] = useState(false);
+
+  const { dropdowVisible, itemDropdown,createdRide, 
+    complainDropdown, emergencyDropdown, createdItem,
+     reportCrimeDropdown, createdComplain, createdCrime, createdEmergency} = useSelector((state) => state.app);
+  const dispatch = useDispatch();
+ 
+
+  const handleVisisble = () => {
+    dispatch(setDropdownVisible());
+  };
+ 
+    const handleItemVisible = () => {
+      dispatch(setItemVisible());
+    };
+  const handleComplainLodge = () => {
+    dispatch(setComplainVisible());
+  };
+ const handleEmergencyLodge = () => {
+    dispatch(setEmergencyVisible());
+  };
+    const handleCrimeLodge = () => {
+      dispatch(setCrimeVisible());
+    };
   const handleShowAll = () => {
     setShowAll((prev) => !prev);
   };
   const handleAllLatest = () => {
     setAllLatest((prev) => !prev);
   };
+
+  const handleCloseItem = () => {
+   
+    dispatch(setCreatedItem());
+  };
+ const handleCloseRide = () => {
+   
+    dispatch(setCreatedRide());
+  };
+  const handleCloseComplain = () => {
+   
+    dispatch(setCreatedComplain());
+  };
+  const handleCloseEmergency = () => {
+   
+    dispatch(setCreatedEmergency());
+  };
+  const handleCloseCrime = () => {
+   
+    dispatch(setCreatedCrime());
+  };
+
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {  
+        handleCloseCrime() 
+      }
+    };
+    if (createdCrime ) {
+     
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+    
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [ createdCrime]);
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {  
+        handleCloseEmergency() 
+      }
+    };
+    if (createdEmergency ) {
+     
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+    
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [ createdEmergency]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {  
+        handleCloseComplain() 
+      }
+    };
+    if (createdComplain ) {
+     
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+    
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [ createdComplain]);
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {  
+        handleCloseItem() 
+      }
+    };
+    if (createdItem ) {
+     
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+    
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [ createdItem]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {  
+        handleCloseRide() 
+      }
+    };
+    if (createdRide ) {
+     
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+    
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [ createdRide]);
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {  
+        handleCrimeLodge() 
+      }
+    };
+    if (reportCrimeDropdown ) {
+     
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+    
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [ reportCrimeDropdown]);
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {  
+        handleEmergencyLodge() 
+      }
+    };
+    if (emergencyDropdown ) {
+     
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+    
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [ emergencyDropdown]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {  
+        handleComplainLodge() 
+      }
+    };
+    if (complainDropdown ) {
+     
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+    
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [ complainDropdown]);
+ 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {  
+        handleItemVisible() 
+      }
+    };
+    if (itemDropdown ) {
+     
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+    
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [ itemDropdown]);
+ 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {  
+        handleVisisble() 
+      }
+    };
+    if (dropdowVisible ) {
+     
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+    
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [ dropdowVisible]);
+
   const displayedParking = showAll ? parking : parking.slice(0, 2);
   const displayedLatest = allLatest ? latest : latest.slice(0, 1);
 
@@ -534,7 +744,7 @@ const Dashboard = () => {
           <div style={{width: "100%", overflowX: "hidden" }}>
             <div className="allRideContainer">
               <div className="allRides">
-                <div className="lodge-div">
+                <div onClick={handleVisisble} className="lodge-div">
                   <div className="car">
                     <img src="/images/car.png" alt="" />
                   </div>
@@ -548,31 +758,38 @@ const Dashboard = () => {
                       <img src="/images/flag.png" alt=".." />
                     </div>
                   </div>
-                  <h4>Lodge Ride</h4>
+                  <h4>Flag Ride</h4>
                 </div>
-                <div className="lodge-div">
+                <div onClick={handleItemVisible}  className="lodge-div">
                   <div className="lodge">
                     <img src="/images/lodge.png" alt="" />
                   </div>
-                  <h4>Lodge Ride</h4>
+                  <h4>Lodge Item</h4>
                 </div>
-                <div className="lodge-div">
-                  <div className="lodge">
-                    <img src="/images/lodge.png" alt="" />
+
+                <div onClick={handleComplainLodge} className="lodge-div">
+                  <div className="lodge" style={{ position: "relative" }}>
+                    <img src="/images/crime.png" alt="" />
+                    <div className="flag">
+                      <img src="/images/flag.png" alt=".." />
+                    </div>
                   </div>
-                  <h4>Lodge Ride</h4>
+                  <h4>Lodge Complain</h4>
+                  
                 </div>
-                <div className="lodge-div">
+
+                <div onClick={handleEmergencyLodge} className="lodge-div">
                   <div className="lodge">
-                    <img src="/images/lodge.png" alt="" />
+                    <img src="/images/crime.png" alt="" />
                   </div>
-                  <h4>Lodge Ride</h4>
+                  <h4>Emergency Report</h4>
                 </div>
-                <div className="lodge-div">
+
+                <div onClick={handleCrimeLodge} className="lodge-div">
                   <div className="lodge">
-                    <img src="/images/lodge.png" alt="" />
+                    <img src="/images/crime.png" alt="" />
                   </div>
-                  <h4>Lodge Ride</h4>
+                  <h4>Report Crime</h4>
                 </div>
               </div>
             </div>
@@ -764,6 +981,111 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+        {dropdowVisible? <div  ref={dropdownRef}>< LodgeRidePopup /> </div> : ""}
+      {itemDropdown? <div  ref={dropdownRef}>< LodgeItemPopup /> </div> : ""}
+      {complainDropdown? <div> <LodgeComplain /></div> : ""}
+      {emergencyDropdown? <div> <EmergencyReport /> </div> : ""}
+      {reportCrimeDropdown ? <div> <ReportCrimePop /> </div> : ""}
+      {createdRide ? (
+        <div className="dropdown-container">
+          <div className="successCreation">
+            <h2>Ride created</h2>
+            <div>
+            <p>
+              Your ride has been created successfully, you can share ride with
+              family and friends.
+            </p>
+            <Link onClick={handleCloseRide} className="successContinue">Continue</Link>
+            <input type="text" />
+            <Link className="whatssap">
+            <img src="/images/what_icon.png" alt="" />
+            <p>Share on WhatsApp</p></Link>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+      {createdItem ? (
+        <div className="dropdown-container">
+          <div className="successCreation">
+            <h2>Item Lodged</h2>
+            <div>
+            <p>
+            Your item has been lodge successfully, 
+            you can share link with family and friends.
+            </p>
+            <Link onClick={handleCloseItem} className="successContinue">Continue</Link>
+            <input type="text" />
+            <Link className="whatssap">
+            <img src="/images/what_icon.png" alt="" />
+            <p>Share on WhatsApp</p></Link>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+       {createdComplain ? (
+        <div className="dropdown-container">
+          <div className="successCreation">
+            <h2>Complain Lodged</h2>
+            <div>
+            <p>
+            Your complain has been lodge successfully, 
+            you can share link with family and friends.
+            </p>
+            <Link onClick={handleCloseItem} className="successContinue">View Details</Link>
+            <input type="text" />
+            <Link className="whatssap">
+            <img src="/images/what_icon.png" alt="" />
+            <p>Share on WhatsApp</p></Link>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+        {createdEmergency ? (
+        <div className="dropdown-container">
+          <div className="successCreation">
+            <h2>Request Sent</h2>
+            <div>
+            <p>
+            Your emergency request have been sent successfully,
+             you can share link with family and friends.
+            </p>
+            <Link onClick={handleCloseEmergency} className="successContinue">View Details</Link>
+            <input type="text" />
+            <Link className="whatssap">
+            <img src="/images/what_icon.png" alt="" />
+            <p>Share on WhatsApp</p></Link>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+          {createdCrime ? (
+        <div className="dropdown-container">
+          <div className="successCreation">
+            <h2>Request Sent</h2>
+            <div>
+            <p>
+            Your emergency request have been sent successfully, 
+            you can share link with family and friends.
+            </p>
+            <Link onClick={handleCloseCrime} className="successContinue">View Details</Link>
+            <input type="text" />
+            <Link className="whatssap">
+            <img src="/images/what_icon.png" alt="" />
+            <p>Share on WhatsApp</p></Link>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
       </div>
     </DashboardRap>
   );

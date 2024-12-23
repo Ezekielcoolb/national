@@ -129,7 +129,12 @@ const Footer = () => {
                 style={{ color: "white", fontWeight: "700", fontSize: "20px" }}
               >
                 Contact
-              </p>
+              </p> <Icon
+                  icon="fluent:call-24-filled"
+                  width="13"
+                  height="13"
+                  style={{ color: "#FFFFFF8C" }}
+                />
               <p className="flex gap-2 items-center">
                 <Icon
                   icon="mdi:email-open-outline"
@@ -140,12 +145,7 @@ const Footer = () => {
                 info@roadusersassociation.com
               </p>
               <p className="flex gap-2 items-center">
-                <Icon
-                  icon="fluent:call-24-filled"
-                  width="13"
-                  height="13"
-                  style={{ color: "#FFFFFF8C" }}
-                />
+               
                 +2347464531, +2345546864
               </p>
               <p className="flex gap-2 items-center">

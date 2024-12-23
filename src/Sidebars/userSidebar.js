@@ -15,7 +15,7 @@ const sidebarConfig = [
   {
     id: 2,
     img: "/images/ride.png",
-    link: "",
+    link: "/users/rides",
     title: "Rides",
   },
   {

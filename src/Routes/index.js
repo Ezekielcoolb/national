@@ -9,6 +9,10 @@ import Project from "../component/News/Project";
 import Contact from "../component/Contact/Contact";
 import UserDashboardLayout from "../Controller/userController";
 import UserDashboard from "../UserPages/UserDashboard";
+import AgencySelector from "../test";
+import Ride from "../UserPages/Ride";
+import RideDetails from "../UserPages/RidePages/RideDetails";
+
 
 
 
@@ -34,7 +38,9 @@ export default function Routers () {
                     element: <UserDashboardLayout />,
                     children:  [
                         {path: "/users/dashboard", element: <UserDashboard />},
-                       
+                        {path: "/users/test", element: <AgencySelector />},
+                        {path: "/users/rides", element: <Ride />},
+                        {path: "/users/ridesDetails", element: <RideDetails />},
                     ]
                 }
             ]
