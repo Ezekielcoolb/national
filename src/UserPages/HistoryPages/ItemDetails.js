@@ -128,18 +128,13 @@ const TaskRap = styled.div`
     justify-content: space-between;
     align-items: center;
   }
+
   .right-inne-div {
     display: flex;
     flex-direction: column;
     gap: 40px;
-
+    padding: 10px;
     align-items: center;
-  }
-  .move-to-end {
-    display: flex;
-    gap: 150px;
-    flex-direction: column;
-    justify-content: space-between;
   }
   .right-inner-info p {
     display: flex;
@@ -234,6 +229,12 @@ const TaskRap = styled.div`
     background: #6670851f !important;
     color: #112240 !important;
   }
+  .move-to-end {
+    display: flex;
+    flex-direction: column;
+    gap: 200px;
+    justify-content: space-between;
+  }
   @media (max-width: 992px) {
     .all-rides-details {
       flex-direction: column;
@@ -248,7 +249,7 @@ const TaskRap = styled.div`
   }
 `;
 
-const RideDetails = () => {
+const ItemDetails = () => {
   const [dropdownVisible, setDropdownVisisble] = useState(false);
 
   const handleDropFlag = () => {
@@ -271,7 +272,7 @@ const RideDetails = () => {
     <TaskRap>
       <div className="ride-detail-header">
         <div className="icon-header">
-          <Link to="/users/rides">
+          <Link to="/users/history">
             <Icon
               className="back-arrow-left"
               icon="material-symbols-light:arrow-left-alt"
@@ -280,7 +281,7 @@ const RideDetails = () => {
               style={{ color: "#112240" }}
             />
           </Link>
-          <h2>Ride Details</h2>
+          <h2>Lodge Details</h2>
         </div>
         <Link className="send-message">Send a Message</Link>
       </div>
@@ -305,16 +306,16 @@ const RideDetails = () => {
           </div>
           <div className="ride-info">
             <p>
-              Ride ID
+              Lodge ID
               <span>2333455600</span>
-            </p>
-            <p>
-              Vehicle Number
-              <span>LAG-565768</span>
             </p>
             <p>
               Vehicle Name
               <span>Toyota Camry XLE</span>
+            </p>
+            <p>
+              Vehicle Number
+              <span>LAG-565768</span>
             </p>
             <p>
               Driver Name
@@ -331,32 +332,16 @@ const RideDetails = () => {
         </div>
         <div className="right-ride-div">
           <div className="right-header">
-            <h4>Next of KIN</h4>
+            <h4>Description</h4>
             <p className="status-ride">Ongoing</p>
           </div>
           <div className="move-to-end">
             <div className="right-inne-div">
-              <img src="/images/ride-pic.png" alt="" />
-              <div className="right-inner-info">
-                <p>
-                  Fullname
-                  <span>Funsho Sofis</span>
-                </p>
-                <p>
-                  Phone Number
-                  <span>07066091112</span>
-                </p>
-                <p>
-                  Address
-                  <span
-                    style={{
-                      maxWidth: "116px",
-                    }}
-                  >
-                    70 Shitta Street Ojuelegbe Lagos
-                  </span>
-                </p>
-              </div>
+              <p style={{ maxWidth: "367px" }}>
+                Lorem ipsum dolor sit amet consectetur. Ipsum urna aliquet eget
+                amet urna. Neque mattis dui imperdiet proin dignissim. Cursus
+                congue tellus velit et. Neque id.
+              </p>
             </div>
 
             <div>
@@ -364,8 +349,7 @@ const RideDetails = () => {
                 <h4>Images</h4>
               </div>
               <div className="images-car">
-                <img src="/images/rides_car_1.png" alt="" />
-                <img src="/images/rides_car_2.png" alt="" />
+                <img src="/images/tv_img.png" alt="" />
               </div>
             </div>
           </div>
@@ -398,4 +382,4 @@ const RideDetails = () => {
     </TaskRap>
   );
 };
-export default RideDetails;
+export default ItemDetails;

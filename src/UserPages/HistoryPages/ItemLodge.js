@@ -35,112 +35,112 @@ const TaskRap = styled.div`
  
 `;
 
-const Ride = () => {
+const ItemLodge = () => {
     const navigate = useNavigate();
-  const rides = [
+  const items = [
     {
       id: 1,
-      rideNo: "45999077",
-      vehicleNumber: "LAG-345677",
-      vehicleName: "Toyoto Camry XLE",
-      driverName: "Michael Solomon",
+      item: "2 Laptop Bag",
+      bikeNo: "LASG-4785",
+      riderNo: "07066091112",
+      riderCompany: "GLOVO",
       destination: "185 Allen Avenue Round About Ikeja Lagos.",
       status: "Ongoing",
     },
     {
       id: 2,
-      rideNo: "100235448",
-      vehicleNumber: "XKE-345677",
-      vehicleName: "Lexus 350 GL",
-      driverName: "Adeleke Funsho",
-      destination: "Shitta mosefejo bustop",
+      item: "Wall Clock GIG",
+      bikeNo: "LASG-4785",
+      riderNo: "07066091112",
+      riderCompany: "GLOVO",
+      destination: "185 Allen Avenue Round About Ikeja Lagos.",
       status: "Completed",
     },
     {
       id: 3,
-      rideNo: "45999077",
-      vehicleNumber: "LAG-345677",
-      vehicleName: "Toyoto Camry XLE",
-      driverName: "Michael Solomon",
+      item: "2 Laptop Bag",
+      bikeNo: "LASG-4785",
+      riderNo: "07066091112",
+      riderCompany: "GLOVO",
       destination: "185 Allen Avenue Round About Ikeja Lagos.",
       status: "Completed",
     },
     {
       id: 4,
-      rideNo: "100235448",
-      vehicleNumber: "XKE-345677",
-      vehicleName: "Lexus 350 GL",
-      driverName: "Adeleke Funsho",
-      destination: "Shitta mosefejo bustop",
-      status: "Completed",
+      item: "2 Laptop Bag",
+      bikeNo: "LASG-4785",
+      riderNo: "07066091112",
+      riderCompany: "GLOVO",
+      destination: "185 Allen Avenue Round About Ikeja Lagos.",
+      status: "Ongoing",
     },
     {
       id: 5,
-      rideNo: "45999077",
-      vehicleNumber: "LAG-345677",
-      vehicleName: "Toyoto Camry XLE",
-      driverName: "Michael Solomon",
+      item: "2 Laptop Bag",
+      bikeNo: "LASG-4785",
+      riderNo: "07066091112",
+      riderCompany: "GLOVO",
       destination: "185 Allen Avenue Round About Ikeja Lagos.",
       status: "Completed",
     },
     {
       id: 6,
-      rideNo: "100235448",
-      vehicleNumber: "XKE-345677",
-      vehicleName: "Lexus 350 GL",
-      driverName: "Adeleke Funsho",
-      destination: "Shitta mosefejo bustop",
+      item: "2 Laptop Bag",
+      bikeNo: "LASG-4785",
+      riderNo: "07066091112",
+      riderCompany: "GLOVO",
+      destination: "185 Allen Avenue Round About Ikeja Lagos.",
       status: "Completed",
     },
     {
       id: 7,
-      rideNo: "100235448",
-      vehicleNumber: "XKE-345677",
-      vehicleName: "Lexus 350 GL",
-      driverName: "Adeleke Funsho",
-      destination: "Shitta mosefejo bustop",
+      item: "2 Laptop Bag",
+      bikeNo: "LASG-4785",
+      riderNo: "07066091112",
+      riderCompany: "GLOVO",
+      destination: "185 Allen Avenue Round About Ikeja Lagos.",
       status: "Completed",
     },
     {
       id: 8,
-      rideNo: "100235448",
-      vehicleNumber: "XKE-345677",
-      vehicleName: "Lexus 350 GL",
-      driverName: "Adeleke Funsho",
-      destination: "Shitta mosefejo bustop",
-      status: "Ongoing",
+      item: "2 Laptop Bag",
+      bikeNo: "LASG-4785",
+      riderNo: "07066091112",
+      riderCompany: "GLOVO",
+      destination: "185 Allen Avenue Round About Ikeja Lagos.",
+      status: "Completed",
     },
     {
       id: 9,
-      rideNo: "100235448",
-      vehicleNumber: "XKE-345677",
-      vehicleName: "Lexus 350 GL",
-      driverName: "Adeleke Funsho",
-      destination: "Shitta mosefejo bustop",
+      item: "2 Laptop Bag",
+      bikeNo: "LASG-4785",
+      riderNo: "07066091112",
+      riderCompany: "GLOVO",
+      destination: "185 Allen Avenue Round About Ikeja Lagos.",
       status: "Completed",
     },
     {
       id: 10,
-      rideNo: "45999077",
-      vehicleNumber: "LAG-345677",
-      vehicleName: "Toyoto Camry XLE",
-      driverName: "Michael Solomon",
+      item: "2 Laptop Bag",
+      bikeNo: "LASG-4785",
+      riderNo: "07066091112",
+      riderCompany: "GLOVO",
       destination: "185 Allen Avenue Round About Ikeja Lagos.",
       status: "Completed",
     },
     {
         id: 11,
-        rideNo: "45999077",
-        vehicleNumber: "LAG-345677",
-        vehicleName: "Toyoto Camry XLE",
-        driverName: "Michael Solomon",
+        item: "2 Laptop Bag",
+        bikeNo: "LASG-4785",
+        riderNo: "07066091112",
+        riderCompany: "GLOVO",
         destination: "185 Allen Avenue Round About Ikeja Lagos.",
         status: "Completed",
       },
   ];
   const handleRowClick = () => {
     
-    navigate("/users/ridesDetails");
+    navigate("/users/itemDetails");
   };
   //   pagination
 
@@ -148,10 +148,10 @@ const Ride = () => {
   const rowsPerPage = 10;
 
   // Pagination Logic
-  const totalPages = Math.ceil(rides.length / rowsPerPage);
+  const totalPages = Math.ceil(items.length / rowsPerPage);
   const indexOfLastCase = currentPage * rowsPerPage;
   const indexOfFirstCase = indexOfLastCase - rowsPerPage;
-  const CurrentRides = rides.slice(indexOfFirstCase, indexOfLastCase);
+  const CurrentItems = items.slice(indexOfFirstCase, indexOfLastCase);
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber > 0 && pageNumber <= totalPages) {
@@ -174,7 +174,7 @@ const Ride = () => {
     <TaskRap>
       <div>
         <div className="table-container ">
-          <div className="find-lawyer-header">
+          <div className="logger-header">
             <div className="search-divs">
               <input type="text" placeholder="search" />
               <Icon
@@ -205,17 +205,17 @@ const Ride = () => {
                      S/N
                     </th>
 
-                    <th>RIDE ID</th>
-                    <th>VEHICLE NUMBER</th>
-                    <th>VEHICLE NAME</th>
-                    <th>DRIVER NAME</th>
+                    <th>ITEM</th>
+                    <th>BIKE NUMBER</th>
+                    <th>RIDER NUMBER</th>
+                    <th>RIDER COMPANY</th>
                     <th>DESTINATION</th>
                     <th>STATUS</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {CurrentRides ? (
-                    CurrentRides.map((caseItem, index) => {
+                  {CurrentItems ? (
+                    CurrentItems.map((caseItem, index) => {
                       return (
                         <tr className="table-row"
                           key={caseItem.id}
@@ -226,10 +226,10 @@ const Ride = () => {
                           {index + 1}
                           </td>
 
-                          <td >{caseItem.rideNo}</td>
-                          <td>{caseItem.vehicleNumber}</td>
-                          <td>{caseItem.vehicleName}</td>
-                          <td>{caseItem.driverName}</td>
+                          <td >{caseItem.item}</td>
+                          <td>{caseItem.bikeNo}</td>
+                          <td>{caseItem.riderNo}</td>
+                          <td>{caseItem.riderCompany}</td>
                           <td className="destination-wide">{caseItem.destination}</td>
                           <td>
                             <div
@@ -257,8 +257,8 @@ const Ride = () => {
                     <tr>
                       <td colSpan="10" className="no-case">
                         <img src="/images/mask_img.png" alt="" />
-                        <h3>No Ride Lodged.</h3>
-                        
+                        <h3>No Item lodged.</h3>
+                       
                       </td>
                     </tr>
                   )}
@@ -318,4 +318,4 @@ const Ride = () => {
     </TaskRap>
   );
 };
-export default Ride;
+export default ItemLodge;

@@ -21,7 +21,7 @@ const sidebarConfig = [
   {
     id: 3,
     img: "/images/history.svg",
-    link: "",
+    link: "/users/history",
     title: "History",
   },
   {

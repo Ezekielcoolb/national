@@ -12,6 +12,11 @@ import UserDashboard from "../UserPages/UserDashboard";
 import AgencySelector from "../test";
 import Ride from "../UserPages/Ride";
 import RideDetails from "../UserPages/RidePages/RideDetails";
+import History from "../UserPages/History";
+import ItemDetails from "../UserPages/HistoryPages/ItemDetails";
+import ComplainDetails from "../UserPages/HistoryPages/ComplainDetails";
+import EmergencyDetails from "../UserPages/HistoryPages/EmergencyDetails";
+import CrimeReportDetails from "../UserPages/HistoryPages/CrimeReportDetails";
 
 
 
@@ -41,6 +46,11 @@ export default function Routers () {
                         {path: "/users/test", element: <AgencySelector />},
                         {path: "/users/rides", element: <Ride />},
                         {path: "/users/ridesDetails", element: <RideDetails />},
+                        {path: "/users/history", element: <History />},
+                        {path: "/users/itemDetails", element: <ItemDetails />},
+                        {path: "/users/complainDetails", element: <ComplainDetails />},
+                        {path: "/users/emergencyDetails", element: <EmergencyDetails />},
+                        {path: "/users/crimeDetails", element: <CrimeReportDetails />},
                     ]
                 }
             ]

@@ -389,6 +389,23 @@ margin: 5px 0px;
   color: #112240;
 
 }
+.history-header {
+  background: #ffffff;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+  padding: 0px 20px;
+  border-bottom: 1px solid #1122401F !important;
+}
+.logger-header {
+  padding: 20px 20px;
+  margin-top: 0px !important;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  background: #ffffff;
+  
+  justify-content: space-between;
+}
 .find-lawyer-header {
   background: #ffffff;
   border-top-right-radius: 15px;
