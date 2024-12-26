@@ -27,20 +27,20 @@ const sidebarConfig = [
   {
     id: 4,
     img: "/images/packing.png",
-    link: "",
+    link: "/users/parking",
     title: "Parking Space",
   },
   {
     id: 5,
     img: "/images/traffic.png",
-    link: "",
+    link: "/users/traffic",
     title: "Traffic Update",
   },
 
   {
     id: 6,
     img: "/images/news.png",
-    link: "/users/billing",
+    link: "/users/news",
     title: "News",
   },
   {
@@ -52,7 +52,7 @@ const sidebarConfig = [
   {
     id: 8,
     img: "/images/setting.png",
-    link: "",
+    link: "/users/settings",
     title: "Settings",
   },
 

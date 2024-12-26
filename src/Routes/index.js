@@ -17,6 +17,12 @@ import ItemDetails from "../UserPages/HistoryPages/ItemDetails";
 import ComplainDetails from "../UserPages/HistoryPages/ComplainDetails";
 import EmergencyDetails from "../UserPages/HistoryPages/EmergencyDetails";
 import CrimeReportDetails from "../UserPages/HistoryPages/CrimeReportDetails";
+import Traffic from "../UserPages/Traffic";
+import TrafficDetials from "../UserPages/TrafficDetails";
+import News from "../UserPages/News/News";
+import NewsDetails from "../UserPages/News/NewsDetails";
+import Settings from "../UserPages/Setting";
+import Parking from "../UserPages/Parking";
 
 
 
@@ -51,6 +57,12 @@ export default function Routers () {
                         {path: "/users/complainDetails", element: <ComplainDetails />},
                         {path: "/users/emergencyDetails", element: <EmergencyDetails />},
                         {path: "/users/crimeDetails", element: <CrimeReportDetails />},
+                        {path: "/users/traffic", element: <Traffic />},
+                        {path: "/users/trafficDetails", element: <TrafficDetials />},
+                        {path: "/users/news", element: <News />},
+                        {path: "/users/newsDetails", element: <NewsDetails />},
+                        {path: "/users/settings", element: <Settings />},
+                        {path: "/users/parking", element: <Parking />},
                     ]
                 }
             ]
