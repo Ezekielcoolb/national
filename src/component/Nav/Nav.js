@@ -173,6 +173,21 @@ const NavBar = () => {
               </a>
             </div>
           </div>
+          <Link to="/admin/dashboard">
+            <div
+              className="p-5 flex justify-center items-center join "
+              style={{
+                color: "white",
+                fontWeight: "700",
+                height: "55px",
+                width: "180px",
+                borderRadius: "100px",
+                backgroundColor: "#1C4F96",
+              }}
+            >
+              Admin
+            </div>
+          </Link>
           <Link to="/users/dashboard">
             <div
               className="p-5 flex justify-center items-center join "
