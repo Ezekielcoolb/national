@@ -23,6 +23,11 @@ import News from "../UserPages/News/News";
 import NewsDetails from "../UserPages/News/NewsDetails";
 import Settings from "../UserPages/Setting";
 import Parking from "../UserPages/Parking";
+import AdminDashboardLayout from "../Controller/adminController";
+import AdminDashboard from "../Admin/AdminDashboard";
+import Complaints from "../Admin/Complaints";
+import ComplaintsDetails from "../Admin/ComplaintsDetails";
+import AdminSetting from "../Admin/AdminSettings";
 
 
 
@@ -63,6 +68,17 @@ export default function Routers () {
                         {path: "/users/newsDetails", element: <NewsDetails />},
                         {path: "/users/settings", element: <Settings />},
                         {path: "/users/parking", element: <Parking />},
+                    ]
+                },
+                {
+                    path : "/admin",
+                    element: <AdminDashboardLayout />,
+                    children:  [
+                        {path: "/admin/dashboard", element: <AdminDashboard />},
+                        {path: "/admin/complaints", element: <Complaints />},
+                        {path: "/admin/complaintsDetails", element: <ComplaintsDetails />},
+                        {path: "/admin/settings", element: <AdminSetting />},
+                      
                     ]
                 }
             ]

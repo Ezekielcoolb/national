@@ -1,15 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-import MapRoad from "./Map";
+
 import { Link } from "react-router-dom";
-import LodgeRidePopup from "./AllPopup/LodgeRidePopup";
-import LodgeItemPopup from "./AllPopup/LodgeItemPopup"
-import { useDispatch, useSelector } from "react-redux";
-import { setComplainVisible, setCreatedComplain, setCreatedCrime, setCreatedEmergency, setCreatedItem, setCreatedRide, setCrimeVisible, setDropdownVisible, setEmergencyVisible, setItemVisible } from "../Redux/appSlice";
-import LodgeComplain from "./AllPopup/LodgeComplain";
-import EmergencyReport from "./AllPopup/EmergencyReportPop";
-import ReportCrimePop from "./AllPopup/ReportCrimePop";
+import MapRoad from "../UserPages/Map";
+
 
 const DashboardRap = styled.div`
   width: 100%;
@@ -44,10 +39,7 @@ const DashboardRap = styled.div`
     width: 75.8px;
     height: 40.78px;
   }
-  .parking-table,
-  .all-commuter-div {
-    width: 50%;
-  }
+  
   .flag {
     width: 42px;
     height: 34px;
@@ -262,14 +254,15 @@ flex-wrap: nowrap;
     font-size: 12px;
     font-weight: 500;
   }
-  .all-commuter-div {
-    background: #112240;
-    border-radius: 10px;
-    padding: 20px;
-  }
+  
   .down-left-div {
     display: flex;
-    gap: 20px;
+   justify-content: space-between;
+   padding: 20px;
+   border: 1px solid #1122401F;
+   background: #ffffff;
+   border-radius: 10px;
+
   }
   .follow_img {
     height: 40px;
@@ -360,9 +353,110 @@ flex-wrap: nowrap;
   .pop{
     
   }
-  .parking-table,
-  .all-commuter-div {
+  .parking-table {
     width: 50%;
+  }
+  .complain-amn h3 {
+    color: #112240;
+    font-size: 24px;
+    font-weight: 700;
+  }
+  .complain-amn p {
+    color: #667085;
+
+    font-size: 13px;
+    font-weight: 400;
+  }
+  .complain-amn  {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .complain-div {
+    border: 1px solid #1122401F;
+    height: 102px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #ffffff;
+    border-radius: 10px;
+    width: 33%;
+    padding: 20px;
+  }
+  .all-complain-div {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .traffic-map {
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+  }
+  .update-btn {
+    background: #112240;
+    text-decoration: none;
+    width: 55px;
+    height: 22px;
+    display: flex;
+    color: #ffffff;
+    font-size: 12px;
+    border-radius: 16px;
+    font-weight: 400;
+    align-items: center;
+    padding: 10px;
+    justify-content: center;
+  }
+  .update-div {
+    background: #f2f4f7;
+    display: flex;
+    align-items: center;
+   
+    border-radius: 16px;
+  }
+  .update-div  p {
+    font-size: 10px;
+    font-weight: 400;
+    color: #344054;
+margin: 0px;
+  }
+  .all-update-div {
+    background: #ffffff;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 10px;
+  }
+  .learn-more-btn {
+    background: #56BF2A;
+    width: 113px;
+    height: 31px;
+    border-radius: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .security-div-info h3 {
+    color: #112240;
+    font-size: 22px;
+    font-weight: 700;
+    max-width: 184px;
+  }
+  .security-div-info p {
+    color: #667085;
+    font-size: 13px;
+    font-weight: 400;
+    max-width: 207px;
+  }
+  .security-div-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .custom-table th {
+    background: #ffffff;
   }
   @media (max-width: 992px) {
     .dashboard {
@@ -382,7 +476,7 @@ flex-wrap: nowrap;
   }
 `;
 
-const Dashboard = () => {
+const AdminDashboard = () => {
   const parking = [
     {
       id: 1,
@@ -493,216 +587,22 @@ const Dashboard = () => {
         "Bitcoin Mini Showdown Puts New York on Front Lines of a Green Fight",
     },
   ];
-  const dropdownRef = useRef(null);
+ 
   const [showAll, setShowAll] = useState(false);
   const [allLatest, setAllLatest] = useState(false);
 
-  const { dropdowVisible, itemDropdown,createdRide, 
-    complainDropdown, emergencyDropdown, createdItem,
-     reportCrimeDropdown, createdComplain, createdCrime, createdEmergency} = useSelector((state) => state.app);
-  const dispatch = useDispatch();
+
  
 
-  const handleVisisble = () => {
-    dispatch(setDropdownVisible());
-  };
- 
-    const handleItemVisible = () => {
-      dispatch(setItemVisible());
-    };
-  const handleComplainLodge = () => {
-    dispatch(setComplainVisible());
-  };
- const handleEmergencyLodge = () => {
-    dispatch(setEmergencyVisible());
-  };
-    const handleCrimeLodge = () => {
-      dispatch(setCrimeVisible());
-    };
   const handleShowAll = () => {
     setShowAll((prev) => !prev);
   };
+ 
   const handleAllLatest = () => {
     setAllLatest((prev) => !prev);
   };
 
-  const handleCloseItem = () => {
-   
-    dispatch(setCreatedItem());
-  };
- const handleCloseRide = () => {
-   
-    dispatch(setCreatedRide());
-  };
-  const handleCloseComplain = () => {
-   
-    dispatch(setCreatedComplain());
-  };
-  const handleCloseEmergency = () => {
-   
-    dispatch(setCreatedEmergency());
-  };
-  const handleCloseCrime = () => {
-   
-    dispatch(setCreatedCrime());
-  };
 
-
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") {  
-        handleCloseCrime() 
-      }
-    };
-    if (createdCrime ) {
-     
-      document.addEventListener("keydown", handleKeyDown);
-    }
-    return () => {
-    
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [ createdCrime]);
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") {  
-        handleCloseEmergency() 
-      }
-    };
-    if (createdEmergency ) {
-     
-      document.addEventListener("keydown", handleKeyDown);
-    }
-    return () => {
-    
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [ createdEmergency]);
-
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") {  
-        handleCloseComplain() 
-      }
-    };
-    if (createdComplain ) {
-     
-      document.addEventListener("keydown", handleKeyDown);
-    }
-    return () => {
-    
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [ createdComplain]);
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") {  
-        handleCloseItem() 
-      }
-    };
-    if (createdItem ) {
-     
-      document.addEventListener("keydown", handleKeyDown);
-    }
-    return () => {
-    
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [ createdItem]);
-
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") {  
-        handleCloseRide() 
-      }
-    };
-    if (createdRide ) {
-     
-      document.addEventListener("keydown", handleKeyDown);
-    }
-    return () => {
-    
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [ createdRide]);
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") {  
-        handleCrimeLodge() 
-      }
-    };
-    if (reportCrimeDropdown ) {
-     
-      document.addEventListener("keydown", handleKeyDown);
-    }
-    return () => {
-    
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [ reportCrimeDropdown]);
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") {  
-        handleEmergencyLodge() 
-      }
-    };
-    if (emergencyDropdown ) {
-     
-      document.addEventListener("keydown", handleKeyDown);
-    }
-    return () => {
-    
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [ emergencyDropdown]);
-
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") {  
-        handleComplainLodge() 
-      }
-    };
-    if (complainDropdown ) {
-     
-      document.addEventListener("keydown", handleKeyDown);
-    }
-    return () => {
-    
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [ complainDropdown]);
- 
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") {  
-        handleItemVisible() 
-      }
-    };
-    if (itemDropdown ) {
-     
-      document.addEventListener("keydown", handleKeyDown);
-    }
-    return () => {
-    
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [ itemDropdown]);
- 
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") {  
-        handleVisisble() 
-      }
-    };
-    if (dropdowVisible ) {
-     
-      document.addEventListener("keydown", handleKeyDown);
-    }
-    return () => {
-    
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [ dropdowVisible]);
 
   const displayedParking = showAll ? parking : parking.slice(0, 2);
   const displayedLatest = allLatest ? latest : latest.slice(0, 1);
@@ -735,136 +635,62 @@ const Dashboard = () => {
   const currentRows = followers.slice(indexOfFirstRow, indexOfLastRow);
   return (
     <DashboardRap>
-        <h2>Welcome Back, Taiwo</h2>
+        
       <div className="dashboard">
         <div className="left-dashboard">
-          <div className="map-div">
+        <div className="all-complain-div">
+            <div className="complain-div">
+                <img src="/images/complain_icon.png" alt="" />
+                <div className="complain-amn">
+                    <p>Complains</p>
+                    <h3>250</h3>
+                </div>
+            </div>
+            <div className="complain-div">
+                <img src="/images/complain_icon.png" alt="" />
+                <div className="complain-amn">
+                    <p>Pending</p>
+                    <h3>25</h3>
+                </div>
+            </div>
+            <div className="complain-div">
+                <img src="/images/complain_icon.png" alt="" />
+                <div className="complain-amn">
+                    <p>Completed</p>
+                    <h3>196</h3>
+                </div>
+            </div>
+        </div>
+
+        <div className="map-plus-info">
+          <div className="traffic-map">
             <MapRoad />
           </div>
-          <div style={{width: "100%", overflowX: "hidden" }}>
-            <div className="allRideContainer">
-              <div className="allRides">
-                <div onClick={handleVisisble} className="lodge-div">
-                  <div className="car">
-                    <img src="/images/car.png" alt="" />
-                  </div>
-                  <h4>Lodge Ride</h4>
-                </div>
-
-                <div className="lodge-div">
-                  <div style={{ position: "relative" }} className="car">
-                    <img src="/images/car.png" alt="" />
-                    <div className="flag">
-                      <img src="/images/flag.png" alt=".." />
-                    </div>
-                  </div>
-                  <h4>Flag Ride</h4>
-                </div>
-                <div onClick={handleItemVisible}  className="lodge-div">
-                  <div className="lodge">
-                    <img src="/images/lodge.png" alt="" />
-                  </div>
-                  <h4>Lodge Item</h4>
-                </div>
-
-                <div onClick={handleComplainLodge} className="lodge-div">
-                  <div className="lodge" style={{ position: "relative" }}>
-                    <img src="/images/crime.png" alt="" />
-                    <div className="flag">
-                      <img src="/images/flag.png" alt=".." />
-                    </div>
-                  </div>
-                  <h4>Lodge Complain</h4>
-                  
-                </div>
-
-                <div onClick={handleEmergencyLodge} className="lodge-div">
-                  <div className="lodge">
-                    <img src="/images/crime.png" alt="" />
-                  </div>
-                  <h4>Emergency Report</h4>
-                </div>
-
-                <div onClick={handleCrimeLodge} className="lodge-div">
-                  <div className="lodge">
-                    <img src="/images/crime.png" alt="" />
-                  </div>
-                  <h4>Report Crime</h4>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-          <div className="down-left-div">
-            <div className="table-container parking-table">
-              <div className="new-table-scroll">
-                <div className="">
-                  <table className="custom-table">
-                    <thead>
-                      <tr>
-                        <th>Parking space</th>
-                        <th>
-                          <Link onClick={handleShowAll} className="see-all">
-                            {showAll ? "See less" : "See all"}
-                          </Link>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {displayedParking.length > 0 ? (
-                        displayedParking.map((caseItem) => (
-                          <tr key={caseItem.id}>
-                            <td>
-                              <div className="allPark">
-                                <div className="space">
-                                  <img src="/images/space.png" alt="" />
-                                </div>
-                                <div className="parrkingName">
-                                  {caseItem.parkingName}
-                                  <span className="parkingAddress">
-                                    {caseItem.status}
-                                    <img
-                                      src="/images/location_icon.png"
-                                      alt=""
-                                    />
-                                    {caseItem.address}
-                                  </span>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="price-td">{caseItem.price}</td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td colSpan="7" className="no-case">
-                            <img src="/images/mask_img.png" alt="" />
-                            <p>You have parking space</p>
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-            <div className="all-commuter-div">
-              <div className="commuter-text">
-                <h3>
-                  New RUA Commuter <br />
-                  Safety Pass ID
-                </h3>
-                <Link className="commuter-link">Get Started</Link>
-              </div>
-              <div className="commuter-move">
-                <div className="commuter-img">
-                  <img src="/images/commuter.png" alt="" />
-                </div>
-              </div>
+          <div className="all-update-div">
+            <div className="update-div">
+              <Link className="update-btn">Update</Link>
+              <p> alimosho around egebeda round-about... </p>
+              <p>Small traffic in Ikeja Round-About...</p>
+              <p>Road is free around 3rd mainland bridge... </p>
             </div>
           </div>
         </div>
+       
+
+
+          <div className="down-left-div">
+           <div className="security-div-info">
+            <h3>Security at your fingertips!</h3>
+            <p>Use your RUA card around the country for free money.</p>
+            <Link className="learn-more-btn">  Learn more</Link>
+           </div>
+            <div className="all-commuter-div">
+             <img src="/images/secure_rua.png" alt="" />
+            </div>
+          </div>
+        </div>
+
+
         <div className="right-dashboard">
           <div className="table-container">
             <div className="new-table-scroll">
@@ -872,8 +698,8 @@ const Dashboard = () => {
                 <table className="custom-table">
                   <thead>
                     <tr>
-                      <th>Who to follow</th>
-                      <th></th>
+                      <th>Messages</th>
+                      <th style={{color: " #56BF2A"}}>See all</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -894,7 +720,6 @@ const Dashboard = () => {
                             </div>
                           </td>
                           <td>
-                            <Link className="folow-btn">follow</Link>
                           </td>
                         </tr>
                       ))
@@ -983,114 +808,11 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        {dropdowVisible? <div  ref={dropdownRef}>< LodgeRidePopup /> </div> : ""}
-      {itemDropdown? <div  ref={dropdownRef}>< LodgeItemPopup /> </div> : ""}
-      {complainDropdown? <div> <LodgeComplain /></div> : ""}
-      {emergencyDropdown? <div> <EmergencyReport /> </div> : ""}
-      {reportCrimeDropdown ? <div> <ReportCrimePop /> </div> : ""}
-      {createdRide ? (
-        <div className="dropdown-container">
-          <div className="successCreation">
-            <h2>Ride created</h2>
-            <div>
-            <p>
-              Your ride has been created successfully, you can share ride with
-              family and friends.
-            </p>
-            <Link onClick={handleCloseRide} className="successContinue">Continue</Link>
-            <input type="text" />
-            <Link className="whatssap">
-            <img src="/images/what_icon.png" alt="" />
-            <p>Share on WhatsApp</p></Link>
-            </div>
-          </div>
-        </div>
-      ) : (
-        ""
-      )}
-      {createdItem ? (
-        <div className="dropdown-container">
-          <div className="successCreation">
-            <h2>Item Lodged</h2>
-            <div>
-            <p>
-            Your item has been lodge successfully, 
-            you can share link with family and friends.
-            </p>
-            <Link onClick={handleCloseItem} className="successContinue">Continue</Link>
-            <input type="text" />
-            <Link className="whatssap">
-            <img src="/images/what_icon.png" alt="" />
-            <p>Share on WhatsApp</p></Link>
-            </div>
-          </div>
-        </div>
-      ) : (
-        ""
-      )}
-       {createdComplain ? (
-        <div className="dropdown-container">
-          <div className="successCreation">
-            <h2>Complain Lodged</h2>
-            <div>
-            <p>
-            Your complain has been lodge successfully, 
-            you can share link with family and friends.
-            </p>
-            <Link onClick={handleCloseItem} className="successContinue">View Details</Link>
-            <input type="text" />
-            <Link className="whatssap">
-            <img src="/images/what_icon.png" alt="" />
-            <p>Share on WhatsApp</p></Link>
-            </div>
-          </div>
-        </div>
-      ) : (
-        ""
-      )}
-        {createdEmergency ? (
-        <div className="dropdown-container">
-          <div className="successCreation">
-            <h2>Request Sent</h2>
-            <div>
-            <p>
-            Your emergency request have been sent successfully,
-             you can share link with family and friends.
-            </p>
-            <Link onClick={handleCloseEmergency} className="successContinue">View Details</Link>
-            <input type="text" />
-            <Link className="whatssap">
-            <img src="/images/what_icon.png" alt="" />
-            <p>Share on WhatsApp</p></Link>
-            </div>
-          </div>
-        </div>
-      ) : (
-        ""
-      )}
-          {createdCrime ? (
-        <div className="dropdown-container">
-          <div className="successCreation">
-            <h2>Request Sent</h2>
-            <div>
-            <p>
-            Your emergency request have been sent successfully, 
-            you can share link with family and friends.
-            </p>
-            <Link onClick={handleCloseCrime} className="successContinue">View Details</Link>
-            <input type="text" />
-            <Link className="whatssap">
-            <img src="/images/what_icon.png" alt="" />
-            <p>Share on WhatsApp</p></Link>
-            </div>
-          </div>
-        </div>
-      ) : (
-        ""
-      )}
+       
+      
       </div>
     </DashboardRap>
   );
 };
 
-export default Dashboard;
+export default AdminDashboard;
