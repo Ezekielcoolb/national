@@ -751,7 +751,7 @@ const Dashboard = () => {
                   <h4>Lodge Ride</h4>
                 </div>
 
-                <div className="lodge-div">
+                {/* <div className="lodge-div">
                   <div style={{ position: "relative" }} className="car">
                     <img src="/images/car.png" alt="" />
                     <div className="flag">
@@ -759,7 +759,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <h4>Flag Ride</h4>
-                </div>
+                </div> */}
                 <div onClick={handleItemVisible}  className="lodge-div">
                   <div className="lodge">
                     <img src="/images/lodge.png" alt="" />

@@ -148,7 +148,7 @@ const ExploringPark = () => {
   ];
   const handleRowClick = () => {
     
-    navigate("");
+    navigate("/users/explore-parking/details");
   };
   //   pagination
 

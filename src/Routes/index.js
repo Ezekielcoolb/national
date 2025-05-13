@@ -28,6 +28,10 @@ import AdminDashboard from "../Admin/AdminDashboard";
 import Complaints from "../Admin/Complaints";
 import ComplaintsDetails from "../Admin/ComplaintsDetails";
 import AdminSetting from "../Admin/AdminSettings";
+import ParkingDetials from "../UserPages/PakingPages/ParkingDetails";
+import GeneralParkingDetials from "../UserPages/PakingPages/GeneralParkingDetails";
+import AdminRide from "../Admin/AdminRides";
+import AdminRideDetails from "../Admin/AdminRideDetails";
 
 
 
@@ -68,6 +72,9 @@ export default function Routers () {
                         {path: "/users/newsDetails", element: <NewsDetails />},
                         {path: "/users/settings", element: <Settings />},
                         {path: "/users/parking", element: <Parking />},
+                        {path: "/users/parking/details", element: <ParkingDetials />},
+                        {path: "/users/explore-parking/details", element: <GeneralParkingDetials />},
+
                     ]
                 },
                 {
@@ -75,6 +82,8 @@ export default function Routers () {
                     element: <AdminDashboardLayout />,
                     children:  [
                         {path: "/admin/dashboard", element: <AdminDashboard />},
+                         {path: "/admin/rides", element: <AdminRide />},
+                         {path: "/admin/rides/details", element: <AdminRideDetails />},
                         {path: "/admin/complaints", element: <Complaints />},
                         {path: "/admin/complaintsDetails", element: <ComplaintsDetails />},
                         {path: "/admin/settings", element: <AdminSetting />},

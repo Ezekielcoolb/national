@@ -79,6 +79,7 @@ const TaskRap = styled.div`
     align-items: center;
     gap: 10px;
  }
+
 `;
 
 const MyParking = () => {
@@ -148,7 +149,7 @@ const MyParking = () => {
   ];
   const handleRowClick = () => {
     
-    navigate("");
+    navigate("/users/parking/details")
   };
   //   pagination
 
@@ -173,6 +174,8 @@ const MyParking = () => {
     return "#112240"; // Default color if priority is missing or unrecognized
   };
  
+   const handleParkingDetail = () => {
+  }
 
   return (
     <TaskRap>
@@ -232,7 +235,7 @@ const MyParking = () => {
                           <td>{caseItem.bikeNo}</td>
                           <div className="second-park-td">
                             <h4>₦600</h4>
-                            <Link className="book-now">Book Now</Link>
+                            {/* <Link className="book-now">Book Now</Link> */}
                           </div>
                         </tr>
                       );

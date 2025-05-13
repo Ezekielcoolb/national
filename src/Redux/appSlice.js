@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   openSideBar: false,
   dropdowVisible: false,
+  dropdowVisibleTwo: false,
   itemDropdown: false,
   complainDropdown: false,
   emergencyDropdown: false,
@@ -23,6 +24,9 @@ const appSlice = createSlice({
     },
     setDropdownVisible: (state) => {
       state.dropdowVisible = !state.dropdowVisible
+    },
+     setDropdownVisibleTwo: (state) => {
+      state.dropdowVisibleTwo = !state.dropdowVisibleTwo
     },
     setItemVisible: (state) => {
       state.itemDropdown = !state.itemDropdown
@@ -53,7 +57,7 @@ const appSlice = createSlice({
     },
   },
 });
-export const { setOpenSideBar,  setDropdownVisible, setItemVisible,
+export const { setOpenSideBar, setDropdownVisibleTwo, setDropdownVisible, setItemVisible,
    setComplainVisible, setEmergencyVisible, setCrimeVisible, setCreatedCrime,
     setCreatedRide, setCreatedItem, setCreatedComplain, setCreatedEmergency} = appSlice.actions;
 export default appSlice.reducer;

@@ -15,24 +15,30 @@ const sidebarConfig = [
   {
     id: 2,
     img: "/images/complain.png",
+    link: "/admin/rides",
+    title: "Ride",
+  },
+   {
+    id: 3,
+    img: "/images/complain.png",
     link: "/admin/complaints",
     title: "Complaints",
   },
   {
-    id: 3,
+    id: 4,
     img: "/images/user_mes.png",
     link: "",
     title: "Messages",
   },
   {
-    id: 4,
+    id: 5,
     img: "/images/news.png",
     link: "",
     title: "News",
   },
  
   {
-    id: 5,
+    id: 6,
     img: "/images/setting.png",
     link: "/admin/settings",
     title: "Settings",

@@ -38,7 +38,7 @@ const HomeSection = styled.section`
   h1 {
     font-size: 70px;
     font-weight: 700;
-    line height: 75px;
+    line-height: 75px;
     font-family: Bricolage Grotesque;
     margin-bottom: 1.5rem;
   }
@@ -86,6 +86,7 @@ const HomeSection = styled.section`
   }
    
 `;
+
 const OtherSection = styled.div`
   font-family: Inter;
  

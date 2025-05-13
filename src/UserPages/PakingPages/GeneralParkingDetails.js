@@ -108,9 +108,9 @@ const TrafficDetaiRap = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid blue;
+    border: 1px solid #56BF2A;
     text-decoration: none;
-    color: blue;
+    color: #56BF2A;
     font-size: 12px;
     font-weight: 500;
     cursor: pointer;
@@ -118,7 +118,7 @@ const TrafficDetaiRap = styled.div`
    }
 `;
 
-const ParkingDetials = () => {
+const GeneralParkingDetials = () => {
   return (
     <TrafficDetaiRap>
       <div className="icon-header">
@@ -137,7 +137,7 @@ const ParkingDetials = () => {
         <div className="all-details-divs">
           <img src="/images/traffic-2.png" alt="" />
           <div className="tech-div">
-            {/* <p className="tech">Pending</p> */}
+            <p className="tech">Pending</p>
             <div className="rating-star">
                  <Icon
               icon="material-symbols:star-rounded"
@@ -199,11 +199,11 @@ const ParkingDetials = () => {
             <img src="/images/traffic-2.png" alt="" />
             <img src="/images/traffic-2.png" alt="" />
           </div>
-          <button className="book-now">Edit</button>
+          <button className="book-now">Book now</button>
         </div>
       </div>
     </TrafficDetaiRap>
   );
 };
 
-export default ParkingDetials;
+export default GeneralParkingDetials;
