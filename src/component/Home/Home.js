@@ -1,6 +1,106 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Icon } from "@iconify/react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { fetchHomepage } from "../../Redux/slices/homeSlice";
+
+const Wrapper = styled.div`
+  margin-top: 100px;
+  background-color: #1c4f96;
+  color: white;
+  height: 565px;
+  display: flex;
+  position: relative;
+`;
+
+const LeftSection = styled.div`
+  flex: 1;
+  padding: 80px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  min-width: 360px;
+  margin-left: 125px;
+
+  @media (max-width: 1200px) {
+    margin-left: 70px !important;
+  }
+  @media (max-width: 992px) {
+    margin-left: 100px !important;
+  }
+  @media (max-width: 576px) {
+    margin-left: 40px !important;
+  }
+`;
+
+const Title = styled.p`
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+`;
+
+const Heading = styled.h2`
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 55px;
+  max-width: 365px;
+`;
+
+const Description = styled.p`
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  max-width: 377px;
+`;
+
+const ButtonRow = styled.div`
+  display: flex;
+  gap: 28px;
+  margin-top: 48px;
+`;
+
+const NavButton = styled.button`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: ${({ active }) => (active ? "#ffffff" : "#ffffff33")};
+  cursor: ${({ active }) => (active ? "pointer" : "not-allowed")};
+  color: black;
+  transition: background-color 0.3s ease;
+`;
+
+const SliderContainer = styled.div`
+  width: 720px;
+  height: 565px;
+  overflow: hidden;
+  flex-shrink: 0;
+`;
+
+const SliderTrack = styled.div`
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  height: 100%;
+`;
+
+const Slide = styled.div`
+  width: 720px;
+  height: 565px;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+`;
+
 
 const HomeSection = styled.section`
   position: relative;
@@ -12,9 +112,9 @@ const HomeSection = styled.section`
   padding-left: 125px;
   padding-top: 100px;
   align-items: center;
-//   justify-content: center;
+  //   justify-content: center;
   color: white;
-  
+
   /* Dark overlay on the background */
   &:before {
     content: "";
@@ -31,7 +131,7 @@ const HomeSection = styled.section`
   .content {
     position: relative;
     z-index: 2;
-    
+
     max-width: 570px;
   }
 
@@ -54,42 +154,57 @@ const HomeSection = styled.section`
     display: flex;
     gap: 15px;
     justify-content: flex-start;
-    
-    button {
+  }
+
+  .buttons-link {
     width: 183.19px;
     height: 55px;
     font-family: Inter;
     font-weight: 600;
     line-height: 19.36px;
-      padding: 0.8rem 1.5rem;
-      font-size: 16px;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s ease;
+    padding: 0.8rem 1.5rem;
+    font-size: 16px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
 
-      &:first-child {
-        background-color:  #56BF2A;; /* Green for Get Started */
-        color: white;
-      }
-
-      &:last-child {
-        background-color: transparent;
-        color: white;
-        border: 1px solid white; /* Outline button for Learn More */
-      }
-
-      &:hover {
-        opacity: 0.8;
-      }
-    }
+    gap: 5px;
+    background-color: #56bf2a; /* Green for Get Started */
+    color: white;
   }
-   
+  .buttons-link-two {
+    width: 183.19px;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    font-weight: 600;
+    line-height: 19.36px;
+    padding: 0.8rem 1.5rem;
+    font-size: 16px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+  }
+
+  .buttons-link:hover,
+  .buttons-link-two:hover {
+    opacity: 0.8;
+  }
 `;
 
 const OtherSection = styled.div`
   font-family: Inter;
- 
 
   .D-1 {
     background: linear-gradient(90deg, #f3f4f7 0%, rgba(254, 253, 253, 0) 100%);
@@ -115,7 +230,7 @@ const OtherSection = styled.div`
     border-radius: 8px;
     border: 1px solid #e3e6ef;
     background: white;
-    
+
     position: relative; /* Make sure influence is positioned relative */
     z-index: 2; /* Make sure it's above the .dots */
   }
@@ -190,7 +305,7 @@ const OtherSection = styled.div`
     opacity: 0px;
     position: absolute;
     bottom: 60px;
-    right:  -100px;
+    right: -100px;
     z-index: 1;
     background: white;
   }
@@ -273,7 +388,7 @@ const OtherSection = styled.div`
   }
 
   /* General styling for the services section */
- .services-section {
+  .services-section {
     display: flex;
     justify-content: space-between;
     padding-top: 100px;
@@ -281,11 +396,11 @@ const OtherSection = styled.div`
     color: white;
     gap: 20px; /* Adds space between .services-info and .image-section */
     overflow: hidden; /* Ensures that overflow is limited to the scroll area */
-}
+  }
 
   .services-info {
     max-width: 312px;
-     flex-shrink: 0;
+    flex-shrink: 0;
   }
 
   .services-info h3 {
@@ -304,32 +419,32 @@ const OtherSection = styled.div`
     font-size: 16px;
     line-height: 24px;
   }
-.image-overflow {
-overflow-x: auto;
-}
-.image-overflow::-webkit-scrollbar {
-    width: 5px;  /* Width of the vertical scrollbar */
+  .image-overflow {
+    overflow-x: auto;
+  }
+  .image-overflow::-webkit-scrollbar {
+    width: 5px; /* Width of the vertical scrollbar */
     height: 7px; /* Height of the horizontal scrollbar */
-}
+  }
 
-/* The scrollbar track (background) */
-.image-overflow.image-overflow::-webkit-scrollbar-track {
-    background:  #1c4f96;
-}
+  /* The scrollbar track (background) */
+  .image-overflow.image-overflow::-webkit-scrollbar-track {
+    background: #1c4f96;
+  }
 
-/* The draggable handle (thumb) */
-.image-overflow::-webkit-scrollbar-thumb {
+  /* The draggable handle (thumb) */
+  .image-overflow::-webkit-scrollbar-thumb {
     background-color: #888;
     border-radius: 10px; /* Rounded edges */
     border: 2px solid #1c4f96; /* Optional to create a padding effect */
-}
+  }
 
-/* Hover state of the thumb */
-.image-overflow::-webkit-scrollbar-thumb:hover {
+  /* Hover state of the thumb */
+  .image-overflow::-webkit-scrollbar-thumb:hover {
     background-color: #f1f1f1;
-}
+  }
   /* Styling for the image section with two images */
- .image-section {
+  .image-section {
     display: flex;
     flex-grow: 1; /* Allows image-section to take up remaining space */
     overflow-x: auto !important;
@@ -337,9 +452,9 @@ overflow-x: auto;
     scroll-behavior: smooth;
     gap: 20px;
     width: fit-content;
-     flex-shrink: 0;
+    flex-shrink: 0;
     padding-bottom: 10px; /* Adds space at the bottom to avoid scrollbar overlap */
-}
+  }
 
   .image-overlay {
     position: relative;
@@ -350,21 +465,9 @@ overflow-x: auto;
     border-radius: 10px;
   }
 
-  /* First image (Road Safety Management) */
-  .image-overlay:nth-child(1) {
-    background-image: url("../images/road_1.jpg");
+  .btn-hidden {
+    display: none;
   }
-
-  /* Second image (Road Traffic Management) */
-  .image-overlay:nth-child(2) {
-    background-image: url("../images/road-2.jpg");
-  }
-     .image-overlay:nth-child(3) {
-    background-image: url("../images/road-2.jpg");
-  }
-.btn-hidden {
-display: none;
-}
   /* Gradient overlay on the images */
   .overlay-gradient {
     position: absolute;
@@ -398,12 +501,31 @@ display: none;
     backdrop-filter: blur(5px);
     background: #ffffff33;
   }
+  .slider-container {
+    overflow: hidden;
+    width: 720px;
+    height: 565px;
+    position: relative;
+  }
+
+  .slider-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    height: 100%;
+  }
+
+  .slider-item {
+    flex-shrink: 0;
+    width: 720px;
+    height: 565px;
+  }
+
   .logic-shadow {
     box-shadow: 0px 15px 50px 0px #00000014;
 
-    border-radius: 15px; 
+    border-radius: 15px;
     overflow: hidden;
-    margin: 5px
+    margin: 5px;
   }
 `;
 
@@ -411,25 +533,95 @@ const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isClicked, setIsClicked] = useState(true);
   const [clicked, setClicked] = useState(false);
-  const handleToggle = () => [setIsOpen(!isOpen)];
-  const secondToggle = () => {
-    setClicked(!clicked);
+  const [activeIndex, setActiveIndex] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndexTes, setCurrentIndexTes] = useState(0);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { homeObject, loading, error } = useSelector(
+    (state) => state.home || []
+  );
+
+  const slider = homeObject?.data?.slider;
+  const aboutUs = homeObject?.data?.aboutUs;
+  const counterSection = homeObject?.data?.counterSection;
+  const departments = homeObject?.data?.departments;
+  const downloadAppSection = homeObject?.data?.downloapAppSection;
+  const members = homeObject?.data?.members;
+  const ourService = homeObject?.data?.ourService;
+  const partners = homeObject?.data?.partners;
+  const sectionNine = homeObject?.data?.sectionNine;
+  const testimonials = homeObject?.data?.testimonials;
+  const blog = homeObject?.data?.blog;
+  const callToAction = homeObject?.data?.callToAction;
+  const currentTestimony = testimonials?.testList[currentIndexTes];
+
+  const rating = parseFloat(currentTestimony?.rate);
+  const totalStars = 5;
+  const safeRating = isNaN(rating) ? 0 : rating;
+  const fullStars = Math.floor(safeRating);
+  const hasHalfStar = safeRating % 1 >= 0.5;
+
+  console.log(homeObject);
+  useEffect(() => {
+    dispatch(fetchHomepage()); // Call API on component mount
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (counterSection?.counterFaq?.faqs?.length > 0) {
+      setActiveIndex(0);
+    }
+  }, [counterSection]);
+
+  const handleToggle = (index) => {
+    setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
   };
-  const handleIsClicked = () => {
-    setIsClicked(!isClicked);
+  const total = members?.memberList?.length || 0;
+  const memberImages = members?.memberList || [];
+  console.log(memberImages);
+
+  const handleNext = () => {
+    if (currentIndex < memberImages?.length - 1) {
+      setCurrentIndex((prev) => prev + 1);
+    }
   };
 
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex((prev) => prev - 1);
+    }
+  };
 
+  const handleNextTes = () => {
+    setCurrentIndexTes(
+      (prevIndex) => (prevIndex + 1) % testimonials?.testList?.length
+    );
+  };
+
+  const handlePrevTes = () => {
+    setCurrentIndexTes((prevIndex) =>
+      prevIndex === 0 ? testimonials?.testList?.length - 1 : prevIndex - 1
+    );
+  };
+
+  const formatMonthYear = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+    }); // Output like: "May, 2025"
+  };
 
   return (
     <div>
       <HomeSection>
         <div className="content homecontent">
-          <p style={{color: "white"}}>WELCOME TO ROAD USERS ASSOCIATION</p>
-          <h1 style={{color: "white"}}>The National Road Transport Organization.</h1>
+          <p style={{ color: "white" }}>{slider?.title}</p>
+          <h1 style={{ color: "white" }}>{slider?.sub_title}</h1>
           <div className="buttons btn">
-            <button className="flex justify-around items-center">
-              <div>Get Started</div>
+            <Link to={`${slider?.second_btn_link}`} className="buttons-link">
+              <div>{slider?.second_btn_name}</div>
               <div
                 className="flex justify-center items-center"
                 style={{
@@ -446,8 +638,10 @@ const Home = () => {
                   style={{ color: "#56bf2a" }}
                 />
               </div>
-            </button>
-            <button>Learn More</button>
+            </Link>
+            <Link className="buttons-link-two" to={`${slider?.first_btn_link}`}>
+              {slider?.first_btn_name}
+            </Link>
           </div>
         </div>
       </HomeSection>
@@ -463,75 +657,32 @@ const Home = () => {
           >
             <p className="py-14 text-center">
               <span style={{ color: "rgba(255, 255, 255, 0.7)" }}>
-                RUA delivers for its individual and corporate members.{" "}
+                {departments?.departmentsHeading?.title}{" "}
               </span>
-              <a style={{ textDecoration: "white" }} href="#">
-                Our Department
-              </a>
             </p>
 
-        
-
             <div className="flex containers justify-between gap-7">
-              <div className="influence justify-center px-7">
-                <div className="flex justify-between items-center ">
-                  <img
-                    style={{
-                      height: "34px",
-                      width: "34px",
-                      objectFit: "contain",
-                      display: "block",
-                      objectPosition: "top",
-                    }}
-                    src="./images/Icon.png"
-                    alt="..."
-                  />
-                  <div className="D-1 items-center">D1</div>
+              {departments?.departmentsList?.map((items) => (
+                <div className="influence justify-center px-7">
+                  <div className="flex justify-between items-center ">
+                    <img
+                      style={{
+                        height: "34px",
+                        width: "34px",
+                        objectFit: "contain",
+                        display: "block",
+                        objectPosition: "top",
+                      }}
+                      src={`https://backoffice.rua.com.ng/${items?.image}`}
+                      alt="..."
+                    />
+                    <div className="D-1 items-center">D1</div>
+                  </div>
+                  <p style={{ lineHeight: "21.6px", marginTop: "20px" }}>
+                    {items?.title}
+                  </p>
                 </div>
-                <p style={{ lineHeight: "21.6px", marginTop: "20px" }}>
-                  Influence
-                </p>
-              </div>
-
-              <div className="influence justify-center px-7">
-                <div className="flex justify-between items-center ">
-                  <img
-                    style={{
-                      height: "34px",
-                      width: "34px",
-                      objectFit: "contain",
-                      display: "block",
-                      objectPosition: "top",
-                    }}
-                    src="./images/Icon.png"
-                    alt="..."
-                  />
-                  <div className="D-1 items-center">D1</div>
-                </div>
-                <p style={{ lineHeight: "21.6px", marginTop: "20px" }}>
-                  Intelligence
-                </p>
-              </div>
-
-              <div className="influence justify-center px-7">
-                <div className="flex justify-between items-center ">
-                  <img
-                    style={{
-                      height: "34px",
-                      width: "34px",
-                      objectFit: "contain",
-                      display: "block",
-                      objectPosition: "top",
-                    }}
-                    src="./images/Icon.png"
-                    alt="..."
-                  />
-                  <div className="D-1 items-center">D1</div>
-                </div>
-                <p style={{ lineHeight: "21.6px", marginTop: "20px" }}>
-                  Access
-                </p>
-              </div>
+              ))}
             </div>
             <div className="dots"></div>
           </div>
@@ -540,7 +691,7 @@ const Home = () => {
               className="flex gap-4  justify-between items-center voice"
               style={{ marginTop: "100px", marginBottom: "100px" }}
             >
-              <div className="img-voice-div" style={{position: "relative"}}>
+              <div className="img-voice-div" style={{ position: "relative" }}>
                 <div
                   style={{
                     fontFamily: "Bricolage Grotesque",
@@ -572,7 +723,7 @@ const Home = () => {
                       marginTop: "-100px",
                     }}
                   >
-                    12
+                    {aboutUs?.years_of_exp}
                   </p>
                   <p
                     style={{
@@ -582,10 +733,17 @@ const Home = () => {
                       maxWidth: "102.48px",
                     }}
                   >
-                    years of existence
+                    {aboutUs?.years_of_exp_title}
                   </p>
                 </div>
-                <div className="voice-img" style={{marginLeft: "90px", height: "558px", width: "464px" }}>
+                <div
+                  className="voice-img"
+                  style={{
+                    marginLeft: "90px",
+                    height: "558px",
+                    width: "464px",
+                  }}
+                >
                   <img
                     style={{
                       height: "100%",
@@ -594,7 +752,7 @@ const Home = () => {
                       display: "block",
                       objectPosition: "top",
                     }}
-                    src="./images/image_1.png"
+                    src={`https://backoffice.rua.com.ng/${aboutUs?.banner}`}
                     alt="..."
                   />
                 </div>
@@ -609,9 +767,10 @@ const Home = () => {
                     lineHeight: "16.94px",
                   }}
                 >
-                  THE VOICE OF ROAD TRANSPORT
+                  {aboutUs?.title}
                 </p>
-                <h2 className=""
+                <h2
+                  className=""
                   style={{
                     lineHeight: "55px",
                     color: "#112240",
@@ -622,7 +781,7 @@ const Home = () => {
                     maxWidth: "453px",
                   }}
                 >
-                  Lorem ipsum dolor sit amet consectetur.
+                  {aboutUs?.sub_title}
                 </h2>
                 <p
                   style={{
@@ -631,13 +790,7 @@ const Home = () => {
                     maxWidth: "431px",
                   }}
                 >
-                  Lorem ipsum dolor sit amet consectetur. In ac facilisi
-                  ultrices nulla tempus neque in. Pharetra volutpat turpis
-                  parturient a egestas sed nulla nisl egestas. Nisl nunc massa
-                  at id. Cursus eu urna dolor convallis auctor vitae
-                  scelerisque. Lobortis mauris auctor placerat magnis. Cras
-                  montes habitant leo sed. Habitant sapien urna risus nibh
-                  viverra vestibulum nec. Felis id id a aliquet a eu.
+                  {aboutUs?.content}
                 </p>
                 <button className="flex justify-around items-center">
                   <div>Read More</div>
@@ -661,11 +814,12 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="flex justify-center items-center "  style={{ backgroundColor: "#eef5ff", height: "135.19px" }}>
-            <div
-              className="flex justify-center items-center gap-8 containers"
-             
-            >
+
+          <div
+            className="flex justify-center items-center "
+            style={{ backgroundColor: "#eef5ff", height: "135.19px" }}
+          >
+            <div className="flex justify-center items-center gap-8 containers">
               <div
                 style={{
                   borderTop: "4px solid #1c4f96",
@@ -682,7 +836,7 @@ const Home = () => {
                   color: "#112240",
                 }}
               >
-                Lorem ipsum dolor sit amet consectetur. Odio viverra massa.
+                {aboutUs?.bottom_title}
               </p>
               <div
                 style={{
@@ -693,19 +847,18 @@ const Home = () => {
               ></div>
             </div>
           </div>
+
           <div style={{ backgroundColor: "#1c4f96", position: "relative" }}>
             <div className="blue-dot"></div>
-            <div style={{overflowX: "hidden"}} className="services-section gap-10 contains items-center ">
+            <div
+              style={{ overflowX: "hidden" }}
+              className="services-section gap-10 contains items-center "
+            >
               {/* Left Section */}
               <div className="services-info flex flex-col gap-5">
-                <h3>SERVICES</h3>
-                <h1>What we do</h1>
-                <p>
-                  RUA actively shapes the future of the industry, working with
-                  businesses, industry experts, CEOs, politicians, researchers,
-                  and everyone else involved in road transport at regional and
-                  national levels.
-                </p>
+                <h3>{ourService?.serviceHeading?.title}</h3>
+                <h1>{ourService?.serviceHeading?.sub_title}</h1>
+                <p>{ourService?.serviceHeading?.content}</p>
                 <button className="flex justify-around items-center">
                   <div>Get in Touch</div>
                   <div
@@ -728,83 +881,45 @@ const Home = () => {
               </div>
 
               {/* Right Section - Two Images with Gradient and Text */}
-              <div className="image-overflow" >
-                  <div className="image-section"  style={{ display: "flex", width: "fit-content" }}>
-                {/* First Image */}
-                <div className="image-overlay" style={{ }}>
-                  <div className="overlay-gradient"></div>
-                  <div className="text-content px-5 gap-12 flex justify-between">
-                    <h2>Road Safety Management</h2>
+              <div className="image-overflow">
+                <div
+                  className="image-section"
+                  style={{ display: "flex", width: "fit-content" }}
+                >
+                  {/* First Image */}
+                  {ourService?.serviceList?.map((items) => (
                     <div
-                      className="flex justify-center items-center round-arrow"
+                      className="image-overlay"
                       style={{
-                        width: "50px",
-                        height: "50px",
-                        borderRadius: "50%",
+                        backgroundImage: `url(https://backoffice.rua.com.ng/${items?.image})`,
                       }}
-                     
                     >
-                      <Icon
-                        icon="solar:arrow-right-outline"
-                        width="28"
-                        height="28"
-                        style={{ color: "black" }}
-                      />
+                      <div className="overlay-gradient"></div>
+                      <div className="text-content px-5 gap-12 flex justify-between">
+                        <h2>{items?.title}</h2>
+                        <div
+                          className="flex justify-center items-center round-arrow"
+                          style={{
+                            width: "50px",
+                            height: "50px",
+                            borderRadius: "50%",
+                          }}
+                        >
+                          <Icon
+                            icon="solar:arrow-right-outline"
+                            width="28"
+                            height="28"
+                            style={{ color: "black" }}
+                          />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-
-                {/* Second Image */}
-                <div className="image-overlay" style={{ }}>
-                  <div className="overlay-gradient"></div>
-                  <div className="text-content px-5 gap-12 flex justify-between">
-                    <h2>Road Traffic Management</h2>
-                    <div
-                      className="flex justify-center items-center round-arrow"
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                        borderRadius: "50%",
-                      }}
-                     
-                    >
-                      <Icon
-                        icon="solar:arrow-right-outline"
-                        width="28"
-                        height="28"
-                        style={{ color: "black" }}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Third Image */}
-                <div className="image-overlay" style={{ }}>
-                  <div className="overlay-gradient"></div>
-                  <div className="text-content px-5 gap-12 flex justify-between">
-                    <h2>Traffic  Solutions</h2>
-                    <div
-                      className="flex justify-center items-center round-arrow"
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                        borderRadius: "50%",
-                      }}
-                     
-                    >
-                      <Icon
-                        icon="solar:arrow-right-outline"
-                        width="28"
-                        height="28"
-                        style={{ color: "black" }}
-                      />
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
-             </div>
             </div>
           </div>
+
           <div>
             <div
               style={{ paddingTop: "100px", gap: "20px" }}
@@ -813,7 +928,6 @@ const Home = () => {
               <div className="logic-shadow">
                 <div className="flex logic-wrap">
                   <div
-                  
                     style={{
                       width: "290px",
                       height: "214px",
@@ -831,7 +945,7 @@ const Home = () => {
                         lineHeight: "60px",
                       }}
                     >
-                      60%
+                      {counterSection?.counters?.counter_one}
                     </p>
                     <p
                       style={{
@@ -841,7 +955,7 @@ const Home = () => {
                         lineHeight: "32px",
                       }}
                     >
-                      LOGISTICS
+                      {counterSection?.counters?.counter_one_title}
                     </p>
                   </div>
                   <div
@@ -861,7 +975,7 @@ const Home = () => {
                         lineHeight: "60px",
                       }}
                     >
-                      40%
+                      {counterSection?.counters?.counter_two}
                     </p>
                     <p
                       style={{
@@ -871,7 +985,7 @@ const Home = () => {
                         lineHeight: "32px",
                       }}
                     >
-                      MOBILITY
+                      {counterSection?.counters?.counter_two_title}
                     </p>
                   </div>
                 </div>
@@ -893,7 +1007,7 @@ const Home = () => {
                         lineHeight: "60px",
                       }}
                     >
-                      5+
+                      {counterSection?.counters?.counter_three}
                     </p>
                     <p
                       style={{
@@ -903,7 +1017,7 @@ const Home = () => {
                         lineHeight: "32px",
                       }}
                     >
-                      STATES
+                      {counterSection?.counters?.counter_three_title}
                     </p>
                   </div>
                   <div
@@ -920,7 +1034,7 @@ const Home = () => {
                         lineHeight: "60px",
                       }}
                     >
-                      40%
+                      {counterSection?.counters?.counter_four}
                     </p>
                     <p
                       style={{
@@ -931,12 +1045,12 @@ const Home = () => {
                         lineHeight: "32px",
                       }}
                     >
-                      MEMBERS ORGANIZATION
+                      {counterSection?.counters?.counter_four_title}
                     </p>
                   </div>
                 </div>
               </div>
-              <div style={{Maxwidth: "493px"}}>
+              <div style={{ Maxwidth: "493px" }}>
                 <h2
                   style={{
                     maxWidth: "500px",
@@ -947,258 +1061,101 @@ const Home = () => {
                     color: "#112240",
                   }}
                 >
-                  Lorem ipsum dolor sit amet consectetur. Seed.
+                  {counterSection?.counterFaq?.heading?.title}
                 </h2>
-                <div
-                  className="flex flex-col gap-3 py-4"
-                  onClick={handleIsClicked}
-                  style={{
-                    borderBottom: "1px solid #e3e6ef",
-                    cursor: "pointer",
-                  }}
-                >
-                  <div className="flex justify-between items-center">
-                    <h3
-                      style={{
-                        fontWeight: "600",
-                        fontSize: "19px",
-                        lineHeight: "32px",
-                        color: "#112240",
-                      }}
-                    >
-                      You deserve time to recover
-                    </h3>
-                    {isClicked ? (
+
+                {counterSection?.counterFaq?.faqs?.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col gap-3 py-4"
+                    onClick={() => handleToggle(index)}
+                    style={{
+                      borderBottom: "1px solid #e3e6ef",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <div className="flex justify-between items-center">
+                      <h3
+                        style={{
+                          fontWeight: "600",
+                          fontSize: "19px",
+                          lineHeight: "32px",
+                          color: "#112240",
+                        }}
+                      >
+                        {item?.question}
+                      </h3>
                       <Icon
-                        icon="ri:arrow-up-s-line"
+                        icon={
+                          activeIndex === index
+                            ? "ri:arrow-up-s-line"
+                            : "ri:arrow-down-s-line"
+                        }
                         width="16.3"
                         height="19"
                         style={{ color: "#112240", fontWeight: "900" }}
                       />
-                    ) : (
-                      <Icon
-                        icon="ri:arrow-down-s-line"
-                        width="16.3"
-                        height="19"
-                        style={{ color: "#112240", fontWeight: "900" }}
-                      />
+                    </div>
+
+                    {activeIndex === index && (
+                      <p style={{ maxWidth: "472px" }}>{item?.answer}</p>
                     )}
                   </div>
-
-                  {isClicked ? (
-                    <p style={{ maxWidth: "472px" }}>
-                      Lorem ipsum dolor sit amet consectetur. Eget gravide
-                      fermentum viverra mi. At ipsum convallis tortor laculis
-                      viverra dignissim velit ultrices. Diam fringilla risus mi
-                      eget natoque.
-                    </p>
-                  ) : (
-                    ""
-                  )}
-                </div>
-
-                <div
-                  className="flex flex-col gap-3 py-4"
-                  onClick={handleToggle}
-                  style={{
-                    borderBottom: "1px solid #e3e6ef",
-                    cursor: "pointer",
-                  }}
-                >
-                  <div className="flex justify-between items-center">
-                    <h3
-                      style={{
-                        fontWeight: "600",
-                        fontSize: "19px",
-                        lineHeight: "32px",
-                        color: "#112240",
-                      }}
-                    >
-                      Don't settle for less than you deserve
-                    </h3>
-                    {isOpen ? (
-                      <Icon
-                        icon="ri:arrow-up-s-line"
-                        width="16.3"
-                        height="19"
-                        style={{ color: "#112240", fontWeight: "900" }}
-                      />
-                    ) : (
-                      <Icon
-                        icon="ri:arrow-down-s-line"
-                        width="16.3"
-                        height="19"
-                        style={{ color: "#112240", fontWeight: "900" }}
-                      />
-                    )}
-                  </div>
-
-                  {isOpen ? (
-                    <p style={{ maxWidth: "472px" }}>
-                      At ipsum convallis tortor laculis viverra dignissim velit
-                      ultrices. Diam fringilla risus mi eget natoque.
-                    </p>
-                  ) : (
-                    ""
-                  )}
-                </div>
-
-                <div
-                  className="flex flex-col gap-3 py-4"
-                  onClick={secondToggle}
-                  style={{ cursor: "pointer" }}
-                >
-                  <div className="flex justify-between items-center">
-                    <h3
-                      style={{
-                        fontWeight: "600",
-                        fontSize: "19px",
-                        lineHeight: "32px",
-                        color: "#112240",
-                      }}
-                    >
-                      Experience you can trust
-                    </h3>
-                    {clicked ? (
-                      <Icon
-                        icon="ri:arrow-up-s-line"
-                        width="16.3"
-                        height="19"
-                        style={{ color: "#112240", fontWeight: "900" }}
-                      />
-                    ) : (
-                      <Icon
-                        icon="ri:arrow-down-s-line"
-                        width="16.3"
-                        height="19"
-                        style={{ color: "#112240", fontWeight: "900" }}
-                      />
-                    )}
-                  </div>
-
-                  {clicked ? (
-                    <p style={{ maxWidth: "472px" }}>
-                      Lorem ipsum dolor sit amet consectetur. Eget gravide
-                      fermentum viverra mi.
-                    </p>
-                  ) : (
-                    ""
-                  )}
-                </div>
+                ))}
               </div>
             </div>
           </div>
-          <div
-            style={{
-              marginTop: "100px",
-              backgroundColor: "#1c4f96",
-              color: "white",
-              height: "565px",
-              position: "relative",
-            }}
-            className="flex  justify-between member-div"
-          >
-            <div className="second-blue-dot"></div>
-            <div
-             
-              className=" contains member-info flex flex-col gap-7 my-20 "
-            >
-              <p
-                style={{
-                  fontFamily: "roboto",
-                  fontWeight: "500",
-                  fontSize: "14px",
-                }}
-              >
-                MEMBERS
-              </p>
-              <h2
-                style={{
-                  maxWidth: "365px",
-                  fontFamily: "Bricolage Grotesque",
-                  fontWeight: "500",
-                  fontSize: "40px",
-                  lineHeight: "55px",
-                }}
-              >
-                Our Members have influence
-              </h2>
-              <p
-              className="member-p"
-                style={{
-                  maxWidth: "377px",
-                  fontFamily: "roboto",
-                  fontSize: "16px",
-                  lineHeight: "24px",
-                  color: "",
-                }}
-              >
-                Get issues put into policy debates and dialogues, engage with
-                key private and public sector stakeholders. Shape the regulatory
-                environment to increase the sector's efficiency and
-                pperformance.
-              </p>
-              <div className="flex gap-7 mt-12">
-                <div
-                  className="flex justify-center items-center round-arrow"
-                  style={{
-                    width: "50px",
-                    height: "50px",
-                    borderRadius: "50%",
-                  }}
+
+          <Wrapper>
+            <LeftSection>
+              <Title>{members?.memberTitle?.title}</Title>
+              <Heading>{members?.memberTitle?.sub_title}</Heading>
+              <Description>{members?.memberTitle?.content}</Description>
+
+              <ButtonRow>
+                <NavButton
+                  onClick={handlePrev}
+                  disabled={currentIndex === 0}
+                  active={currentIndex > 0}
                 >
                   <Icon
-                    icon="solar:arrow-left-outline"
+                    icon="mdi:arrow-left"
                     width="28"
                     height="28"
-                    style={{ color: "black" }}
+                    style={{ color: "black", zIndex: 10, position: "relative" }}
                   />
-                </div>
-                <div
-                  className="flex justify-center items-center"
-                  style={{
-                    width: "50px",
-                    height: "50px",
-                    borderRadius: "50%",
-                    backgroundColor: "white",
-                  }}
+                </NavButton>
+                <NavButton
+                  onClick={handleNext}
+                  disabled={currentIndex === memberImages.length - 1}
+                  active={currentIndex < memberImages.length - 1}
                 >
-                  <Icon
-                    icon="solar:arrow-right-outline"
-                    width="28"
-                    height="28"
-                    style={{ color: "black" }}
-                  />
-                </div>
-              </div>
-            </div>
+                  <Icon icon="mdi:arrow-right" width="28" height="28" />{" "}
+                </NavButton>
+              </ButtonRow>
+            </LeftSection>
+
+            <SliderContainer>
+              <SliderTrack
+                style={{ transform: `translateX(-${currentIndex * 720}px)` }}
+              >
+                {memberImages.map((item, index) => (
+                  <Slide key={index}>
+                    <img
+                      src={`https://backoffice.rua.com.ng/${item.image}`}
+                      alt={`slide-${index}`}
+                    />
+                  </Slide>
+                ))}
+              </SliderTrack>
+            </SliderContainer>
+          </Wrapper>
+
+          <div style={{ marginTop: "100px" }} className="flex flex-col gap-12">
             <div
-            className="member-img"
-              style={{
-                width: "720px",
-                height: "565px",
-                padding: "0",
-                margin: "0",
-              }}
+              style={{ textAlign: "center" }}
+              className="flex flex-col justify-center items-center gap-5"
             >
-              <img
-                style={{
-                  height: "100%",
-                  width: "100%",
-                  objectFit: "cover",
-                  display: "block",
-                  objectPosition: "top",
-                }}
-                src="./images/image_2.png"
-                alt="..."
-              />
-            </div>
-          </div>
-          <div
-            style={{ marginTop: "100px" }}
-            className="flex flex-col gap-12"
-          >
-            <div style={{textAlign: "center"}} className="flex flex-col justify-center items-center gap-5">
               <h2
                 style={{
                   color: "#112240",
@@ -1208,7 +1165,7 @@ const Home = () => {
                   lineHeight: "28.8px",
                 }}
               >
-                Global Partners
+                {partners?.partnerTitle?.title}
               </h2>
               <p
                 style={{
@@ -1219,12 +1176,12 @@ const Home = () => {
                   maxWidth: "555px",
                 }}
               >
-                Weembrace holistic development and support for employees the aim
-                of being a first-choice employer with our sectors.
+                {partners?.partnerTitle?.sub_title}
               </p>
             </div>
-           
-              <div className="flex justify-center items-center flex-wrap gap-5">
+
+            <div className="flex justify-center items-center flex-wrap gap-5">
+              {partners?.partnerList?.map((items) => (
                 <div
                   className="flex justify-center items-center"
                   style={{
@@ -1244,81 +1201,12 @@ const Home = () => {
                       display: "block",
                       objectPosition: "top",
                     }}
-                    src="./images/rfea.png"
+                    src={`https://backoffice.rua.com.ng/${items.image}`}
                     alt="..."
                   />
                 </div>
-                <div
-                  className="flex justify-center items-center"
-                  style={{
-                    backgroundColor: "white",
-                    width: "278pxx",
-                    height: "144px",
-                    borderRadius: "6px",
-                    border: "1px solid #e3e6ef",
-                  }}
-                >
-                  <img
-                    className="my-10 mx-12 global-img"
-                    style={{
-                      height: "64px",
-                      width: "181px",
-                      objectFit: "cover",
-                      display: "block",
-                      objectPosition: "top",
-                    }}
-                    src="./images/dezeen.png"
-                    alt="..."
-                  />
-                </div>
-                <div
-                  className="flex justify-center items-center"
-                  style={{
-                    backgroundColor: "white",
-                    width: "278pxx",
-                    height: "144px",
-                    borderRadius: "6px",
-                    border: "1px solid #e3e6ef",
-                  }}
-                >
-                  <img
-                    className="my-10 mx-12 global-img"
-                    style={{
-                      height: "64px",
-                      width: "181px",
-                      objectFit: "cover",
-                      display: "block",
-                      objectPosition: "top",
-                    }}
-                    src="./images/award.png"
-                    alt="..."
-                  />
-                </div>
-                <div
-                  className="flex justify-center items-center"
-                  style={{
-                    backgroundColor: "white",
-                    width: "278pxx",
-                    height: "144px",
-                    borderRadius: "6px",
-                    border: "1px solid #e3e6ef",
-                  }}
-                >
-                  <img
-                    className="my-10 mx-12 global-img"
-                    style={{
-                      height: "64px",
-                      width: "181px",
-                      objectFit: "cover",
-                      display: "block",
-                      objectPosition: "top",
-                    }}
-                    src="./images/rfea.png"
-                    alt="..."
-                  />
-                </div>
-              </div>      
-           
+              ))}
+            </div>
           </div>
           <div
             style={{
@@ -1339,7 +1227,7 @@ const Home = () => {
                       fontFamily: "roboto",
                     }}
                   >
-                    TESTIMONIALS
+                    {testimonials?.testTitle?.title}
                   </p>
                   <h2
                     style={{
@@ -1351,10 +1239,13 @@ const Home = () => {
                       maxWidth: "350px",
                     }}
                   >
-                    What people say about us?
+                    {testimonials?.testTitle?.sub_title}
                   </h2>
                 </div>
-                <div style={{ fontFamily: "roboto", width: "382px" }} className="testy-p">
+                <div
+                  style={{ fontFamily: "roboto", width: "382px" }}
+                  className="testy-p"
+                >
                   <p
                     style={{
                       color: "#5c6a7f",
@@ -1362,9 +1253,7 @@ const Home = () => {
                       lineHeight: "24px",
                     }}
                   >
-                    Lorem ipsum dolor sit amet consectetur. Convallis sed mauris
-                    orci velit sed morbi id integer. Massa velit in netus velit.
-                    At velit ut posuere aliquam. Nulla.
+                    {testimonials?.testTitle?.content}
                   </p>
                 </div>
               </div>
@@ -1376,7 +1265,8 @@ const Home = () => {
                   borderRadius: "10px",
                 }}
               >
-                <div className="testi-img"
+                <div
+                  className="testi-img"
                   style={{
                     width: "392px",
                     height: "359px",
@@ -1391,7 +1281,7 @@ const Home = () => {
                       display: "block",
                       objectPosition: "top",
                     }}
-                    src="./images/image_3.png"
+                    src={`https://backoffice.rua.com.ng/${currentTestimony?.image}`}
                     alt="..."
                   />
                 </div>
@@ -1405,12 +1295,7 @@ const Home = () => {
                       width: "580px",
                     }}
                   >
-                    Lorem ipsum dolor sit amet consectetur. At mi accumsan
-                    egestas mi odio integer fusce consectetur est. Sed ultrices
-                    ultricies nascetur nunc nulla. Proin urna sodales lectus
-                    tellus at vitae. Quisque id hendrerit arcu mauris nisi
-                    mauris lacus. Eget arcu scelerisque amet in odio turpis.
-                    Donec blandit in adipiscing.
+                    {currentTestimony?.testimony}
                   </p>
                   <div className="flex justify-between items-center">
                     <div
@@ -1424,7 +1309,7 @@ const Home = () => {
                           color: "#5c6a7f",
                         }}
                       >
-                        MD - STARK LOGIC
+                        {currentTestimony?.title}
                       </p>
                       <p
                         style={{
@@ -1433,44 +1318,49 @@ const Home = () => {
                           color: "#112240",
                         }}
                       >
-                        Donald Salvor
+                        {currentTestimony?.full_name}
                       </p>
-                      <p className="flex gap-3">
-                        <Icon
-                          icon="material-symbols:star"
-                          width="17.27"
-                          height="15"
-                          style={{ color: "#e0a416", fontWeight: "900" }}
-                        />
-                        <Icon
-                          icon="material-symbols:star"
-                          width="17.27"
-                          height="15"
-                          style={{ color: "#e0a416", fontWeight: "900" }}
-                        />
-                        <Icon
-                          icon="material-symbols:star"
-                          width="17.27"
-                          height="15"
-                          style={{ color: "#e0a416", fontWeight: "900" }}
-                        />
-                        <Icon
-                          icon="material-symbols:star"
-                          width="17.27"
-                          height="15"
-                          style={{ color: "#e0a416", fontWeight: "900" }}
-                        />
-                        <Icon
-                          icon="material-symbols:star"
-                          width="17.27"
-                          height="15"
-                          style={{ color: "#e0a416", fontWeight: "900" }}
-                        />
+                      <p
+                        className="flex gap-1 mt-2"
+                        style={{ color: "#e0a416", fontWeight: "900" }}
+                      >
+                        {[...Array(fullStars)].map((_, i) => (
+                          <Icon
+                            key={`full-${i}`}
+                            icon="material-symbols:star"
+                            width="17.27"
+                            height="15"
+                          />
+                        ))}
+                        {hasHalfStar && (
+                          <Icon
+                            key="half-star"
+                            icon="material-symbols:star-half"
+                            width="17.27"
+                            height="15"
+                          />
+                        )}
+                        {[
+                          ...Array(
+                            Math.max(
+                              0,
+                              totalStars - fullStars - (hasHalfStar ? 1 : 0)
+                            )
+                          ),
+                        ].map((_, i) => (
+                          <Icon
+                            key={`empty-${i}`}
+                            icon="material-symbols:star-outline"
+                            width="17.27"
+                            height="15"
+                          />
+                        ))}
                       </p>
                     </div>
                     <div>
                       <div className="flex gap-7 ">
                         <div
+                          onClick={handlePrevTes}
                           className="flex justify-center items-center"
                           style={{
                             width: "50px",
@@ -1487,6 +1377,7 @@ const Home = () => {
                           />
                         </div>
                         <div
+                          onClick={handleNextTes}
                           className="flex justify-center items-center"
                           style={{
                             width: "50px",
@@ -1515,7 +1406,7 @@ const Home = () => {
               className="flex gap-10 flex-row-reverse  justify-between items-center voice"
               style={{ marginTop: "100px", marginBottom: "100px" }}
             >
-              <div style={{position: "relative"}}>
+              <div style={{ position: "relative" }}>
                 <div
                   style={{
                     fontFamily: "Bricolage Grotesque",
@@ -1539,7 +1430,7 @@ const Home = () => {
                       transform: "translate(-10%, -15%)", // Ensures that half of the circle goes beyond the corner
                     }}
                   ></div>
-                 
+
                   <p
                     style={{
                       fontSize: "24px",
@@ -1547,13 +1438,16 @@ const Home = () => {
                       fontFamily: "Bricolage Grotesque",
                       lineHeight: "24px",
                       maxWidth: "130px",
-                      marginTop: "-75px"
+                      marginTop: "-75px",
                     }}
                   >
-                   Join us in making a difference
+                    {sectionNine?.image_writeup}
                   </p>
                 </div>
-                <div className="voice-img" style={{ height: "558px", width: "464px" }}>
+                <div
+                  className="voice-img"
+                  style={{ height: "558px", width: "464px" }}
+                >
                   <img
                     style={{
                       height: "100%",
@@ -1562,7 +1456,7 @@ const Home = () => {
                       display: "block",
                       objectPosition: "top",
                     }}
-                    src="./images/image_1.png"
+                    src={`https://backoffice.rua.com.ng/${sectionNine?.banner}`}
                     alt="..."
                   />
                 </div>
@@ -1577,9 +1471,10 @@ const Home = () => {
                     lineHeight: "16.94px",
                   }}
                 >
-                  THE VOICE OF ROAD TRANSPORT
+                  {sectionNine?.title}
                 </p>
-                <h2 className=""
+                <h2
+                  className=""
                   style={{
                     lineHeight: "55px",
                     color: "#112240",
@@ -1590,7 +1485,7 @@ const Home = () => {
                     maxWidth: "453px",
                   }}
                 >
-                  Lorem ipsum dolor sit amet consectetur.
+                  {sectionNine?.sub_title}
                 </h2>
                 <p
                   style={{
@@ -1599,13 +1494,7 @@ const Home = () => {
                     maxWidth: "431px",
                   }}
                 >
-                  Lorem ipsum dolor sit amet consectetur. In ac facilisi
-                  ultrices nulla tempus neque in. Pharetra volutpat turpis
-                  parturient a egestas sed nulla nisl egestas. Nisl nunc massa
-                  at id. Cursus eu urna dolor convallis auctor vitae
-                  scelerisque. Lobortis mauris auctor placerat magnis. Cras
-                  montes habitant leo sed. Habitant sapien urna risus nibh
-                  viverra vestibulum nec. Felis id id a aliquet a eu.
+                  {sectionNine?.content}
                 </p>
                 <button className="flex justify-around items-center">
                   <div>Read More</div>
@@ -1631,7 +1520,7 @@ const Home = () => {
           </div>
 
           <div
-          className="road "
+            className="road "
             style={{
               height: "745px",
               backgroundColor: "#1c4f96",
@@ -1650,7 +1539,7 @@ const Home = () => {
                     maxWidth: "480px",
                   }}
                 >
-                  Road and Commuter Safety Web Application
+                  {downloadAppSection?.title}
                 </h2>
                 <p
                   style={{
@@ -1660,11 +1549,7 @@ const Home = () => {
                     width: "445px",
                   }}
                 >
-                  Lorem ipsum dolor sit amet consectetur. Tristique dapibus erat
-                  pulvinar eleifend. Mauris in elementum morbi tempus eu. Id
-                  vestibulum id lectus ante ut hac ullamcorper. Nunc erat
-                  viverra pharetra donec pretium id. Donec sed commodo sed
-                  pretium vel at.
+                  {downloadAppSection?.content}
                 </p>
                 <div className="flex flex-col gap-6">
                   <p
@@ -1709,7 +1594,10 @@ const Home = () => {
                   </p>
                 </div>
 
-                <div style={{ marginTop: "40px" }} className="flex flex-wrap gap-8">
+                <div
+                  style={{ marginTop: "40px" }}
+                  className="flex flex-wrap gap-8"
+                >
                   <button
                     style={{ width: "auto", cursor: "pointer" }}
                     className="flex justify-around gap-3  items-center"
@@ -1745,7 +1633,7 @@ const Home = () => {
                 </div>
               </div>
               <div
-              className="road-img"
+                className="road-img"
                 style={{
                   width: "558px",
                   height: "683px",
@@ -1763,7 +1651,7 @@ const Home = () => {
                     display: "block",
                     objectPosition: "top",
                   }}
-                  src="./images/image_4.png"
+                  src={`https://backoffice.rua.com.ng/${downloadAppSection?.banner}`}
                   alt="..."
                 />
               </div>
@@ -1782,10 +1670,10 @@ const Home = () => {
                 marginBottom: "15px",
               }}
             >
-              BLOG & INSIGHTS
+              {blog?.blogHeading?.title}
             </p>
             <h2
-            className="latest"
+              className="latest"
               style={{
                 fontSize: "45px",
                 fontWeight: "700",
@@ -1796,10 +1684,10 @@ const Home = () => {
                 marginBottom: "70px",
               }}
             >
-              Latest News & Articles
+              {blog?.blogHeading?.description}
             </h2>
             <div className=" flex flex-wrap justify-center items-center gap-3">
-             
+              {blog?.blogList?.map((items) => (
                 <div
                   style={{
                     width: "370px",
@@ -1836,7 +1724,7 @@ const Home = () => {
                           textAlign: "center",
                         }}
                       >
-                        16
+                        {new Date(items?.updated_at).getDate()}
                       </p>
                     </div>
                     <div
@@ -1850,7 +1738,7 @@ const Home = () => {
                           fontSize: "11px",
                         }}
                       >
-                        June, 2013
+                        {formatMonthYear(items?.updated_at)}
                       </p>
                     </div>
                   </div>
@@ -1864,7 +1752,7 @@ const Home = () => {
                         display: "block",
                         objectPosition: "top",
                       }}
-                      src="./images/image_5.png"
+                      src={`https://backoffice.rua.com.ng/${items?.banner}`}
                       alt="..."
                     />
                   </div>
@@ -1877,7 +1765,7 @@ const Home = () => {
                         fontFamily: "Roboto",
                       }}
                     >
-                      <p>Mr Dunos</p>
+                      <p>{items?.author}</p>
                       <p className="flex gap-2">
                         {" "}
                         <Icon
@@ -1897,7 +1785,7 @@ const Home = () => {
                         color: "#112240",
                       }}
                     >
-                      Lorem ipsum dolor sit amet consectetur. Ut fermentum.
+                      {items?.title}
                     </p>
                     <button
                       className="flex justify-between items-center"
@@ -1929,265 +1817,7 @@ const Home = () => {
                     </button>
                   </div>
                 </div>
-                <div
-                  style={{
-                    width: "370px",
-                    height: "560.88px",
-                    border: "1px solid #E3E6EF",
-                    borderRadius: "15px",
-                    background: "#FFFFFF01",
-                    position: "relative",
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "20px",
-                      left: "20px",
-                      width: "80px",
-                      height: "89px",
-                    }}
-                  >
-                    <div
-                      className=""
-                      style={{
-                        width: "80px",
-                        height: "62px",
-                        background: "#1c4f96",
-                        color: "#FFFFFF",
-                      }}
-                    >
-                      <p
-                        style={{
-                          fontFamily: "Manrope",
-                          fontWeight: "800",
-                          fontSize: "30px",
-                          textAlign: "center",
-                        }}
-                      >
-                        16
-                      </p>
-                    </div>
-                    <div
-                      style={{ background: "#FFFFFF" }}
-                      className="flex justify-center items-center"
-                    >
-                      <p
-                        style={{
-                          fontFamily: "Manrope",
-                          fontWeight: "600",
-                          fontSize: "11px",
-                        }}
-                      >
-                        June, 2013
-                      </p>
-                    </div>
-                  </div>
-                  <div style={{ width: "370px", height: "320px" }}>
-                    <img
-                      style={{
-                        height: "100%",
-                        borderRadius: "15px 15px 0px 0px",
-                        width: "100%",
-                        objectFit: "cover",
-                        display: "block",
-                        objectPosition: "top",
-                      }}
-                      src="./images/image_6.png"
-                      alt="..."
-                    />
-                  </div>
-                  <div className="flex flex-col gap-5 m-6">
-                    <div
-                      className="flex gap-5"
-                      style={{
-                        fontSize: "14px",
-                        color: "#5c6a7f",
-                        fontFamily: "Roboto",
-                      }}
-                    >
-                      <p>Mr Dunos</p>
-                      <p className="flex gap-2">
-                        {" "}
-                        <Icon
-                          icon="uil:comments"
-                          width="16.13"
-                          height="14"
-                          style={{ fontWeight: "900", color: "#1c4f96" }}
-                        />{" "}
-                        0 Comments
-                      </p>
-                    </div>
-                    <p
-                      style={{
-                        fontSize: "24px",
-                        fontWeight: "700",
-                        lineHeight: "30px",
-                        color: "#112240",
-                      }}
-                    >
-                      Lorem ipsum dolor sit amet consectetur. Ut fermentum.
-                    </p>
-                    <button
-                      className="flex justify-between items-center"
-                      style={{
-                        background: "transparent",
-                        width: "300px",
-                        height: "50px",
-                        border: "1px solid #E3E6EF",
-                        borderRadius: "100px",
-                      }}
-                    >
-                      <p
-                        style={{
-                          fontFamily: "Roboto",
-                          fontSize: "14px",
-                          lineHeight: "19.6px",
-                          fontWeight: "500",
-                          color: "#56bf2a",
-                        }}
-                      >
-                        View Post
-                      </p>
-                      <Icon
-                        icon="formkit:arrowright"
-                        width="18.97"
-                        height="8.8"
-                        style={{ color: "#56bf2a" }}
-                      />
-                    </button>
-                  </div>
-                </div>
-             
-              <div
-                style={{
-                  width: "370px",
-                  height: "560.88px",
-                  border: " 1px solid #E3E6EF",
-                  borderRadius: "15px",
-                  background: "#FFFFFF01",
-                  position: "relative",
-                }}
-              >
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "20px",
-                    left: "20px",
-                    width: "80px",
-                    height: "89px",
-                  }}
-                >
-                  <div
-                    className=""
-                    style={{
-                      width: "80px",
-                      height: "62px",
-                      background: "#1c4f96",
-                      color: "#FFFFFF",
-                    }}
-                  >
-                    <p
-                      style={{
-                        fontFamily: "Manrope",
-                        fontWeight: "800",
-                        fontSize: "30px",
-                        textAlign: "center",
-                      }}
-                    >
-                      16
-                    </p>
-                  </div>
-                  <div
-                    style={{ background: "#FFFFFF" }}
-                    className="flex justify-center items-center"
-                  >
-                    <p
-                      style={{
-                        fontFamily: "Manrope",
-                        fontWeight: "600",
-                        fontSize: "11px",
-                      }}
-                    >
-                      June, 2013
-                    </p>
-                  </div>
-                </div>
-                <div style={{ width: "370px", height: "320px" }}>
-                  <img
-                    style={{
-                      height: "100%",
-                      borderRadius: "15px 15px 0px 0px",
-                      width: "100%",
-                      objectFit: "cover",
-                      display: "block",
-                      objectPosition: "top",
-                    }}
-                    src="./images/image_7.png"
-                    alt="..."
-                  />
-                </div>
-                <div className="flex flex-col gap-5 m-6">
-                  <div
-                    className="flex gap-5"
-                    style={{
-                      fontSize: "14px",
-                      color: "#5c6a7f",
-                      fontFamily: "Roboto",
-                    }}
-                  >
-                    <p>Mr Dunos</p>
-                    <p className="flex gap-2">
-                      {" "}
-                      <Icon
-                        icon="uil:comments"
-                        width="16.13"
-                        height="14"
-                        style={{ fontWeight: "900", color: "#1c4f96" }}
-                      />{" "}
-                      0 Comments
-                    </p>
-                  </div>
-                  <p
-                    style={{
-                      fontSize: "24px",
-                      fontWeight: "700",
-                      lineHeight: "30px",
-                      color: "#112240",
-                    }}
-                  >
-                    Lorem ipsum dolor sit amet consectetur. Ut fermentum.
-                  </p>
-                  <button
-                    className="flex justify-between items-center"
-                    style={{
-                      background: "transparent",
-                      width: "300px",
-                      height: "50px",
-                      border: "1px solid #E3E6EF",
-                      borderRadius: "100px",
-                    }}
-                  >
-                    <p
-                      style={{
-                        fontFamily: "Roboto",
-                        fontSize: "14px",
-                        lineHeight: "19.6px",
-                        fontWeight: "500",
-                        color: "#56bf2a",
-                      }}
-                    >
-                      View Post
-                    </p>
-                    <Icon
-                      icon="formkit:arrowright"
-                      width="18.97"
-                      height="8.8"
-                      style={{ color: "#56bf2a" }}
-                    />
-                  </button>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
           <div
@@ -2212,8 +1842,8 @@ const Home = () => {
                 top: "-120px",
               }}
             >
-              <h2 
-              className="join-div-h2"
+              <h2
+                className="join-div-h2"
                 style={{
                   fontFamily: "Bricolage Grotesque",
                   fontWeight: "600",
@@ -2223,7 +1853,7 @@ const Home = () => {
                   textAlign: "center",
                 }}
               >
-                Join us, become a member today.
+                {callToAction?.title}
               </h2>
               <p
                 style={{
@@ -2234,8 +1864,7 @@ const Home = () => {
                   textAlign: "center",
                 }}
               >
-                Embrace holistic development and support for employee the aim of
-                being a first-choice
+                {callToAction?.content}
               </p>
               <div className="flex gap-4 join-btn">
                 <button
@@ -2247,11 +1876,15 @@ const Home = () => {
                     borderRadius: "700px",
                   }}
                 >
-                  <p style={{
-                    fontFamily: "Roboto",
-                    fontSize: "16px",
-                    fontWeight: "500"
-                  }}>Get Started </p>
+                  <p
+                    style={{
+                      fontFamily: "Roboto",
+                      fontSize: "16px",
+                      fontWeight: "500",
+                    }}
+                  >
+                    Get Started{" "}
+                  </p>
                   <div
                     className="flex justify-center items-center"
                     style={{
@@ -2278,11 +1911,15 @@ const Home = () => {
                     borderRadius: "700px",
                   }}
                 >
-                  <p style={{
-                    fontFamily: "Roboto",
-                    fontSize: "16px",
-                    fontWeight: "500"
-                  }}>Get in Touch </p>
+                  <p
+                    style={{
+                      fontFamily: "Roboto",
+                      fontSize: "16px",
+                      fontWeight: "500",
+                    }}
+                  >
+                    Get in Touch{" "}
+                  </p>
                 </button>
               </div>
             </div>

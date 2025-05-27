@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { fetchAboutpage } from "../../Redux/slices/homeSlice";
 
 const AboutRap = styled.div`
  .dots {
@@ -40,16 +43,66 @@ const AboutRap = styled.div`
     background: url("../images/new-dot.png");
     z-index: 1; /* Ensure it stays below the content */
   }
+  .about-three-new {
+    display: flex;
+    gap: 20px;
+  }
+
+  @media (max-width: 800px)  {
+    .about-three-new {
+      flex-wrap: wrap;
+    }
+  }
 `;
 
 const About = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { aboutObject, loading, error } = useSelector(
+      (state) => state.home || []
+      
+    );
+  const [currentIndexTes, setCurrentIndexTes] = useState(0);
+
+const aboutus = aboutObject?.data?.aboutus || [];
+const callToAction = aboutObject?.data?.callToAction || [];
+const missionVision = aboutObject?.data?.missionVision || [];
+const partners = aboutObject?.data?.partners || [];
+const testimonials = aboutObject?.data?.testimonials || [];
+
+ const currentTestimony = testimonials?.testList[currentIndexTes];
+
+  const rating = parseFloat(currentTestimony?.rate);
+  const totalStars = 5;
+  const safeRating = isNaN(rating) ? 0 : rating;
+  const fullStars = Math.floor(safeRating);
+  const hasHalfStar = safeRating % 1 >= 0.5;
+
+console.log(aboutObject);
+
     const color = {
          green : "#56BF2A",
          deepBlue : "#112240",
          deepGrey : "#485776",
          offWhite : " #FFFFFFB2"
     }
+     useEffect(() => {
+       dispatch(fetchAboutpage()); // Call API on component mount
+     }, [dispatch]);
    
+  const handleNextTes = () => {
+    setCurrentIndexTes(
+      (prevIndex) => (prevIndex + 1) % testimonials?.testList?.length
+    );
+  };
+
+  const handlePrevTes = () => {
+    setCurrentIndexTes((prevIndex) =>
+      prevIndex === 0 ? testimonials?.testList?.length - 1 : prevIndex - 1
+    );
+  };
+
+
   return (
     <AboutRap>
       <div>
@@ -62,7 +115,7 @@ const About = () => {
                     fontSize: "14px",
                     textAlign: "center",
                     color: color.green
-                }}>ABOUT US</p>
+                }}>{aboutus?.title}</p>
                 <h2 style={{
                     fontFamily: "Bricolage Grotesque",
                     fontSize: "45px",
@@ -71,8 +124,7 @@ const About = () => {
                     textAlign: "center",
                     color: color.deepBlue,
                     maxWidth: "673px"
-                }}>We’re on a mission to
-                empower investors worldwide</h2>
+                }}>{aboutus?.sub_title}</h2>
                 <p style={{
                     fontSize: "16px",
                     fontWeight: "400",
@@ -82,8 +134,7 @@ const About = () => {
                     textAlign: "center",
                     maxWidth: "610px",
                     color: color.deepGrey
-                }}>Lorem ipsum dolor sit amet consectetur. Molestie nibh sit pretium vitae integer hendrerit. Est auctor tellus eros ornare tristique donec. Amet sit risus adipiscing faucibus. Morbi lacus duis nulla sit tincidunt sed auctor sit. Lectus viverra tristique eu 
-                    tempor urna arcu sit aliquam. Mauris quis amet ante.</p>
+                }}>{aboutus?.content}</p>
             </div>
             <div className=" about-img flex justify-center gap-6">
                 <div className="about-img-3" style={{
@@ -97,7 +148,7 @@ const About = () => {
                         objectFit: "cover", 
                         objectPosition: "top", borderRadius: "15px"
                     }}
-                        src="./images/image_2.png"
+                        src={`https://backoffice.rua.com.ng/${aboutus?.image_one}`}
                         alt="..."
                     />
                 </div>
@@ -114,7 +165,7 @@ const About = () => {
                         objectPosition: "top",
                          borderRadius: "12px"
                     }}
-                        src="./images/image_8.png"
+                        src={`https://backoffice.rua.com.ng/${aboutus?.image_two}`}
                         alt="..."
                     />
                     </div>
@@ -131,7 +182,7 @@ const About = () => {
                         objectPosition: "top",
                          borderRadius: "12px"
                     }}
-                        src="./images/image_2.png"
+                        src={`https://backoffice.rua.com.ng/${aboutus?.image_three}`}
                         alt="..."
                             />
                         </div>
@@ -147,13 +198,13 @@ const About = () => {
                                 fontWeight: "800",
                                 fontSize: "75px",
                                 textAlign: "center"
-                            }}>25k+</h3>
+                            }}>{aboutus?.total_reg_user}</h3>
                             <p style={{
                                 fontFamily: "Bricolage Grotesque",
                                 fontWeight: "700",
                                 fontSize: "24px",
                                 textAlign: "center"
-                            }}>Registered Members</p>
+                            }}>{aboutus?.total_reg_user_title}</p>
                         </div>
                     </div>
                 </div>
@@ -167,15 +218,14 @@ const About = () => {
                     fontSize: "14px",
                     marginBottom: "20px",
                     color: color.green
-                }}>WHO WE ARE</p>
+                }}>{missionVision?.title}</p>
                 <h2 className="vission-h2" style={{
                     fontFamily: "Bricolage Grotesque",
                     fontSize: "45px",
                     fontWeight: "700",
                     lineHeight: "55px",
                     maxWidth: "944px"
-                }}>The Pan-African leader connecting societies with safe, efficient,
-                mobility and logistics</h2>
+                }}>{missionVision?.sub_title}</h2>
                 <div className="my-24 gap-8 flex justify-between  items-end flex-wrap">
                     <div style={{
                         borderLeft: "1px solid #DCDCE3",
@@ -186,15 +236,14 @@ const About = () => {
                             fontFamily: "Roboto",
                             fontSize: "14px",
                             fontWeight: "700"
-                        }}>OUR VISSION</h2>
+                        }}>{missionVision?.vision_title}</h2>
                         <p className="vission-p" style={{
                             fontFamily: "Roboto",
                             fontSize: "16px",
                             color: color.offWhite,
                             lineHeight: "22px",
                             maxWidth: "299px"
-                        }}>Lorem ipsum dolor sit amet consectetur. Arcu purus mi dui eget viverra. Nam ultrices mauris id id adipiscing id vel id. 
-                            Ut non volutpat habitant ut amet. Ornare.</p>
+                        }}>{missionVision?.vision}.</p>
                     </div>
                     <div style={{
                         borderLeft: "1px solid #DCDCE3",
@@ -205,30 +254,33 @@ const About = () => {
                             fontFamily: "Roboto",
                             fontSize: "14px",
                             fontWeight: "700"
-                        }}>OUR  MISSION</h2>
+                        }}>{missionVision?.mission_title}</h2>
                         <p className="vission-p" style={{
                             fontFamily: "Roboto",
                             fontSize: "16px",
                             color: color.offWhite,
                             lineHeight: "22px",
                             maxWidth: "299px"
-                        }}>Lorem ipsum dolor sit amet consectetur. Et turpis proin arcu semper sed sem vestibulum tellus est. Et volutpat 
-                        odio vitae fermentum aliquet malesuada mi. Neque sed commodo maecenas.</p>
+                        }}>{missionVision?.mission}</p>
                     </div>
-                    <button 
-                    className="about-btn flex justify-center items-center"
-                    style={{
-                        width: "200px",
-                        height: "40px",
-                        backdropFilter:" blur(6.199999809265137px)",
-                        borderRadius: "59px",
-                        backgroundColor: color.green                    }}>
-                        <p style={{
-                            fontFamily: "Manrope",
-                            fontWeight: "600",
-                            fontSize: "16px",
-                        }}>Unlock capital</p>
-                    </button>
+                 <a
+  href={missionVision?.button_link}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="about-btn flex justify-center items-center"
+  style={{
+    width: "200px",
+    height: "40px",
+    backdropFilter: "blur(6.2px)",
+    borderRadius: "59px",
+    backgroundColor: color.green,
+  }}
+>
+  
+    {missionVision?.button_title}
+
+</a>
+
                 </div>
             </div>
             <div className="blue-dot"></div>
@@ -238,7 +290,7 @@ const About = () => {
             style={{ marginTop: "100px" }}
             className=" flex flex-col gap-12"
           >
-          <div  className="containers flex flex-wrap justify-between gap-5">
+          <div  className="containers about-three-new">
                 <div style={{
                     width: "575px",
                     height: "395px",
@@ -252,7 +304,7 @@ const About = () => {
                             objectPosition: "top",
                             borderRadius: "12px"
                         }}
-                        src="./images/image_10.png"
+                        src={`https://backoffice.rua.com.ng/${missionVision?.image_one}`}
                     />
 
                 </div>
@@ -269,7 +321,7 @@ const About = () => {
                             objectPosition: "top",
                             borderRadius: "12px"
                         }}
-                        src="./images/image_11.png"
+                        src={`https://backoffice.rua.com.ng/${missionVision?.image_two}`}
                     />
 
                 </div>
@@ -284,7 +336,7 @@ const About = () => {
                   lineHeight: "28.8px",
                 }}
               >
-                Global Partners
+                {partners?.title}
               </h2>
               <p
                 style={{
@@ -295,13 +347,12 @@ const About = () => {
                   maxWidth: "555px",
                 }}
               >
-                Weembrace holistic development and support for employees the aim
-                of being a first-choice employer with our sectors.
+                {partners?.sub_title}
               </p>
             </div>
             <div className="flex justify-center items-center flex-wrap gap-5">
-              
-                <div
+              {partners?.partnerList?.map((partner, index) => (
+ <div
                   className="flex justify-center items-center"
                   style={{
                     backgroundColor: "white",
@@ -320,83 +371,19 @@ const About = () => {
                       display: "block",
                       objectPosition: "top",
                     }}
-                    src="./images/rfea.png"
+                    src={`https://backoffice.rua.com.ng/${partner?.image}`}
                     alt="..."
                   />
                 </div>
-                <div
-                  className="flex justify-center items-center"
-                  style={{
-                    backgroundColor: "white",
-                    width: "278pxx",
-                    height: "144px",
-                    borderRadius: "6px",
-                    border: "1px solid #e3e6ef",
-                  }}
-                >
-                  <img
-                    className="my-10 mx-12 global-img"
-                    style={{
-                      height: "64px",
-                      width: "181px",
-                      objectFit: "cover",
-                      display: "block",
-                      objectPosition: "top",
-                    }}
-                    src="./images/dezeen.png"
-                    alt="..."
-                  />
-                </div>
-                <div
-                  className="flex justify-center items-center"
-                  style={{
-                    backgroundColor: "white",
-                    width: "278pxx",
-                    height: "144px",
-                    borderRadius: "6px",
-                    border: "1px solid #e3e6ef",
-                  }}
-                >
-                  <img
-                    className="my-10 mx-12 global-img"
-                    style={{
-                      height: "64px",
-                      width: "181px",
-                      objectFit: "cover",
-                      display: "block",
-                      objectPosition: "top",
-                    }}
-                    src="./images/award.png"
-                    alt="..."
-                  />
-                </div>
-                <div
-                  className="flex justify-center items-center"
-                  style={{
-                    backgroundColor: "white",
-                    width: "278pxx",
-                    height: "144px",
-                    borderRadius: "6px",
-                    border: "1px solid #e3e6ef",
-                  }}
-                >
-                  <img
-                    className="my-10 mx-12 global-img"
-                    style={{
-                      height: "64px",
-                      width: "181px",
-                      objectFit: "cover",
-                      display: "block",
-                      objectPosition: "top",
-                    }}
-                    src="./images/rfea.png"
-                    alt="..."
-                  />
-                </div>
+              ))}
+               
+               
            
               
             </div>
         </div>
+
+
         <div
             style={{
               marginTop: "100px",
@@ -416,7 +403,7 @@ const About = () => {
                       fontFamily: "roboto",
                     }}
                   >
-                    TESTIMONIALS
+                    {testimonials?.testTitle?.title}
                   </p>
                   <h2
                     style={{
@@ -428,10 +415,13 @@ const About = () => {
                       maxWidth: "350px",
                     }}
                   >
-                    What people say about us?
+                    {testimonials?.testTitle?.sub_title}
                   </h2>
                 </div>
-                <div style={{ fontFamily: "roboto", width: "382px" }} className="testy-p">
+                <div
+                  style={{ fontFamily: "roboto", width: "382px" }}
+                  className="testy-p"
+                >
                   <p
                     style={{
                       color: "#5c6a7f",
@@ -439,9 +429,7 @@ const About = () => {
                       lineHeight: "24px",
                     }}
                   >
-                    Lorem ipsum dolor sit amet consectetur. Convallis sed mauris
-                    orci velit sed morbi id integer. Massa velit in netus velit.
-                    At velit ut posuere aliquam. Nulla.
+                    {testimonials?.testTitle?.content}
                   </p>
                 </div>
               </div>
@@ -453,7 +441,8 @@ const About = () => {
                   borderRadius: "10px",
                 }}
               >
-                <div className="testi-img"
+                <div
+                  className="testi-img"
                   style={{
                     width: "392px",
                     height: "359px",
@@ -468,7 +457,7 @@ const About = () => {
                       display: "block",
                       objectPosition: "top",
                     }}
-                    src="./images/image_3.png"
+                    src={`https://backoffice.rua.com.ng/${currentTestimony?.image}`}
                     alt="..."
                   />
                 </div>
@@ -482,12 +471,7 @@ const About = () => {
                       width: "580px",
                     }}
                   >
-                    Lorem ipsum dolor sit amet consectetur. At mi accumsan
-                    egestas mi odio integer fusce consectetur est. Sed ultrices
-                    ultricies nascetur nunc nulla. Proin urna sodales lectus
-                    tellus at vitae. Quisque id hendrerit arcu mauris nisi
-                    mauris lacus. Eget arcu scelerisque amet in odio turpis.
-                    Donec blandit in adipiscing.
+                    {currentTestimony?.testimony}
                   </p>
                   <div className="flex justify-between items-center">
                     <div
@@ -501,7 +485,7 @@ const About = () => {
                           color: "#5c6a7f",
                         }}
                       >
-                        MD - STARK LOGIC
+                        {currentTestimony?.title}
                       </p>
                       <p
                         style={{
@@ -510,44 +494,49 @@ const About = () => {
                           color: "#112240",
                         }}
                       >
-                        Donald Salvor
+                        {currentTestimony?.full_name}
                       </p>
-                      <p className="flex gap-3">
-                        <Icon
-                          icon="material-symbols:star"
-                          width="17.27"
-                          height="15"
-                          style={{ color: "#e0a416", fontWeight: "900" }}
-                        />
-                        <Icon
-                          icon="material-symbols:star"
-                          width="17.27"
-                          height="15"
-                          style={{ color: "#e0a416", fontWeight: "900" }}
-                        />
-                        <Icon
-                          icon="material-symbols:star"
-                          width="17.27"
-                          height="15"
-                          style={{ color: "#e0a416", fontWeight: "900" }}
-                        />
-                        <Icon
-                          icon="material-symbols:star"
-                          width="17.27"
-                          height="15"
-                          style={{ color: "#e0a416", fontWeight: "900" }}
-                        />
-                        <Icon
-                          icon="material-symbols:star"
-                          width="17.27"
-                          height="15"
-                          style={{ color: "#e0a416", fontWeight: "900" }}
-                        />
+                      <p
+                        className="flex gap-1 mt-2"
+                        style={{ color: "#e0a416", fontWeight: "900" }}
+                      >
+                        {[...Array(fullStars)].map((_, i) => (
+                          <Icon
+                            key={`full-${i}`}
+                            icon="material-symbols:star"
+                            width="17.27"
+                            height="15"
+                          />
+                        ))}
+                        {hasHalfStar && (
+                          <Icon
+                            key="half-star"
+                            icon="material-symbols:star-half"
+                            width="17.27"
+                            height="15"
+                          />
+                        )}
+                        {[
+                          ...Array(
+                            Math.max(
+                              0,
+                              totalStars - fullStars - (hasHalfStar ? 1 : 0)
+                            )
+                          ),
+                        ].map((_, i) => (
+                          <Icon
+                            key={`empty-${i}`}
+                            icon="material-symbols:star-outline"
+                            width="17.27"
+                            height="15"
+                          />
+                        ))}
                       </p>
                     </div>
                     <div>
                       <div className="flex gap-7 ">
                         <div
+                          onClick={handlePrevTes}
                           className="flex justify-center items-center"
                           style={{
                             width: "50px",
@@ -564,6 +553,7 @@ const About = () => {
                           />
                         </div>
                         <div
+                          onClick={handleNextTes}
                           className="flex justify-center items-center"
                           style={{
                             width: "50px",
@@ -619,7 +609,7 @@ const About = () => {
                   textAlign: "center",
                 }}
               >
-                Join us, become a member today.
+                {callToAction?.title}
               </h2>
               <p
                 style={{
@@ -630,8 +620,7 @@ const About = () => {
                   textAlign: "center",
                 }}
               >
-                Embrace holistic development and support for employee the aim of
-                being a first-choice
+              {callToAction?.content}
               </p>
               <div className="flex gap-4 join-btn">
                 <button

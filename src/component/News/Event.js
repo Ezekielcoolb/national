@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Icon } from "@iconify/react";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { useDispatch, useSelector } from "react-redux";
+import { fetctEventpage, fetctMediapage, fetctNewspage } from "../../Redux/slices/homeSlice";
 
-const EventRap = styled.div`
-  button:hover {
-    opacity: 0.8;
+const MediaRap = styled.div`
+  .media-dot {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 200px;
+
+    background: url("../images/media_dot.png");
+    z-index: 1; /* Ensure it stays below the content */
   }
      .dot-now {
     position: absolute;
@@ -17,358 +26,555 @@ const EventRap = styled.div`
   }
 `;
 
-const Events = () => {
-  return (
-    <EventRap>
-      <div>
-        <div
-          style={{
-            height: "auto",
-            background: "#1c4f96",
-            color: "white",
-            paddingTop: "80px",
-            paddingBottom: "80px",
-          }}
-        >
-          <div className="flex flex-col justify-center items-center containers">
-            <p
-              style={{
-                fontFamily: "Roboto",
-                fontSize: "14px",
-                fontWeight: "700",
-                textAlign: "center",
-              }}
-            >
-              ADMIN - BLOG - APR 26, 2021
-            </p>
-            <h2
-              style={{
-                fontFamily: "Bricolage Grotesque",
-                fontSize: "45px",
-                lineHeight: "55px",
-                fontWeight: "700",
-                maxWidth: "686px",
-                textAlign: "center",
-                marginTop: "30px",
-              }}
-            >
-              A clunky customer experience threatens your bottom line
-            </h2>
-          </div>
-        </div>
-        <div
-          style={{ marginTop: "100px" }}
-          className="event-block flex justify-between gap-10 containers "
-        >
-          <div
-            className="flex flex-col gap-6 event-div"
+const Event = () => {
+  const [activeLink, setActiveLink] = useState("news"); // Track the active link
+  const [content, setContent] = useState(null); // Display content for "news" or "media"
+  const navigate = useNavigate();
+const dispatch = useDispatch();
+    const {newsObject, mediaObject, eventObject, loading, error } = useSelector(
+      (state) => state.home || []
+      
+    );
+
+    console.log(activeLink);
+    
+
+const blog = newsObject?.data?.blog || [];
+    console.log(eventObject);
+
+      useEffect(() => {
+           dispatch(fetctNewspage()); // Call API on component mount
+         }, [dispatch]);
+ useEffect(() => {
+           dispatch(fetctMediapage()); // Call API on component mount
+         }, [dispatch]);
+         useEffect(() => {
+           dispatch(fetctEventpage()); // Call API on component mount
+         }, [dispatch]);
+
+  useEffect(() => {
+    handleClick("news"); // Set "news" as the default content on load
+  }, []);
+
+    const formatMonthYear = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+    }); // Output like: "May, 2025"
+  };
+
+
+  const handleClick = (type) => {
+    setActiveLink(type);
+
+    if (type === "news") {
+      setContent(
+        <div className="media-grid">
+          {blog?.blogList?.map((item, index) => (
+<div className="news-div"
             style={{
-              maxWidth: "680px",
-              fontSize: "16px",
-              fontWeight: "400",
-              lineHeight: "24px",
-              color: "#5c6a7f",
+              width: "370px",
+              height: "560.88px",
+              border: " 1px solid #E3E6EF",
+              borderRadius: "15px",
+              background: "#FFFFFF01",
+              position: "relative",
             }}
           >
-            <div className="event-image"
-              style={{ width: "680px", height: "400px", borderRadius: "12px" }}
+            <div
+              style={{
+                position: "absolute",
+                top: "20px",
+                left: "20px",
+                width: "80px",
+                height: "89px",
+              }}
             >
+              <div
+                className=""
+                style={{
+                  width: "80px",
+                  height: "62px",
+                  background: "#1c4f96",
+                  color: "#FFFFFF",
+                }}
+              >
+                <p
+                  style={{
+                    fontFamily: "Manrope",
+                    fontWeight: "800",
+                    fontSize: "30px",
+                    textAlign: "center",
+                  }}
+                >
+                  {new Date(item?.updated_at).getDate()}
+                </p>
+              </div>
+              <div
+                style={{ background: "#FFFFFF" }}
+                className="flex justify-center items-center"
+              >
+                <p
+                  style={{
+                    fontFamily: "Manrope",
+                    fontWeight: "600",
+                    fontSize: "11px",
+                  }}
+                >
+                  {formatMonthYear(item?.updated_at)}
+                </p>
+              </div>
+            </div>
+            <div className="news-div" style={{ width: "370px", height: "320px" }}>
               <img
                 style={{
-                  width: "100%",
                   height: "100%",
+                  borderRadius: "15px 15px 0px 0px",
+                  width: "100%",
                   objectFit: "cover",
-                  borderRadius: "12px",
+                  display: "block",
+                  objectPosition: "top",
                 }}
-                src="./images/image_14.png"
+                src={`https://backoffice.rua.com.ng/${item?.banner}`}
                 alt="..."
               />
             </div>
-            <p>
-              Lorem ipsum dolor sit amet consectetur. Adipiscing tortor
-              fringilla maecenas enim lectus. Non quis tortor malesuada massa.
-              Nibh volutpat mattis mauris molestie ullamcorper. Vel neque
-              pellentesque nam aliquam. Dictum amet dui nullam ultricies nibh.
-              At bibendum amet urna interdum leo. Arcu diam elementum nec leo
-              fermentum sed facilisis non non. Ornare in nec sit placerat
-              malesuada. Enim erat sociis enim nunc amet. Facilisis hac sagittis
-              pharetra vitae quis.
+            <div className="flex flex-col gap-5 m-6">
+              <div
+                className="flex gap-5"
+                style={{
+                  fontSize: "14px",
+                  color: "#5c6a7f",
+                  fontFamily: "Roboto",
+                }}
+              >
+                <p>{item?.author}</p>
+                <p className="flex gap-2">
+                  {" "}
+                  <Icon
+                    icon="uil:comments"
+                    width="16.13"
+                    height="14"
+                    style={{ fontWeight: "900", color: "#1c4f96" }}
+                  />{" "}
+                  0 Comments
+                </p>
+              </div>
+              <p
+                style={{
+                  fontSize: "24px",
+                  fontWeight: "700",
+                  lineHeight: "30px",
+                  color: "#112240",
+                }}
+              >
+                Lorem ipsum dolor sit amet consectetur. Ut fermentum.
+              </p>
+              <button
+                className="news-div-btn flex justify-between items-center"
+                style={{
+                  background: "transparent",
+                  width: "300px",
+                  height: "50px",
+                  border: "1px solid #E3E6EF",
+                  borderRadius: "100px",
+                }}
+              >
+                <p
+                  style={{
+                    fontFamily: "Roboto",
+                    fontSize: "14px",
+                    lineHeight: "19.6px",
+                    fontWeight: "500",
+                    color: "#56bf2a",
+                  }}
+                >
+                  View Post
+                </p>
+                <Icon
+                  icon="formkit:arrowright"
+                  width="18.97"
+                  height="8.8"
+                  style={{ color: "#56bf2a" }}
+                />
+              </button>
+            </div>
+          </div>
+          ))}
+          
+        
+        </div>
+      );
+    } else if (type === "media") {
+      setContent(
+        <div>
+       
+        <div className="media-grid">
+          {mediaObject?.data?.data?.map((item,index) => (
+            <div className="image-item">
+              <img key={index} src={`https://backoffice.rua.com.ng/${item?.image}`} alt="Media 1" />
+              </div>
+
+          ))}
+            
+        </div>
+    </div>
+      );
+//     } else if (type === "event") {
+//        setContent(
+//         <div className="media-grid">
+//           {blog?.blogList?.map((item, index) => (
+// <div className="news-div"
+//             style={{
+//               width: "370px",
+//               height: "560.88px",
+//               border: " 1px solid #E3E6EF",
+//               borderRadius: "15px",
+//               background: "#FFFFFF01",
+//               position: "relative",
+//             }}
+//           >
+//             <div
+//               style={{
+//                 position: "absolute",
+//                 top: "20px",
+//                 left: "20px",
+//                 width: "80px",
+//                 height: "89px",
+//               }}
+//             >
+//               <div
+//                 className=""
+//                 style={{
+//                   width: "80px",
+//                   height: "62px",
+//                   background: "#1c4f96",
+//                   color: "#FFFFFF",
+//                 }}
+//               >
+//                 <p
+//                   style={{
+//                     fontFamily: "Manrope",
+//                     fontWeight: "800",
+//                     fontSize: "30px",
+//                     textAlign: "center",
+//                   }}
+//                 >
+//                   {new Date(item?.updated_at).getDate()}
+//                 </p>
+//               </div>
+//               <div
+//                 style={{ background: "#FFFFFF" }}
+//                 className="flex justify-center items-center"
+//               >
+//                 <p
+//                   style={{
+//                     fontFamily: "Manrope",
+//                     fontWeight: "600",
+//                     fontSize: "11px",
+//                   }}
+//                 >
+//                   {formatMonthYear(item?.updated_at)}
+//                 </p>
+//               </div>
+//             </div>
+//             <div className="news-div" style={{ width: "370px", height: "320px" }}>
+//               <img
+//                 style={{
+//                   height: "100%",
+//                   borderRadius: "15px 15px 0px 0px",
+//                   width: "100%",
+//                   objectFit: "cover",
+//                   display: "block",
+//                   objectPosition: "top",
+//                 }}
+//                 src={`https://backoffice.rua.com.ng/${item?.banner}`}
+//                 alt="..."
+//               />
+//             </div>
+//             <div className="flex flex-col gap-5 m-6">
+//               <div
+//                 className="flex gap-5"
+//                 style={{
+//                   fontSize: "14px",
+//                   color: "#5c6a7f",
+//                   fontFamily: "Roboto",
+//                 }}
+//               >
+//                 <p>{item?.author}</p>
+//                 <p className="flex gap-2">
+//                   {" "}
+//                   <Icon
+//                     icon="uil:comments"
+//                     width="16.13"
+//                     height="14"
+//                     style={{ fontWeight: "900", color: "#1c4f96" }}
+//                   />{" "}
+//                   0 Comments
+//                 </p>
+//               </div>
+//               <p
+//                 style={{
+//                   fontSize: "24px",
+//                   fontWeight: "700",
+//                   lineHeight: "30px",
+//                   color: "#112240",
+//                 }}
+//               >
+//                 Lorem ipsum dolor sit amet consectetur. Ut fermentum.
+//               </p>
+//               <button
+//                 className="news-div-btn flex justify-between items-center"
+//                 style={{
+//                   background: "transparent",
+//                   width: "300px",
+//                   height: "50px",
+//                   border: "1px solid #E3E6EF",
+//                   borderRadius: "100px",
+//                 }}
+//               >
+//                 <p
+//                   style={{
+//                     fontFamily: "Roboto",
+//                     fontSize: "14px",
+//                     lineHeight: "19.6px",
+//                     fontWeight: "500",
+//                     color: "#56bf2a",
+//                   }}
+//                 >
+//                   View Post
+//                 </p>
+//                 <Icon
+//                   icon="formkit:arrowright"
+//                   width="18.97"
+//                   height="8.8"
+//                   style={{ color: "#56bf2a" }}
+//                 />
+//               </button>
+//             </div>
+//           </div>
+//           ))}
+          
+        
+//         </div>
+//       );
+    } else if (type === "others") {
+      navigate("/news&others");
+    }
+  };
+  return (
+    <MediaRap>
+      <div>
+        <div className="py-14" style={{ position: "relative" }}>
+          <div className="media-dot"></div>
+          <div className="flex flex-col gap-6">
+            <p
+              style={{
+                fontFamily: "Roboto",
+                fontWeight: "600",
+                fontSize: "14px",
+                color: "#56bf2a",
+                textAlign: "center",
+              }}
+            >
+             { blog?.blogHeading?.title}
             </p>
-            <h2
+            <h1
               style={{
                 fontFamily: "Bricolage Grotesque",
                 fontWeight: "700",
-                fontSize: "24px",
-                lineHeight: "30px",
+                fontSize: "45px",
+                lineHeight: "52px",
+                textAlign: "center",
                 color: "#112240",
-                maxWidth: "492px",
               }}
             >
-              A clunky customer experience threatens your bottom line
-            </h2>
-            <p>
-              We’ve all been there as customers: Painstakingly inputting all of
-              our personal data, often redundantly, from one form to the next —
-              all in a desperate bid to get the product or service we need. Not
-              only is this frustrating for customers, it’s also frustrating for
-              you as a business, as there are often manual, redundant processes
-              rife with errors.
-            </p>
-            <p>
-              Expecting your customers to just put up with this poor experience
-              is a surefire way to frustrate and ultimately lose them down the
-              line, especially if the competition has a more streamlined,
-              user-friendly agreement process.
-            </p>
-            <p>
-              And all those errors? They lead to delays as you send back
-              documents for correction, which inevitably adds to your cost of
-              acquisition and causes further frustration and possible
-              abandonment from your customers. Deloitte released a new
-              report that identifies the costly and negative impacts of poor
-              agreement processes and tools on customer experience. It shows
-              that inefficient agreement management processes lead to a nearly
-              $2 trillion loss in annual global economic value with 66% of
-              customer support survey respondents reporting inefficient
-              agreement workflows as a driver for negative customer satisfaction
-            </p>
-            <p>
-              Expecting your customers to just put up with this poor experience
-              is a surefire way to frustrate and ultimately lose them down the
-              line, especially if the competition has a more streamlined,
-              user-friendly agreement process.
-            </p>
+            { blog?.blogHeading?.description}
+            </h1>
           </div>
-          <div className="event-block-2 flex flex-col gap-2" style={{ fontFamily: "Roboto" }}>
-            <div className="flex flex-col gap-2">
-              <p
+          {/* Links with dynamic background change */}
+          <div style={{marginTop: "100px"}} className=" flex justify-center gap-8">
+            <span
+              className="flex justify-center items-center"
+              onClick={() => handleClick("news")}
+              style={{
+                width: "89px",
+                height: "39px",
+                fontFamily: "Roboto",
+                fontSize: "16px",
+                backgroundColor: activeLink === "news" ? "#112240" : "#f7f7f7",
+                cursor: "pointer",
+                color: activeLink === "news" ? "white" : "#5C6A7F",
+                borderRadius: "100px",
+                border: "1px solid #ccc",
+                opacity: "0px",
+              }}
+            >
+              News
+            </span>
+            <span
+              className="flex justify-center items-center"
+              onClick={() => handleClick("media")}
+              style={{
+                width: "89px",
+                height: "39px",
+                fontFamily: "Roboto",
+                fontSize: "16px",
+                backgroundColor: activeLink === "media" ? "#112240" : "#f7f7f7",
+                cursor: "pointer",
+                color: activeLink === "media" ? "white" : "#5C6A7F",
+                borderRadius: "100px",
+                border: "1px solid #ccc",
+                opacity: "0px",
+              }}
+            >
+              Media
+            </span>
+            {/* <span
+              className="flex justify-center items-center"
+              onClick={() => handleClick("event")}
+              style={{
+                width: "89px",
+                height: "39px",
+                fontFamily: "Roboto",
+                fontSize: "16px",
+                backgroundColor: activeLink === "event" ? "#112240" : "#f7f7f7",
+                cursor: "pointer",
+                color: activeLink === "event" ? "white" : "#5C6A7F",
+                borderRadius: "100px",
+                border: "1px solid #ccc",
+                opacity: "0px",
+              }}
+            >
+              Event
+            </span> */}
+            <span
+              className="flex justify-center items-center"
+              onClick={() => handleClick("others")}
+              style={{
+                width: "89px",
+                height: "39px",
+                fontFamily: "Roboto",
+                fontSize: "16px",
+                backgroundColor:
+                  activeLink === "others" ? "#112240" : "#f7f7f7",
+                cursor: "pointer",
+                color: activeLink === "others" ? "white" : "#5C6A7F",
+                borderRadius: "100px",
+                border: "1px solid #ccc",
+                opacity: "0px",
+              }}
+            >
+              Others
+            </span>
+          </div>
+
+          {/* Render full div content */}
+          {content && (
+            <div className="containers" style={{ borderTop: "1px solid #E3E6EF", paddingTop: "50px", marginTop: "30px", fontSize: "18px" }}>{content}</div>
+          )}
+        </div>
+        <div
+            className="flex flex-col justify-center items-center"
+            style={{
+              height: "357px",
+              background: "#eef5ff",
+              marginTop: "220px",
+              position: "relative",
+            }}
+          >
+            <div className="dot-now"></div>
+            <div
+              className="flex flex-col justify-center items-center gap-6"
+              style={{
+                color: "white",
+                background: "#56bf2a",
+                width: "1170px",
+                height: "367px",
+                borderRadius: "12px",
+                position: "absolute",
+                top: "-120px",
+              }}
+            >
+              <h2 
+              className="join-div-h2"
                 style={{
-                  fontSize: "14px",
-                  color: "#5c6a7f",
+                  fontFamily: "Bricolage Grotesque",
+                  fontWeight: "600",
+                  fontSize: "50px",
+                  width: "412px",
+                  lineHeight: "54.57px",
+                  textAlign: "center",
                 }}
               >
-                AUTHOR
+                Join us, become a member today.
+              </h2>
+              <p className=""
+                style={{
+                  width: "412px",
+                  fontFamily: "Roboto",
+                  fontSize: "18px",
+                  lineHeight: "26px",
+                  textAlign: "center",
+                }}
+              >
+                Embrace holistic development and support for employee the aim of
+                being a first-choice
               </p>
-              <p
-                style={{
-                  fontSize: "16px",
-                  color: "#112240",
-                }}
-              >
-                Admin
-              </p>
-              <p className="publish"
-                style={{
-                  marginTop: "20px",
-                  fontSize: "14px",
-                  color: "#5c6a7f",
-                }}
-              >
-                PUBLISHED
-              </p>
-              <p
-                style={{
-                  fontSize: "16px",
-                  color: "#112240",
-                }}
-              >
-                May 30, 2024
-              </p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <p className="share-post"
-                style={{
-                  marginTop: "20px",
-                  fontSize: "14px",
-                  color: "#5c6a7f",
-                }}
-              >
-                SHARE POST
-              </p>
-              <div className="flex gap-4">
-                <Icon
-                  icon="ic:baseline-facebook"
-                  width="24"
-                  height="24"
-                  style={{ color: "black" }}
-                />
-                <Icon
-                  icon="proicons:x-twitter"
-                  width="24"
-                  height="24"
-                  style={{ color: "black" }}
-                />
-                <Icon
-                  icon="mdi:linkedin"
-                  width="24"
-                  height="24"
-                  style={{ color: "black" }}
-                />
-              </div>
-              <div
-                className="flex flex-col gap-4"
-                style={{
-                  width: "316px",
-                  height: "176px",
-                  background: "#f7f7f7",
-                  paddingTop: "20px",
-                  paddingLeft: "20px",
-                  marginTop: "30px",
-                  borderRadius: "10px",
-                }}
-              >
-                <h3
-                  style={{
-                    fontFamily: "Roboto",
-                    fontSize: "18px",
-                    fontWeight: "500px",
-                    lineHeight: "22px",
-                    maxWidth: "265px",
-                    color: "#112240",
-                  }}
-                >
-                  Get the latest marine news and insights from HIOS
-                </h3>
-                <p
-                  style={{
-                    fontSize: "14px",
-                    color: "#5c6a7f",
-                  }}
-                >
-                  Receive latest insights
-                </p>
+              <div className="flex gap-4 join-btn">
                 <button
-                  className="flex justify-center items-center"
+                  className="flex justify-between items-center gap-2"
                   style={{
-                    background: "#56bf2a",
-                    color: "white",
-                    width: "110px",
-                    height: "36px",
-                    borderRadius: "100px",
-                    cursor: "pointer",
+                    background: "#1c4f96",
+                    width: "237px",
+                    height: "55px",
+                    borderRadius: "700px",
                   }}
                 >
-                  <p
+                  <p style={{
+                    fontFamily: "Roboto",
+                    fontSize: "16px",
+                    fontWeight: "500"
+                  }}>Become a Member </p>
+                  <div
+                    className="flex justify-center items-center"
                     style={{
-                      fontFamily: "Roboto",
-                      fontSize: "14px",
+                      backgroundColor: "white",
+                      width: "24px",
+                      height: "24px",
+                      borderRadius: "50%",
                     }}
                   >
-                    Subscribe
-                  </p>
+                    <Icon
+                      icon="weui:arrow-filled"
+                      width="5.56"
+                      height="14"
+                      style={{ color: "#56bf2a" }}
+                    />
+                  </div>
+                </button>
+                <button
+                  style={{
+                    color: "#56bf2a",
+                    background: "white",
+                    width: "200px",
+                    height: "55px",
+                    borderRadius: "700px",
+                  }}
+                >
+                  <p style={{
+                    fontFamily: "Roboto",
+                    fontSize: "16px",
+                    fontWeight: "500"
+                  }}>Get in Touch </p>
                 </button>
               </div>
             </div>
           </div>
-        </div>
-        <div
-          className="flex flex-col justify-center items-center"
-          style={{
-            height: "357px",
-            background: "#eef5ff",
-            marginTop: "220px",
-            position: "relative",
-          }}
-        >
-          <div className="dot-now"></div>
-          <div
-            className="flex flex-col justify-center items-center gap-6"
-            style={{
-              color: "white",
-              background: "#56bf2a",
-              width: "1170px",
-              height: "367px",
-              borderRadius: "12px",
-              position: "absolute",
-              top: "-120px",
-            }}
-          >
-            <h2
-              className="join-div-h2"
-              style={{
-                fontFamily: "Bricolage Grotesque",
-                fontWeight: "600",
-                fontSize: "50px",
-                width: "412px",
-                lineHeight: "54.57px",
-                textAlign: "center",
-              }}
-            >
-              Join us, become a member today.
-            </h2>
-            <p
-              style={{
-                width: "412px",
-                fontFamily: "Roboto",
-                fontSize: "18px",
-                lineHeight: "26px",
-                textAlign: "center",
-              }}
-            >
-              Embrace holistic development and support for employee the aim of
-              being a first-choice
-            </p>
-            <div className="flex gap-4 join-btn">
-              <button
-                className="flex justify-between items-center gap-2"
-                style={{
-                  background: "#1c4f96",
-                  width: "237px",
-                  height: "55px",
-                  borderRadius: "700px",
-                }}
-              >
-                <p
-                  style={{
-                    fontFamily: "Roboto",
-                    fontSize: "16px",
-                    fontWeight: "500",
-                  }}
-                >
-                  Become a Member{" "}
-                </p>
-                <div
-                  className="flex justify-center items-center"
-                  style={{
-                    backgroundColor: "white",
-                    width: "24px",
-                    height: "24px",
-                    borderRadius: "50%",
-                  }}
-                >
-                  <Icon
-                    icon="weui:arrow-filled"
-                    width="5.56"
-                    height="14"
-                    style={{ color: "#56bf2a" }}
-                  />
-                </div>
-              </button>
-              <button
-                style={{
-                  color: "#56bf2a",
-                  background: "white",
-                  width: "200px",
-                  height: "55px",
-                  borderRadius: "700px",
-                }}
-              >
-                <p
-                  style={{
-                    fontFamily: "Roboto",
-                    fontSize: "16px",
-                    fontWeight: "500",
-                  }}
-                >
-                  Get in Touch{" "}
-                </p>
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
-    </EventRap>
+    </MediaRap>
   );
 };
 
-export default Events;
+export default Event;

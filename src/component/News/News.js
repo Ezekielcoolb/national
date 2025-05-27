@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { useDispatch, useSelector } from "react-redux";
+import { fetctNewspage } from "../../Redux/slices/homeSlice";
 
 const MediaRap = styled.div`
   .media-dot {
@@ -25,6 +27,9 @@ const MediaRap = styled.div`
 `;
 
 const NewsMedia = () => {
+
+  
+    
   const [activeLink, setActiveLink] = useState("news"); // Track the active link
   const [content, setContent] = useState(null); // Display content for "news" or "media"
   const navigate = useNavigate();
