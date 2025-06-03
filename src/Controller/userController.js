@@ -10,14 +10,18 @@ import UserSidebar from "../Sidebars/userSidebar";
 import UserNav from "../UserPages/UserNavbar";
 
 export default function UserDashboardLayout() {
-  const {openSideBar} = useSelector((state)=> state.app)
+  const {openSideBar, backgroundChange} = useSelector((state)=> state.app)
+  
   return (
     <Wrapper>
        <div className="usernav-appear">
           <UserNav />
           </div>
       <div
-        style={{}}
+        style={{
+          background: backgroundChange === false ? "#F7F7F7" : "black",
+          color: backgroundChange === false ? "" : "white",
+        }}
         className="outlet"
       >
          <UserSidebar />
@@ -36,7 +40,6 @@ export default function UserDashboardLayout() {
 const Wrapper = styled.div`
   
   .outlet {
-    background: #F7F7F7;
 
     padding: 10px;
     display: flex;

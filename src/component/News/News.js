@@ -1298,24 +1298,7 @@ const NewsMedia = () => {
             >
               Media
             </span>
-            <span
-              className="flex justify-center items-center"
-              onClick={() => handleClick("event")}
-              style={{
-                width: "89px",
-                height: "39px",
-                fontFamily: "Roboto",
-                fontSize: "16px",
-                backgroundColor: activeLink === "event" ? "#112240" : "#f7f7f7",
-                cursor: "pointer",
-                color: activeLink === "event" ? "white" : "#5C6A7F",
-                borderRadius: "100px",
-                border: "1px solid #ccc",
-                opacity: "0px",
-              }}
-            >
-              Event
-            </span>
+           
             <span
               className="flex justify-center items-center"
               onClick={() => handleClick("others")}

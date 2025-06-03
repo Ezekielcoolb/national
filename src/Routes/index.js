@@ -32,6 +32,22 @@ import ParkingDetials from "../UserPages/PakingPages/ParkingDetails";
 import GeneralParkingDetials from "../UserPages/PakingPages/GeneralParkingDetails";
 import AdminRide from "../Admin/AdminRides";
 import AdminRideDetails from "../Admin/AdminRideDetails";
+import UserLogin from "../LoginPages/UserLogins/UserLogin";
+import UserSignUP from "../LoginPages/UserLogins/UserSignUp";
+import UserSignVerification from "../LoginPages/UserLogins/Verification";
+import UserPersonalInfo from "../LoginPages/UserLogins/UserPersonalInformation";
+import UserPasswordCreation from "../LoginPages/UserLogins/PasswordCreation";
+import EventsDetails from "../component/News/EventDetailPage";
+import MoreProject from "../component/News/MoreProjects";
+import UserForgetPasswordVerification from "../LoginPages/UserLogins/UserForgetPasswordEmailVerify";
+import UserForgetPassword from "../LoginPages/UserLogins/UserForgetPassword";
+import Manifest from "../UserPages/Manifest";
+import IncomingParkingDetials from "../UserPages/PakingPages/IncomingParkingDetails";
+import UserComplain from "../UserPages/UserComplain";
+import UserComplaintsDetails from "../UserPages/UserComplainDetails";
+import MyTraffic from "../UserPages/TrafficPages/MyTrafficPage";
+import MyTrafficDetials from "../UserPages/TrafficPages/MyTrafficPageDetails";
+import UserPrivateRoutes from "../UserPages/UserPrivateRoutes";
 
 
 
@@ -49,31 +65,39 @@ export default function Routers () {
                         {path: "/members", element: <Members />},
                         {path: "/news&media", element: <NewsMedia />},
                         {path: "/news&events", element: <Events />},
+                        {path: "/event/details/:id", element: <EventsDetails />},
                         {path: "/news&others", element: <Project />},
-                        {path: "/contact", element: <Contact />}
+                        {path: "/contact", element: <Contact />},
+                        {path: "/project/:id", element: <MoreProject />}
                     ]
                 },
                 {
                     path : "/users",
-                    element: <UserDashboardLayout />,
+                    element: <UserPrivateRoutes />,
                     children:  [
                         {path: "/users/dashboard", element: <UserDashboard />},
                         {path: "/users/test", element: <AgencySelector />},
                         {path: "/users/rides", element: <Ride />},
-                        {path: "/users/ridesDetails", element: <RideDetails />},
+                         {path: "/users/manifest", element: <Manifest />},
+                        {path: "/users/ridesDetails/:id", element: <RideDetails />},
                         {path: "/users/history", element: <History />},
                         {path: "/users/itemDetails", element: <ItemDetails />},
                         {path: "/users/complainDetails", element: <ComplainDetails />},
                         {path: "/users/emergencyDetails", element: <EmergencyDetails />},
                         {path: "/users/crimeDetails", element: <CrimeReportDetails />},
                         {path: "/users/traffic", element: <Traffic />},
-                        {path: "/users/trafficDetails", element: <TrafficDetials />},
+                        {path: "/users/mytraffic", element: <MyTraffic />},
+                        {path: "/users/trafficDetails/:id", element: <TrafficDetials />},
+                        {path: "/users/mytraffic/details/:id", element: <MyTrafficDetials />},
                         {path: "/users/news", element: <News />},
                         {path: "/users/newsDetails", element: <NewsDetails />},
                         {path: "/users/settings", element: <Settings />},
                         {path: "/users/parking", element: <Parking />},
-                        {path: "/users/parking/details", element: <ParkingDetials />},
-                        {path: "/users/explore-parking/details", element: <GeneralParkingDetials />},
+                         {path: "/users/complain", element: <UserComplain />},
+                          {path: "/users/complain/details/:id", element: <UserComplaintsDetails />},
+                        {path: "/users/parking/details/:id", element: <ParkingDetials />},
+                         {path: "/users/incoming/parking/details/:id", element: <IncomingParkingDetials />},
+                        {path: "/users/explore-parking/details/:id", element: <GeneralParkingDetials />},
 
                     ]
                 },
@@ -89,7 +113,14 @@ export default function Routers () {
                         {path: "/admin/settings", element: <AdminSetting />},
                       
                     ]
-                }
+                },
+                {path: "/usersLogin", element: <UserLogin />},
+                {path: "/usersSignup", element: <UserSignUP />},
+                 {path: "/usersEmailVerification", element: <UserSignVerification />},
+                  {path: "/usersPersonalDetails", element: <UserPersonalInfo />},
+                   {path: "/usersPasswordCreation", element: <UserPasswordCreation/>},
+                    {path: "/usersForgetPassword", element: <UserForgetPassword/>},
+                   {path: "/usersForgetPasswordVerification", element: <UserForgetPasswordVerification/>},
             ]
         )
     )

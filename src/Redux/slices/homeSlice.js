@@ -100,6 +100,62 @@ export const fetchAboutpage = createAsyncThunk(
     }
   );
 
+  
+  export const fetchEventDetails = createAsyncThunk(
+  "fetchServiceDetails/fetch",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`https://backoffice.rua.com.ng/api/request/blog/details/${id}`);
+      return response.data?.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
+  export const fetchProjectDetails = createAsyncThunk(
+  "fetchProjectDetails/fetch",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`https://backoffice.rua.com.ng/api/request/project/details/${id}`);
+      return response.data?.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
+
+  export const fetctGeneralSetting= createAsyncThunk(
+    "content/fetctGeneralSetting",
+    async (_, { rejectWithValue }) => {
+      try {
+        const response = await axios.get("https://backoffice.rua.com.ng/api/request/general-settings");
+        console.log("Event response:", response.data);
+        
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching about data:", error);
+        return rejectWithValue(error.response?.data || "An error occurred while fetching Home data");
+      }
+    }
+  );
+
+    export const fetctGeneralAllAgency= createAsyncThunk(
+    "content/fetctGeneralAllAgency",
+    async (_, { rejectWithValue }) => {
+      try {
+        const response = await axios.get("https://backoffice.rua.com.ng/api/request/agencies");
+        console.log(response.data);
+        
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching about data:", error);
+        return rejectWithValue(error.response?.data || "An error occurred while fetching Home data");
+      }
+    }
+  );
+
 
 
 
@@ -109,11 +165,16 @@ const homeSlice = createSlice({
     data: null,
     homeObject: null,
     memberObject: null,
+    eventDetail: null,
+    agencyList: null,
+    projectDetail: null,
+    generalObject: null,
+    projectDetailloading: false,
     newsObject: null,
     mediaObject: null,
     eventObject: null,
     projectObject: null,
-    
+    eventDetailloading: false,
     eventloading: false,
     medialoading: false,
     newsloading: false,
@@ -142,6 +203,22 @@ const homeSlice = createSlice({
       });
 
 
+
+      builder
+      // Fetch Home Data
+      .addCase(fetctGeneralAllAgency.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetctGeneralAllAgency.fulfilled, (state, action) => {
+        state.loading = false;
+        state.agencyList = action.payload;
+      })
+      .addCase(fetctGeneralAllAgency.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
       builder
       // Fetch Home Data
       .addCase(fetchAboutpage.pending, (state) => {
@@ -157,6 +234,50 @@ const homeSlice = createSlice({
         state.error = action.payload;
       });
 
+          builder
+      // Fetch Home Data
+      .addCase(fetchEventDetails.pending, (state) => {
+        state.eventDetailloading = true;
+        state.error = null;
+      })
+      .addCase(fetchEventDetails.fulfilled, (state, action) => {
+        state.eventDetailloading = false;
+        state.eventDetail = action.payload;
+      })
+      .addCase(fetchEventDetails.rejected, (state, action) => {
+        state.eventDetailloading = false;
+        state.error = action.payload;
+      });
+
+              builder
+      // Fetch Home Data
+      .addCase(fetctGeneralSetting.pending, (state) => {
+        state.generalloading = true;
+        state.error = null;
+      })
+      .addCase(fetctGeneralSetting.fulfilled, (state, action) => {
+        state.generalloading = false;
+        state.generalObject = action.payload;
+      })
+      .addCase(fetctGeneralSetting.rejected, (state, action) => {
+        state.generalloading = false;
+        state.error = action.payload;
+      });
+
+   builder
+      // Fetch Home Data
+      .addCase(fetchProjectDetails.pending, (state) => {
+        state.projectDetailloading = true;
+        state.error = null;
+      })
+      .addCase(fetchProjectDetails.fulfilled, (state, action) => {
+        state.projectDetailloading = false;
+        state.projectDetail = action.payload;
+      })
+      .addCase(fetchProjectDetails.rejected, (state, action) => {
+        state.projectDetailloading = false;
+        state.error = action.payload;
+      });
       
       builder
       // Fetch Home Data

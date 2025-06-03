@@ -165,7 +165,14 @@ color: #ffffff;
   font-weight: 500;
 }
 
-
+.cupon-drop {
+    background: #ffffff;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+  }
 
 .dropdown-container {
   position: fixed;

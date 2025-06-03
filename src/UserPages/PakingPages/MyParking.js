@@ -1,7 +1,9 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { fetchMyParkingSpace } from "../../Redux/slices/secondUserSlice";
 
 const TaskRap = styled.div`
   
@@ -84,83 +86,32 @@ const TaskRap = styled.div`
 
 const MyParking = () => {
     const navigate = useNavigate();
-  const items = [
-    {
-      id: 1,
-    pakingname: "Phantom Space",
-    status: "Available",
-    address: "28 Allen Avenue, Ikeja Lagos"
-    },
-    {
-      id: 2,
-      pakingname: "GIG Parking Lot",
-      status: "Closed",
-      address: "60 ST Mary close, Chevy view Lekki Lagos"
-    },
-    {
-      id: 3,
-      pakingname: "Trust Central Park",
-      status: "Available",
-      address: "15 Jurasic park, Gibowo Lagos Island"
-    },
-    {
-      id: 4,
-      pakingname: "Phantom Space",
-      status: "Available",
-      address: "28 Allen Avenue, Ikeja Lagos"
-    },
-    {
-      id: 5,
-      pakingname: "GIG Parking Lot",
-      status: "Closed",
-      address: "60 ST Mary close, Chevy view Lekki Lagos"
-    },
-    {
-      id: 6,
-      pakingname: "GIG Parking Lot",
-      status: "Closed",
-      address: "60 ST Mary close, Chevy view Lekki Lagos"
-    },
-    {
-      id: 7,
-      pakingname: "Phantom Space",
-      status: "Available",
-      address: "28 Allen Avenue, Ikeja Lagos"
-    },
-    {
-      id: 8,
-      pakingname: "Phantom Space",
-      status: "Available",
-      address: "28 Allen Avenue, Ikeja Lagos"
-    },
-    {
-      id: 9,
-      pakingname: "Phantom Space",
-      status: "Available",
-      address: "28 Allen Avenue, Ikeja Lagos"
-    },
-    {
-      id: 10,
-      pakingname: "Phantom Space",
-      status: "Available",
-      address: "28 Allen Avenue, Ikeja Lagos"
-    },
-   
-  ];
-  const handleRowClick = () => {
+      const dispatch = useDispatch()
+        const { parkingloading, myparking, loading, success, error, data, parkingsuccess } = useSelector((state) => state.otherUser);
+  
+  console.log(myparking);
+
+const items = myparking?.data?.data
+
+  const handleRowClick = (id) => {
     
-    navigate("/users/parking/details")
+    navigate(`/users/parking/details/${id}`)
   };
   //   pagination
+
+   useEffect(() => {
+      dispatch(fetchMyParkingSpace());
+    }, [dispatch]);
+
 
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
 
   // Pagination Logic
-  const totalPages = Math.ceil(items.length / rowsPerPage);
+  const totalPages = Math.ceil(items?.length / rowsPerPage);
   const indexOfLastCase = currentPage * rowsPerPage;
   const indexOfFirstCase = indexOfLastCase - rowsPerPage;
-  const CurrentItems = items.slice(indexOfFirstCase, indexOfLastCase);
+  const CurrentItems = items?.slice(indexOfFirstCase, indexOfLastCase);
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber > 0 && pageNumber <= totalPages) {
@@ -169,8 +120,8 @@ const MyParking = () => {
   };
 
   const getStatusColor = (status) => {
-    if (status === "Available") return "#359742";
-    if (status === "Closed") return "#F8253A";
+    if (status === "available") return "#359742";
+    if (status === "closed") return "#F8253A";
     return "#112240"; // Default color if priority is missing or unrecognized
   };
  
@@ -213,7 +164,7 @@ const MyParking = () => {
                       return (
                         <tr className="table-row"
                           key={caseItem.id}
-                          onClick={() => handleRowClick(caseItem)}
+                          onClick={() => handleRowClick(caseItem.id)}
                           style={{ cursor: "pointer", display:"flex", alignItems: "center", justifyContent: "space-between" }}
                         >
                         
@@ -222,7 +173,7 @@ const MyParking = () => {
                             <div className="parking-div">
                                 <img src="/images/park.png" alt="" />
                                 <div className="phantom">
-                                    <h4>{caseItem.pakingname}</h4>
+                                    <h4>{caseItem.name}</h4>
                                     <p>
                                         <span
                                             style={{color: getStatusColor(caseItem.status)}}
@@ -232,9 +183,9 @@ const MyParking = () => {
                                 </div>
                             </div>
                           </td>
-                          <td>{caseItem.bikeNo}</td>
+                          <td>{caseItem.descriptio}</td>
                           <div className="second-park-td">
-                            <h4>₦600</h4>
+                            <h4>₦{caseItem?.amount}</h4>
                             {/* <Link className="book-now">Book Now</Link> */}
                           </div>
                         </tr>

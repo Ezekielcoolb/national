@@ -1,69 +1,148 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import ItemLodge from "./HistoryPages/ItemLodge";
-import ComplainLodge from "./HistoryPages/ComplainLodge";
-import EmergencyReport from "./HistoryPages/EmergencyReport";
-import CrimeReport from "./HistoryPages/CrimeReport";
-import MyParking from "./PakingPages/MyParking";
-import ExploringPark from "./PakingPages/ExploringPark";
-import { Icon } from "@iconify/react/dist/iconify.js";
+import { Link, useNavigate } from "react-router-dom";
+import { formatDistanceToNow } from 'date-fns';
+import MapRoad from "../Map";
 import { useDispatch, useSelector } from "react-redux";
-import { createParkingSpace, fetchMyParkingSpace, resetParkingState } from "../Redux/slices/secondUserSlice";
 import { ClipLoader } from "react-spinners";
-import MyOutGoingParking from "./PakingPages/OutGoingParking";
-import MyIncomingParking from "./PakingPages/IncomingParking";
-import { uploadImages } from "../Redux/slices/uploadSlice";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { uploadImages } from "../../Redux/slices/uploadSlice";
+import { createParkingSpace, createTrafficUpdate, fetchMyTrafficUpdates, resetTrafficState } from "../../Redux/slices/secondUserSlice";
 
-const HistoryRap = styled.div`
-  padding: 15px;
-  width: 100%;
+const TraficRap = styled.div`
+font-family: 'Roboto';
+width: 100%;
 
-  font-family: "Roboto";
-  .link-container {
+.center-tra {
     display: flex;
-    justify-content: flex-start;
-    overflow-x: auto;
-  }
+flex-direction: column;
 
-  .link {
-    padding: 20px 20px;
-    text-decoration: none;
+align-items: center;
+}
+h2 {
+    margin: 50px;
+    margin-bottom: 20px !important;
+    color: #112240;
+    font-size: 18px;
+    font-weight: 600;
+}
+  h5 {
+    color: #112240;
+    font-size: 16px;
+    font-weight: 600;
+    border-bottom: 1px solid #1122401f;
+    padding: 15px;
+  }
+  p {
     color: #667085;
-    white-space: nowrap;
     font-size: 14px;
     font-weight: 400;
-    cursor: pointer;
-    border-bottom: 2px solid transparent; /* Default underline */
-    transition: all 0.3s ease;
   }
-
-  .link.active {
-    font-weight: 600;
-    font-size: 14px;
-    border-bottom: 2px solid black; /* Black underline for the active link */
+  h6 {
+    max-width: 266px;
+    color: #112240;
+    font-size: 15 px;
+    font-weight: 400;
+  }
+  .live-feed p {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 187px;
+  }
+  .live-feed span {
+    font-size: 12px;
     color: #112240;
   }
-
-  .link:hover {
-    color: #555; /* Optional hover effect */
-  }
-  .create-parking {
-    width: 150px;
-    height: 40px;
-    border-radius: 100px;
+  .inner-live-feed {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid blue;
-    text-decoration: none;
-    color: white;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    background: blue;
+    flex-direction: column;
+    gap: 10px;
   }
-  .upper-parking {
+  .all-traffic-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+  }
+
+  .all-traffic-info img {
+    height: 100px;
+    width: 200px;
+    border-radius: 10px;
+  }
+  .all-traffic-info:hover {
+    background: #f2f2f2;
+  }
+  .trafic-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .space-traffic {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 15px;
+  }
+  .house-live-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 15px;
+  }
+  .update-btn {
+    background: #112240;
+    text-decoration: none;
+    width: 55px;
+    height: 22px;
+    display: flex;
+    color: #ffffff;
+    font-size: 12px;
+    border-radius: 16px;
+    font-weight: 400;
+    align-items: center;
+    justify-content: center;
+  }
+  .update-div {
+    background: #f2f4f7;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px;
+    border-radius: 16px;
+  }
+  .all-update-div {
+    background: #ffffff;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 10px;
+  }
+  
+  .all-traffic-update-divs {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+ 
+  .traffic-news {
+    width: 100%;
+  }
+  .live-feed {
+    width: 30%;
+  }
+  .traffic-map {
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+  }
+  .all-traffic-information {
+    background: #ffffff;
+    margin: 30px;
+    padding: 30px;
+    border-radius: 15px;
+  }
+  .upper-new-traffic {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -114,45 +193,52 @@ const HistoryRap = styled.div`
     cursor: pointer;
     border: none;
   }
+  @media (max-width: 678px) {
+.all-traffic-information, .update-div {
+    flex-direction: column;
+
+}
+.traffic-news {
+    border-right: 1px solid white !important;
+    width: 100%;
+  }
+  .live-feed {
+    width: 100%;
+  }
+  }
 `;
 
-const Parking = () => {
-  const dispatch = useDispatch()
-    const { parkingloading, myparking, loading, success, error, data, parkingsuccess } = useSelector((state) => state.otherUser);
-  
-  const [activeLink, setActiveLink] = useState("mypark");
-  const [parkingShow, setParkingShow] = useState(false);
-  const [images, setImages] = useState([]);
-  const [dragging, setDragging] = useState(false);
+const MyTraffic = () => {
+       const navigate = useNavigate();
+        const dispatch = useDispatch()
+           const { trafficloading, trafficData, loading, success, error, data, trafficsuccess } = useSelector((state) => state.otherUser);
+           const [dragging, setDragging] = useState(false);
+           const { backgroundChange} = useSelector((state)=> state.app)
+         
+const [createShow, setCreateShow] = useState(false)
+  const [images, setImages] = useState("");
 
-  const [formData, setFormData] = useState({
-    name: "",
-    amount: "",
-    address: "",
+ const [formData, setFormData] = useState({
+    title: "",
+    category: "",
     description: "",
-    image: [],
+    banner: "",
   });
-console.log(formData);
+console.log(trafficData);
 
+const traffics = trafficData?.data?.data
 
-const isValid =
-  formData.name.trim() !== "" &&
-  formData.amount.trim() !== "" &&
-  formData.address.trim() !== "" &&
+  const isValid =
+  formData.title.trim() !== "" &&
+  formData.category.trim() !== "" &&
   formData.description.trim() !== "" ;
- 
-   useEffect(() => {
-      dispatch(fetchMyParkingSpace());
+const handleCreateShow = () => {
+  setCreateShow(!createShow)
+}
+
+  useEffect(() => {
+      dispatch(fetchMyTrafficUpdates());
     }, [dispatch]);
-
-    
-
-  const handleSubmit = (e) => {
-        e.preventDefault();
-        if (isValid) {
-          dispatch(createParkingSpace(formData));
-        }
-      };
 
 
 const handleImageUpload = async (files) => {
@@ -162,23 +248,32 @@ const handleImageUpload = async (files) => {
     return;
   }
 
-  const resultAction = await dispatch(uploadImages({ files: validFiles, folderName: 'vehicles' }));
+  const resultAction = await dispatch(uploadImages({ files: validFiles, folderName: 'traffic' }));
 
   if (uploadImages.fulfilled.match(resultAction)) {
     const urls = resultAction.payload;
 
-    // Add image URLs to formData and preview
+    // Use the first image URL only
+    const firstImage = urls[0];
+
     setFormData(prev => ({
       ...prev,
-      image: [...prev.image, ...urls],
+      banner: firstImage,  // Set only one image URL
     }));
-    setImages(prev => [...prev, ...urls]);
+
+    setImages(firstImage);  // Also store single URL, not array
   } else {
     console.error("Upload failed:", resultAction.payload);
   }
 };
 
 
+ const handleSubmit = (e) => {
+        e.preventDefault();
+        if (isValid) {
+          dispatch(createTrafficUpdate(formData));
+        }
+      };
 
   const handleDragOver = (event) => {
     event.preventDefault();
@@ -202,65 +297,42 @@ const handleImageUpload = async (files) => {
   }
 };
 
-
-  const navigate = useNavigate();
-
-  const handleLinkClick = (link) => {
-    setActiveLink(link);
-  };
-
-  const handleParkingShow = () => {
-    setParkingShow(!parkingShow);
-  };
-
+       const handleClick = (id) => {
+    
+        navigate(`/users/mytraffic/details/${id}`);
+      };
   return (
-    <HistoryRap>
-      <div className="history-header">
-        <div className="upper-parking">
-          <div className="link-container">
-            <Link
-              className={`link ${activeLink === "mypark" ? "active" : ""}`}
-              onClick={() => handleLinkClick("mypark")}
-            >
-              My Parking Space
-            </Link>
-            <Link
-              className={`link ${activeLink === "explore" ? "active" : ""}`}
-              onClick={() => handleLinkClick("explore")}
-            >
-              Exploring Parking Space
-            </Link>
-            <Link
-              className={`link ${activeLink === "outgoing" ? "active" : ""}`}
-              onClick={() => handleLinkClick("outgoing")}
-            >
-              Outgoing 
-            </Link>
-             <Link
-              className={`link ${activeLink === "incoming" ? "active" : ""}`}
-              onClick={() => handleLinkClick("incoming")}
-            >
-              Incoming 
-            </Link>
-          </div>
-          <button onClick={handleParkingShow} className="create-parking">
-            Create Parking
-          </button>
+    <TraficRap>
+       <div className="upper-new-traffic">
+        <h2  style={{ color: backgroundChange=== true ? "white" : "" }}>My Traffic Updates</h2>
+        <button onClick={handleCreateShow}>Create Update</button>
         </div>
-      </div>
-      <div style={{ marginTop: "-15px" }}>
-        {activeLink === "mypark" && <MyParking />}
-        {activeLink === "explore" && <ExploringPark />}
-        {activeLink === "outgoing" && <MyOutGoingParking />}
-        {activeLink === "incoming" && <MyIncomingParking />}
-      </div>
-      {parkingShow ? (
+         <div className="all-traffic-information">
+          <div className="traffic-news">
+            <h5>Traffic News Created</h5>
+            <div className="space-traffic">
+          {traffics?.map((items) => (
+  <div onClick={() => handleClick(items.id)} className="all-traffic-info" key={items.id}>
+    <div className="trafic-info">
+      <p>{formatDistanceToNow(new Date(items.updated_at), { addSuffix: true })}</p>
+      <h6>{items?.title}</h6>
+    </div>
+    <img src={`https://backoffice.rua.com.ng/${items.banner}`} alt="" />
+  </div>
+))}
+             
+              
+            </div>
+          </div>
+         
+        </div>
+   {createShow ? (
         <div className="dropdown-container">
           <div className="parking-dropdown">
             <div className="parking-dropdown-head">
-              <h4>Add Parking Space</h4>
+              <h4>Add Traffic Update</h4>
               <Icon
-                onClick={handleParkingShow}
+                onClick={handleCreateShow}
                 icon="humbleicons:times"
                 width="24"
                 height="24"
@@ -270,31 +342,26 @@ const handleImageUpload = async (files) => {
             <div className="parking-dropdown-body">
               <input
                 type="text"
-                value={formData.name}
+                value={formData.title}
                 onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
+                  setFormData({ ...formData, title: e.target.value })
                 }
-                placeholder="Parking Name"
+                placeholder="Traffic Title"
               />
               <input
-               value={formData.address}
+               value={formData.category}
                 onChange={(e) =>
-                  setFormData({ ...formData, address: e.target.value })
+                  setFormData({ ...formData, category: e.target.value })
                 }
-              type="text" placeholder="Parking Address" />
-              <input
-               value={formData.amount}
-                onChange={(e) =>
-                  setFormData({ ...formData, amount: e.target.value })
-                }
-              type="text" placeholder="Parking price" />
+              type="text" placeholder="Traffic Category" />
+          
               <textarea
                value={formData.description}
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
                 type="text"
-                placeholder="Parking Description"
+                placeholder="Traffic Description"
               ></textarea>
               <div>
                 {/* Upload Area */}
@@ -379,9 +446,7 @@ const handleImageUpload = async (files) => {
                       justifyContent: "center",
                     }}
                   >
-                    {images.map((image, index) => (
                       <div
-                        key={index}
                         style={{
                           width: "153px",
                           height: "99px",
@@ -391,8 +456,8 @@ const handleImageUpload = async (files) => {
                         }}
                       >
                         <img
-                          src={`https://backoffice.rua.com.ng/${image}`}
-                          alt={`Uploaded ${index + 1}`}
+                          src={`https://backoffice.rua.com.ng/${images}`}
+                          alt=""
                           style={{
                             width: "100%",
                             height: "100%",
@@ -400,7 +465,6 @@ const handleImageUpload = async (files) => {
                           }}
                         />
                       </div>
-                    ))}
                   </div>
                 )}
               </div>
@@ -410,7 +474,7 @@ const handleImageUpload = async (files) => {
                     background: isValid ? "#56BF2A" : "#bdddb0"
                 }}
                 onClick={handleSubmit}>
-                  {parkingloading ? <ClipLoader color="white" size={35} /> :
+                  {trafficloading ? <ClipLoader color="white" size={35} /> :
                   "Continue"}
                 </button>
             </div>
@@ -419,21 +483,19 @@ const handleImageUpload = async (files) => {
       ) : (
         ""
       )}
-
-      {parkingsuccess ? (
-                    <div className="dropdown-container">
-                      <div className="cupon-drop">
-                        <p>Parking space successfully</p>
-                        <p></p>
-                        <div className="button-div">
-                          <button onClick={() => dispatch(resetParkingState())} className="submit-btn">Continue</button>
-                          
-                        </div>
-                      </div>
-                    </div>
-                  ): ""}
-    </HistoryRap>
+          {trafficsuccess ? (
+              <div className="dropdown-container">
+                <div className="cupon-drop">
+                  <p>Traffic Update Created successfully</p>
+                  <p>Thanks!</p>
+                  <div className="button-div">
+                    <button onClick={() => dispatch(resetTrafficState())} className="submit-btn">Continue</button>
+                    
+                  </div>
+                </div>
+              </div>
+            ): ""}
+    </TraficRap>
   );
 };
-
-export default Parking;
+export default MyTraffic;

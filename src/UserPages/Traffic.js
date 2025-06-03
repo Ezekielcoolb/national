@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import MapRoad from "./Map";
 import { Link, useNavigate } from "react-router-dom";
+import { formatDistanceToNow } from 'date-fns';
+
+import { useDispatch, useSelector } from "react-redux";
+import { fetchExploreTrafficUpdates } from "../Redux/slices/secondUserSlice";
 
 const TraficRap = styled.div`
 font-family: 'Roboto';
@@ -59,6 +63,11 @@ h2 {
     align-items: center;
     justify-content: space-between;
 
+  }
+  .all-traffic-info img {
+    height: 100px;
+    width: 200px;
+    border-radius: 10px;
   }
   .all-traffic-info:hover {
     background: #f2f2f2;
@@ -147,14 +156,27 @@ h2 {
 
 const Traffic = () => {
        const navigate = useNavigate();
-       const handleClick = () => {
+               const dispatch = useDispatch()
+
+                  const {exploreTrafficData, loading, success, error} = useSelector((state) => state.otherUser);
+         const { backgroundChange} = useSelector((state)=> state.app)
+       
+       console.log(exploreTrafficData);
+
+       const traffics = exploreTrafficData?.data?.data
+
+         useEffect(() => {
+             dispatch(fetchExploreTrafficUpdates());
+           }, [dispatch]);
+       
+                  const handleClick = (id) => {
     
-        navigate("/users/trafficDetails");
+        navigate(`/users/trafficDetails/${id}`);
       };
   return (
     <TraficRap>
        
-        <h2>Traffic Updates</h2>
+        <h2  style={{ color: backgroundChange=== true ? "white" : "" }}>Traffic Updates</h2>
         <div className="center-tra">
       <div className="all-traffic-update-divs">
         <div className="map-plus-info">
@@ -175,46 +197,15 @@ const Traffic = () => {
           <div className="traffic-news">
             <h5>Traffic News</h5>
             <div className="space-traffic">
-              <div onClick={handleClick} className="all-traffic-info">
-                <div className="trafic-info">
-                  <p>2 minutes ago • LASMA</p>
-                  <h6>
-                    Bitcoin Mini Showdown Puts New York on Front Lines of a
-                    Green Fight
-                  </h6>
-                </div>
-                <img src="/images/traffic-1.png" alt="" />
-              </div>
-              <div onClick={handleClick}  className="all-traffic-info">
-                <div className="traffic-info">
-                  <p>10 hours ago • LASMA</p>
-                  <h6>
-                    Bitcoin Mini Showdown Puts New York on Front Lines of a
-                    Green Fight
-                  </h6>
-                </div>
-                <img src="/images/traffic-2.png" alt="" />
-              </div>
-              <div onClick={handleClick}  className="all-traffic-info">
-                <div className="traffic-info">
-                  <p>1 day ago • LASMA</p>
-                  <h6>
-                    Bitcoin Mini Showdown Puts New York on Front Lines of a
-                    Green Fight
-                  </h6>
-                </div>
-                <img src="/images/traffic-3.png" alt="" />
-              </div>
-              <div onClick={handleClick}  className="all-traffic-info">
-                <div className="traffic-info">
-                  <p>10 hours ago • LASMA</p>
-                  <h6>
-                    Bitcoin Mini Showdown Puts New York on Front Lines of a
-                    Green Fight
-                  </h6>
-                </div>
-                <img src="/images/traffic-2.png" alt="" />
-              </div>
+              {traffics?.map((items) => (
+               <div onClick={() => handleClick(items.id)} className="all-traffic-info" key={items.id}>
+                 <div className="trafic-info">
+                   <p>{formatDistanceToNow(new Date(items.updated_at), { addSuffix: true })}</p>
+                   <h6>{items?.title}</h6>
+                 </div>
+                 <img src={`https://backoffice.rua.com.ng/${items.banner}`} alt="" />
+               </div>
+             ))}
             </div>
           </div>
           <div className="live-feed">

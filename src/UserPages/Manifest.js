@@ -3,10 +3,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { fetchLodgedRide } from "../Redux/slices/userSlice";
+import { fetchManifest } from "../Redux/slices/userSlice";
 
 const TaskRap = styled.div`
-  
   width: 100%;
   font-family: "Roboto";
   h4 {
@@ -21,7 +20,6 @@ const TaskRap = styled.div`
     font-size: 14px;
     font-weight: 500;
     color: #667085;
-
   }
 
   label {
@@ -33,38 +31,33 @@ const TaskRap = styled.div`
     font-weight: 700;
     color: red;
   }
-
- 
 `;
 
-const Ride = () => {
-    const navigate = useNavigate();
- 
+const Manifest = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  
 
-    const { lodgdRideData, loading, error } = useSelector((state) => state.users);
-    console.log(lodgdRideData);
+  const { manifestData, loading, error } = useSelector((state) => state.users);
+  console.log(manifestData);
 
-    const rides = lodgdRideData?.data?.data
+  const manifest = manifestData?.data?.data;
 
-      useEffect(() => {
-        dispatch(fetchLodgedRide());
-      }, [dispatch]);
-
-  const handleRowClick = (id) => {
-    
-    navigate(`/users/ridesDetails/${id}`);
+  const handleRowClick = () => {
+    // navigate("/users/ridesDetails");
   };
   //   pagination
-
+  useEffect(() => {
+    dispatch(fetchManifest());
+  }, [dispatch]);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
 
   // Pagination Logic
-  const totalPages = Math.ceil(rides?.length / rowsPerPage);
+  const totalPages = Math.ceil(manifest?.length / rowsPerPage);
   const indexOfLastCase = currentPage * rowsPerPage;
   const indexOfFirstCase = indexOfLastCase - rowsPerPage;
-  const CurrentRides = rides?.slice(indexOfFirstCase, indexOfLastCase);
+  const CurrentRides = manifest?.slice(indexOfFirstCase, indexOfLastCase);
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber > 0 && pageNumber <= totalPages) {
@@ -74,12 +67,12 @@ const Ride = () => {
 
   const getStatusColor = (status) => {
     if (status === "active") return "#E8A526";
-    if (status === "Completed") return "#379C0C";
+    if (status === "completed") return "#379C0C";
     return "#112240"; // Default color if priority is missing or unrecognized
   };
   const getStatusBackground = (status) => {
     if (status === "active") return "#FDF4E4";
-    if (status === "completed") return "#E8FDE0";
+    if (status === "Completed") return "#E8FDE0";
     return "#112240"; // Default color if priority is missing or unrecognized
   };
 
@@ -99,14 +92,14 @@ const Ride = () => {
               />
             </div>
             <div className="status-pick-div">
-                <p>Status: </p>
-                <span>All</span>
-                <Icon
-                  icon="ep:arrow-down"
-                  width="16"
-                  height="16"
-                  style={{ color: "#667085" }}
-                />
+              <p>Status: </p>
+              <span>All</span>
+              <Icon
+                icon="ep:arrow-down"
+                width="16"
+                height="16"
+                style={{ color: "#667085" }}
+              />
             </div>
           </div>
           <div className="new-table-scroll">
@@ -114,19 +107,15 @@ const Ride = () => {
               <table className="custom-table">
                 <thead>
                   <tr>
-                    <th style={{ width: "30px" }}>
-                     S/N
-                    </th>
+                    <th style={{ width: "30px" }}>S/N</th>
 
-                    
-                    <th>RIDE ID</th>
+                    <th>MANIFEST ID</th>
                     <th>VEHICLE NUMBER</th>
                     <th>VEHICLE NAME</th>
                     <th>VEHICLE MODEL</th>
                     <th>DRIVER NAME</th>
                     <th>DEPARTURE STATE</th>
-                    <th>DESTINATION ADDRESS</th>
-                   
+                    <th>DESTINATION STATE</th>
                     <th>PARK NAME</th>
                     <th>DATE CREATED</th>
                     <th>STATUS</th>
@@ -136,25 +125,32 @@ const Ride = () => {
                   {CurrentRides ? (
                     CurrentRides.map((caseItem, index) => {
                       return (
-                        <tr className="table-row"
+                        <tr
+                          className="table-row"
                           key={caseItem.id}
-                          onClick={() => handleRowClick(caseItem?.id)}
+                          onClick={() => handleRowClick(caseItem)}
                           style={{ cursor: "pointer" }}
                         >
-                          <td>
-                          {index + 1}
-                          </td>
+                          <td>{index + 1}</td>
 
-                           <td>{caseItem.manifest_num}</td>
+                          <td>{caseItem.manifest_num}</td>
                           <td>{caseItem.vehicle_number}</td>
                           <td>{caseItem.vehicle_name}</td>
                           <td>{caseItem.vehicle_model}</td>
                           <td>{caseItem.driver_name}</td>
                           <td>{caseItem.departure_state}</td>
-                          <td>{caseItem.destination_address}</td>
-                          
+                          <td>{caseItem.destination_state}</td>
                           <td>{caseItem.park_name}</td>
-                          <td className="destination-wide">{caseItem.destination}</td>
+                          <td>
+                            {new Date(caseItem.created_at).toLocaleDateString(
+                              "en-US",
+                              {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              }
+                            )}
+                          </td>
                           <td>
                             <div
                               style={{
@@ -182,7 +178,6 @@ const Ride = () => {
                       <td colSpan="10" className="no-case">
                         <img src="/images/mask_img.png" alt="" />
                         <h3>No Ride Lodged.</h3>
-                        
                       </td>
                     </tr>
                   )}
@@ -197,13 +192,13 @@ const Ride = () => {
               disabled={currentPage === 1}
               className="next-page-link"
             >
-              <Icon className="pages-icon"
+              <Icon
+                className="pages-icon"
                 icon="solar:alt-arrow-left-linear"
                 width="16"
                 height="16"
                 style={{ color: "#667085" }}
               />
-              
             </Link>
             <div>
               {Array.from({ length: totalPages }, (_, index) => index + 1).map(
@@ -214,7 +209,8 @@ const Ride = () => {
                     onClick={() => handlePageChange(pageNumber)}
                     style={{
                       color: pageNumber === currentPage ? "#ffffff" : "#667085",
-                      background: pageNumber === currentPage ? "#112240" : "#1122400D",
+                      background:
+                        pageNumber === currentPage ? "#112240" : "#1122400D",
                     }}
                   >
                     {pageNumber}
@@ -227,8 +223,8 @@ const Ride = () => {
               disabled={currentPage === totalPages}
               className="next-page-link"
             >
-            
-              <Icon className="pages-icon"
+              <Icon
+                className="pages-icon"
                 icon="iconamoon:arrow-right-2-light"
                 width="16"
                 height="16"
@@ -236,10 +232,9 @@ const Ride = () => {
               />
             </Link>
           </div>
-
         </div>
       </div>
     </TaskRap>
   );
 };
-export default Ride;
+export default Manifest;

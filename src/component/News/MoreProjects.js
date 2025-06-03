@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetctProjectpage } from "../../Redux/slices/homeSlice";
+import { fetchProjectDetails, fetctProjectpage } from "../../Redux/slices/homeSlice";
 
 const ProjectRap = styled.div`
  .media-dot {
@@ -133,6 +133,7 @@ const ProjectRap = styled.div`
     height: 437px;
     object-fit: cover;
     margin-right: 5px;
+    cursor: pointer;
     flex-shrink: 0;
     border-radius: 8px;
   }
@@ -162,25 +163,32 @@ const ProjectRap = styled.div`
   .nav-btn.right-btn {
     right: 20px;
   }
+  video {
+  border: 2px solid red;
+  z-index: 1000;
+  pointer-events: auto;
+}
+
 `;
 
-const Project = () => {
+const MoreProject = () => {
 
+const {id} = useParams()
 
 
 
     const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
 const dispatch = useDispatch();
-    const {projectObject, loading, error } = useSelector(
+    const {projectDetail, loading, error } = useSelector(
       (state) => state.home || []
       
     );
 
-console.log(projectObject);
+console.log(projectDetail);
 
-const latest = projectObject?.data?.latest || {}
-const otherEvent = projectObject?.data?.otherEvent
+const latest = projectDetail?.latest || {}
+const otherEvent = projectDetail?.otherProject
 let speakers = [];
 try {
   if (latest?.speakers) {
@@ -212,9 +220,13 @@ const slideWidth = 581; // Slide width + margin (571px + 10px margin)
     }
   };
 
-  useEffect(() => {
-           dispatch(fetctProjectpage()); // Call API on component mount
-         }, [dispatch]);
+
+
+useEffect(() => {
+      if (id) {
+        dispatch(fetchProjectDetails(id));
+      }
+    }, [dispatch, id]);
 
 
     const goToSlide = (index) => {
@@ -225,9 +237,17 @@ const slideWidth = 581; // Slide width + margin (571px + 10px margin)
       });
     };
 
-    const handleGoToDetails = (id) => {
+    const videoLink = latest?.video_link;
+
+// Check if it's a YouTube or embeddable link
+const isYouTube = videoLink?.includes("youtube.com") || videoLink?.includes("youtu.be");
+
+// Check if it's a direct video file (like .mp4)
+const isDirectVideo = videoLink?.match(/\.(mp4|webm|ogg)$/);
+  const handleGoToDetails = (id) => {
     navigate(`/project/${id}`);
     }
+
 
   return (
     <ProjectRap>
@@ -328,7 +348,7 @@ const slideWidth = 581; // Slide width + margin (571px + 10px margin)
             style={{ transform: `translateX(-${currentIndex * 20}%)` }}
           >
             {otherEvent?.data?.map((images, index) => (
-              <img onClick={() => handleGoToDetails(images.id)}
+              <img onClick={() => handleGoToDetails(images?.id)}
                 key={index}
                 src={`https://backoffice.rua.com.ng/${images?.banner}`}
                 alt={`pic-${index}`}
@@ -373,32 +393,28 @@ const slideWidth = 581; // Slide width + margin (571px + 10px margin)
           >
            More Information
           </h3>
-         <div className="speakers">
-          <h2>Speakers</h2>
-  {speakers?.map((speaker, index) => (
-    <div key={index} className="speaker-card">
-      <div className="speaker-image-div">
-      <img src={`https://backoffice.rua.com.ng/${speaker.image}`} alt={speaker.fullname} />
-      <div className="speaker-name">
-      <h4>{speaker.fullname}</h4>
- <p>{speaker.position}</p>
-      </div>
-     </div>
-    </div>
-  ))}
-</div>
-       <div className="speakers">
-          <h2>Venue</h2>
-   <div className="speaker-name">
- <p>{latest?.venue}</p>
-      </div>
-</div>
-       <div className="speakers">
-          <h2>Time</h2>
-   <div className="speaker-name">
- <p>{latest?.time}</p>
-      </div>
-</div>
+<div>
+    {isYouTube ? (
+      // YouTube or embeddable iframe
+      <iframe
+        width="100%"
+        height="400"
+        src={videoLink}
+        title="Video"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      ></iframe>
+    ) : isDirectVideo ? (
+      // Direct uploaded video
+      <video width="100%" height="400" controls autoPlay>
+  <source src={videoLink} type="video/mp4" />
+</video>
+
+    ) : (
+      <p>No valid video found</p>
+    )}
+  </div>
          
         </div>
           <div
@@ -502,4 +518,4 @@ const slideWidth = 581; // Slide width + margin (571px + 10px margin)
     </ProjectRap>
   );
 };
-export default Project;
+export default MoreProject;

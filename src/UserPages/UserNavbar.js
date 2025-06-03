@@ -1,8 +1,8 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { setOpenSideBar } from "../Redux/appSlice";
+import { Link, useNavigate } from "react-router-dom";
+import { setBackgroundChange, setBackgroundChangeToOriginal, setOpenSideBar } from "../Redux/appSlice";
 import styled from "styled-components";
 
 const UserNavRap = styled.div`
@@ -19,6 +19,17 @@ color:  #112240;
     display: flex;
     position: relative;
     justify-content: space-between;
+  }
+
+  .logOut {
+        border: 1px solid #1122401a;
+color: #112240;
+background: transparent;
+height: 35px;
+width: 120px;
+display: flex;
+align-items: center;
+justify-content: center;
   }
   .search-bar-div {
     position: relative;
@@ -135,13 +146,19 @@ color:  #112240;
 
 const UserNav = () => {
   const dropdownRef = useRef(null);
-  const { openSideBar } = useSelector((state) => state.app);
+  const { openSideBar, backgroundChange } = useSelector((state) => state.app);
+  console.log(backgroundChange);
+  
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   console.log(openSideBar);
 
   const ShowBar = () => {
     dispatch(setOpenSideBar());
   };
+  const handleChangeBackGround = () => {
+    dispatch(setBackgroundChange())
+  }
 const [dropdownVisibility, setDropdownVisibility] = useState(false)
   const [selected, setSelected] = useState("light");
 
@@ -176,6 +193,18 @@ const [dropdownVisibility, setDropdownVisibility] = useState(false)
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [dropdownVisibility]);
+
+
+const handleLogOut =  () => {
+    navigate("/usersLogin");
+
+  localStorage.removeItem("ruaUserToken");
+  localStorage.removeItem("ruauserregisteredEmail");
+  localStorage.removeItem("ruaUserDetails");
+
+
+};
+
   return (
     <UserNavRap>
       <div className="userNavbar">
@@ -216,8 +245,10 @@ const [dropdownVisibility, setDropdownVisibility] = useState(false)
             }}
           >
             <button
-              onClick={() => setSelected("light")}
-              style={{
+onClick={() => {
+   dispatch(setBackgroundChange())
+  setSelected("light");
+}}              style={{
                 borderStyle: "none",
                 width:  selected === "light" ? "66px" : "50%",
                 color: "#112240",
@@ -235,7 +266,10 @@ const [dropdownVisibility, setDropdownVisibility] = useState(false)
               Light
             </button>
             <button
-              onClick={() => setSelected("dark")}
+             onClick={() => {
+   dispatch(setBackgroundChange())
+  setSelected("dark");
+}} 
               style={{
                 padding: "10px 20px",
                 borderStyle: "none",
@@ -293,7 +327,7 @@ const [dropdownVisibility, setDropdownVisibility] = useState(false)
               </div>
             </div>
               : ""}
-          <select className="nav-select"></select>
+          <button onClick={handleLogOut} className="logOut"> Log out</button>
         </div>
       </div>
     </UserNavRap>

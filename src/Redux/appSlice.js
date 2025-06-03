@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  backgroundChange: false,
   openSideBar: false,
   dropdowVisible: false,
   dropdowVisibleTwo: false,
@@ -9,6 +10,7 @@ const initialState = {
   emergencyDropdown: false,
   reportCrimeDropdown: false,
   createdRide: false,
+    createdManifest: false,
   createdItem: false,
   createdComplain: false,
   createdEmergency: false,
@@ -19,6 +21,12 @@ const appSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
+    setBackgroundChange: (state) => {
+      state.backgroundChange = !state.backgroundChange;
+    },
+       setBackgroundChangeToOriginal: (state) => {
+      state.backgroundChange = false;
+    },
     setOpenSideBar: (state) => {
       state.openSideBar = !state.openSideBar;
     },
@@ -43,6 +51,9 @@ const appSlice = createSlice({
     setCreatedRide: (state) => {
       state.createdRide = !state.createdRide
     },
+    setCreatedManifest: (state) => {
+      state.createdManifest = !state.createdManifest
+    },
     setCreatedItem: (state) => {
       state.createdItem = !state.createdItem
     },
@@ -57,7 +68,7 @@ const appSlice = createSlice({
     },
   },
 });
-export const { setOpenSideBar, setDropdownVisibleTwo, setDropdownVisible, setItemVisible,
+export const { setOpenSideBar,setBackgroundChange, setBackgroundChangeToOriginal, setCreatedManifest, setDropdownVisibleTwo, setDropdownVisible, setItemVisible,
    setComplainVisible, setEmergencyVisible, setCrimeVisible, setCreatedCrime,
     setCreatedRide, setCreatedItem, setCreatedComplain, setCreatedEmergency} = appSlice.actions;
 export default appSlice.reducer;

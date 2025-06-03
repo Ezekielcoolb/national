@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { fetchExploreParkingSpace } from "../../Redux/slices/secondUserSlice";
+import { cancelBookedParkSpace, fetchMyParkingSpace, incomingBookedParkingSpace, myBookedParkingSpace, resetCancelBookingState } from "../../Redux/slices/secondUserSlice";
 
 const TaskRap = styled.div`
   
@@ -81,25 +81,28 @@ const TaskRap = styled.div`
     align-items: center;
     gap: 10px;
  }
+
 `;
 
-const ExploringPark = () => {
+const MyIncomingParking = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch()
-        const { parkingloading, exploreparking, loading, success, error, data, parkingsuccess } = useSelector((state) => state.otherUser);
-      
-        console.log(exploreparking);
-        const items = exploreparking?.data?.data
- 
+      const dispatch = useDispatch()
+        const { parkingloading,  incomingparking, cancelbookparking, cancelbookingsuccess, loading, success, error, data, parkingsuccess } = useSelector((state) => state.otherUser);
+  
+  console.log(cancelbookingsuccess);
+
+const items = incomingparking?.data?.data
+
   const handleRowClick = (id) => {
     
-    navigate(`/users/explore-parking/details/${id}`);
+    navigate(`/users/incoming/parking/details/${id}`)
   };
   //   pagination
 
    useEffect(() => {
-        dispatch(fetchExploreParkingSpace());
-      }, [dispatch]);
+      dispatch(incomingBookedParkingSpace());
+    }, [dispatch]);
+
 
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
@@ -117,11 +120,21 @@ const ExploringPark = () => {
   };
 
   const getStatusColor = (status) => {
-    if (status === "available") return "#359742";
-    if (status === "closed") return "#F8253A";
+    if (status === "pending") return "#359742";
+    if (status === "accepted") return "#F8253A";
+     if (status === "cancelled") return "red";
     return "#112240"; // Default color if priority is missing or unrecognized
   };
  
+   const handleParkingDetail = () => {
+  }
+
+    const handleCancelBookParkSpace = (id) => {
+      
+        dispatch(cancelBookedParkSpace(id))
+    
+    }
+
 
   return (
     <TaskRap>
@@ -156,10 +169,11 @@ const ExploringPark = () => {
                 <tbody>
                   {CurrentItems ? (
                     CurrentItems.map((caseItem, index) => {
+                         const park = JSON.parse(caseItem.park_info);
                       return (
                         <tr className="table-row"
                           key={caseItem.id}
-                          onClick={() => handleRowClick(caseItem.id)}
+           onClick={() => handleRowClick(caseItem.id)}
                           style={{ cursor: "pointer", display:"flex", alignItems: "center", justifyContent: "space-between" }}
                         >
                         
@@ -168,21 +182,22 @@ const ExploringPark = () => {
                             <div className="parking-div">
                                 <img src="/images/park.png" alt="" />
                                 <div className="phantom">
-                                    <h4>{caseItem.name}</h4>
+                                    <h4>{park.name}</h4>
                                     <p>
                                         <span
                                             style={{color: getStatusColor(caseItem.status)}}
                                         >{caseItem.status}</span>
-                                        {caseItem.address}
+                                        {park.address}
                                     </p>
                                 </div>
                             </div>
                           </td>
-                          <td>{caseItem.bikeNo}</td>
+                          <td>₦{park.amount}</td>
+                          {caseItem?.status === "cancelled" ? "It has been cancelled" : caseItem?.status === "completed" ? "This transaction is completed" :
                           <div className="second-park-td">
-                            <h4>₦{caseItem.amount}</h4>
-                            <Link className="book-now">Book Now</Link>
+                            <Link  className="book-now">View Details</Link>
                           </div>
+                    }
                         </tr>
                       );
                     })
@@ -248,7 +263,8 @@ const ExploringPark = () => {
 
         </div>
       </div>
+   
     </TaskRap>
   );
 };
-export default ExploringPark;
+export default MyIncomingParking;

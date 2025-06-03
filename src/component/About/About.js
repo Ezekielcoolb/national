@@ -70,7 +70,7 @@ const missionVision = aboutObject?.data?.missionVision || [];
 const partners = aboutObject?.data?.partners || [];
 const testimonials = aboutObject?.data?.testimonials || [];
 
- const currentTestimony = testimonials?.testList[currentIndexTes];
+const currentTestimony = testimonials?.testList?.[currentIndexTes] || {};
 
   const rating = parseFloat(currentTestimony?.rate);
   const totalStars = 5;

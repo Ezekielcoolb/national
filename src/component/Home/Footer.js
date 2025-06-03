@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetctGeneralSetting } from "../../Redux/slices/homeSlice";
 
 const FooterRap = styled.div`
 
@@ -29,6 +31,21 @@ const FooterRap = styled.div`
 `;
 
 const Footer = () => {
+   const dispatch = useDispatch();
+        const {generalObject, loading, error } = useSelector(
+          (state) => state.home || []
+          
+        );
+  const currentYear = new Date().getFullYear();
+
+  
+        const websetting = generalObject?.data?.websetting
+        const socialLinks = generalObject?.data?.socailLinks
+           console.log(generalObject);
+
+           useEffect(() => {
+                          dispatch(fetctGeneralSetting()); // Call API on component mount
+                        }, [dispatch]);
   return (
     <FooterRap>
       <div className="containers py-12">
@@ -42,43 +59,16 @@ const Footer = () => {
               display: "block",
               objectPosition: "top",
             }}
-            src="./images/footer-img.png"
+            src={`https://backoffice.rua.com.ng/${websetting?.logo_two}`}
             alt="..."
           />
           </Link>
           <div className="flex gap-5 justify-between items-center">
-          <Link to="#">
-            <Icon
-              icon="ri:facebook-fill"
-              width="11.58"
-              height="18"
-              style={{ color: "white" }}
-            />
-            </Link>
-            <Link to="#">
-            <Icon
-              icon="mdi:twitter"
-              width="11.58"
-              height="18"
-              style={{ color: "white" }}
-            />
-            </Link>
-            <Link to="#">
-            <Icon
-              icon="mdi:instagram"
-              width="11.58"
-              height="18"
-              style={{ color: "white" }}
-            />
-            </Link>
-            <Link to="#">
-            <Icon
-              icon="mdi:instagram"
-              width="11.58"
-              height="18"
-              style={{ color: "white" }}
-            />
-            </Link>
+           {socialLinks?.map((items) => (
+                          <Link to={`${items?.social_url}`}>
+                    <img src={`https://backoffice.rua.com.ng/${items?.link_image}`} alt="" />
+                      </Link>
+                      ))}
           </div>
         </div>
         <div
@@ -87,8 +77,7 @@ const Footer = () => {
         >
             <div style={{ lineHeight: "24px", width: "242px" }}>
               <p>
-                Over the years, our commitment to excellence and passion for our
-                has been recognized.
+                {websetting?.site_description}
               </p>
             </div>
             <div
@@ -129,12 +118,7 @@ const Footer = () => {
                 style={{ color: "white", fontWeight: "700", fontSize: "20px" }}
               >
                 Contact
-              </p> <Icon
-                  icon="fluent:call-24-filled"
-                  width="13"
-                  height="13"
-                  style={{ color: "#FFFFFF8C" }}
-                />
+              </p> 
               <p className="flex gap-2 items-center">
                 <Icon
                   icon="mdi:email-open-outline"
@@ -142,11 +126,17 @@ const Footer = () => {
                   height="13"
                   style={{ color: "#FFFFFF8C" }}
                 />
-                info@roadusersassociation.com
+                {websetting?.biz_email}, <br />  {websetting?.biz_email_two}
               </p>
               <p className="flex gap-2 items-center">
+                <Icon
+                  icon="fluent:call-24-filled"
+                  width="13"
+                  height="13"
+                  style={{ color: "#FFFFFF8C" }}
+                />
                
-                +2347464531, +2345546864
+                 {websetting?.biz_phone}, {websetting?.biz_phone_two}
               </p>
               <p className="flex gap-2 items-center">
                 <Icon
@@ -155,7 +145,7 @@ const Footer = () => {
                   height="13"
                   style={{ color: "#FFFFFF8C" }}
                 />
-                112 Allen Avenue Ikeja, Lagos Nigeria
+             {websetting?.first_address}
               </p>
             </div>
           </div>
@@ -172,7 +162,7 @@ const Footer = () => {
           }}
         >
           <p style={{ textAlign: "center" }}>
-            © 2024 Road Users Association. All rights reserved
+            © {currentYear} {websetting?.site_name}. All rights reserved
           </p>
         </div>
       </div>

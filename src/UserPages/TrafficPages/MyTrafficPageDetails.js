@@ -5,7 +5,7 @@ import { formatDistanceToNow } from 'date-fns';
 
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { fetchMyTrafficDetails } from "../Redux/slices/secondUserSlice";
+import { fetchMyTrafficDetails } from "../../Redux/slices/secondUserSlice";
 
 const TrafficDetaiRap = styled.div`
 width: 100%;
@@ -93,7 +93,7 @@ padding: 20px;
 }
 `
 
-const TrafficDetials = () => {
+const MyTrafficDetials = () => {
     const {id} = useParams()
     const dispatch = useDispatch()
     const { trafficDetailsMy, loading, success, error } = useSelector((state) => state.otherUser);
@@ -112,16 +112,16 @@ const TrafficDetials = () => {
     return (
         <TrafficDetaiRap>
             <div className="icon-header">
-                     <Link to="/users/traffic">
+                     <Link to="/users/mytraffic">
                        <Icon
                          className="back-arrow-left"
                          icon="material-symbols-light:arrow-left-alt"
                          width="13"
                          height="13"
-                        style={{ color: backgroundChange=== true ? "white" : "#112240" }}
+                          style={{ color: backgroundChange=== true ? "white" : "#112240" }}
                        />
                      </Link>
-                     <h2  style={{ color: backgroundChange=== true ? "white" : "#112240" }}>Traffic Details</h2>
+                     <h2  style={{ color: backgroundChange=== true ? "white" : "" }}>Traffic Details</h2>
                    </div>
             <div className="traffic-detalis-all-divs">
             <div className="all-details-divs">
@@ -132,8 +132,7 @@ const TrafficDetials = () => {
   {details?.updated_at
     ? `${formatDistanceToNow(new Date(details.updated_at), { addSuffix: true })} • ${details?.views} views`
     : ""}
-</p>
-                </div>
+</p>                </div>
                 <h2>{details?.title}</h2>
                 <div className="lasma">
                     <img src="/images/traffic_person.png" alt="" />
@@ -149,4 +148,4 @@ const TrafficDetials = () => {
     )
 }
 
-export default TrafficDetials
+export default MyTrafficDetials

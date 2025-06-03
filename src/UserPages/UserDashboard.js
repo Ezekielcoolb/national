@@ -2,14 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import MapRoad from "./Map";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LodgeRidePopup from "./AllPopup/LodgeRidePopup";
 import LodgeItemPopup from "./AllPopup/LodgeItemPopup"
 import { useDispatch, useSelector } from "react-redux";
-import { setComplainVisible, setCreatedComplain, setCreatedCrime, setCreatedEmergency, setCreatedItem, setCreatedRide, setCrimeVisible, setDropdownVisible, setEmergencyVisible, setItemVisible } from "../Redux/appSlice";
+import { setComplainVisible, setCreatedComplain, setCreatedCrime, setCreatedEmergency, setCreatedItem, setCreatedManifest, setCreatedRide, setCrimeVisible, setDropdownVisible, setEmergencyVisible, setItemVisible } from "../Redux/appSlice";
 import LodgeComplain from "./AllPopup/LodgeComplain";
 import EmergencyReport from "./AllPopup/EmergencyReportPop";
 import ReportCrimePop from "./AllPopup/ReportCrimePop";
+import CreateManifestPopup from "./AllPopup/CreateManifest";
+import { fetchAllToBeFollowed, fetchExploreParkingSpace, followOrUnfollowAgency } from "../Redux/slices/secondUserSlice";
 
 const DashboardRap = styled.div`
   width: 100%;
@@ -135,6 +137,10 @@ flex-wrap: nowrap;
     color: #12d27d;
     font-weight: 500;
     font-size: 14px;
+    background: transparent;
+    width: fit-content;
+    height: auto;
+    white-space: nowrap;
   }
   .recent-trans {
     display: flex;
@@ -351,6 +357,7 @@ flex-wrap: nowrap;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    height: 100%;
   }
   .table-container {
     background: #ffffff;
@@ -383,97 +390,9 @@ flex-wrap: nowrap;
 `;
 
 const Dashboard = () => {
-  const parking = [
-    {
-      id: 1,
-      parkingName: "Phantom Space",
-      status: "Available",
-      address: "Ikeja, lagos",
-      price: "₦599",
-    },
-    {
-      id: 2,
-      parkingName: "Phantom Space",
-      status: "Available",
-      address: "Ikeja, lagos",
-      price: "₦599",
-    },
-    {
-      id: 3,
-      parkingName: "Phantom Space",
-      status: "Available",
-      address: "Ikeja, lagos",
-      price: "₦599",
-    },
-  ];
+ 
 
-  const followers = [
-    {
-      id: 1,
-      name: "Lagos PRO",
-      web: "press@police.gov.ng",
-    },
-    {
-      id: 2,
-      name: "FIRS",
-      web: "press@police.gov.ng",
-    },
-    {
-      id: 3,
-      name: "LASTMA",
-      web: "press@police.gov.ng",
-    },
-    {
-      id: 4,
-      name: "LASEMA (URU",
-      web: "press@police.gov.ng",
-    },
-    {
-      id: 5,
-      name: "LAWMA PRO",
-      web: "press@police.gov.ng",
-    },
-    {
-      id: 6,
-      name: "Lagos Road",
-      web: "press@police.gov.ng",
-    },
-    {
-      id: 7,
-      name: "Riders",
-      web: "press@police.gov.ng",
-    },
-    {
-      id: 8,
-      name: "LASTMA ROAD",
-      web: "press@police.gov.ng",
-    },
-    {
-      id: 9,
-      name: "LASEMA (URU)",
-      web: "press@police.gov.ng",
-    },
-    {
-      id: 10,
-      name: "LAWMA PRO",
-      web: "press@police.gov.ng",
-    },
-    {
-      id: 11,
-      name: "LASTMA ROAD",
-      web: "press@police.gov.ng",
-    },
-    {
-      id: 12,
-      name: "LASEMA (URU)",
-      web: "press@police.gov.ng",
-    },
-    {
-      id: 13,
-      name: "LAWMA PRO",
-      web: "press@police.gov.ng",
-    },
-  ];
+ 
 
   const latest = [
     {
@@ -496,12 +415,34 @@ const Dashboard = () => {
   const dropdownRef = useRef(null);
   const [showAll, setShowAll] = useState(false);
   const [allLatest, setAllLatest] = useState(false);
+  const {openSideBar, backgroundChange} = useSelector((state)=> state.app)
 
   const { dropdowVisible, itemDropdown,createdRide, 
     complainDropdown, emergencyDropdown, createdItem,
-     reportCrimeDropdown, createdComplain, createdCrime, createdEmergency} = useSelector((state) => state.app);
+     reportCrimeDropdown, createdManifest, createdComplain, createdCrime, createdEmergency} = useSelector((state) => state.app);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+          const { parkingloading, allToFollowOrUnfollow, exploreparking, allToFollow, loading, success, error, data, parkingsuccess } = useSelector((state) => state.otherUser);
+        
+          console.log(allToFollowOrUnfollow);
+          const parking = exploreparking?.data?.data
+          const followers = allToFollow?.data
  
+const userDetails = JSON.parse(localStorage.getItem('ruaUserDetails') || '{}');
+console.log(userDetails);
+
+
+   useEffect(() => {
+        dispatch(fetchExploreParkingSpace());
+      }, [dispatch]);
+
+       useEffect(() => {
+        dispatch(fetchAllToBeFollowed());
+      }, [dispatch]);
+
+      const handleUnfollowFollow = (id) => {
+        dispatch(followOrUnfollowAgency(id))
+      }
 
   const handleVisisble = () => {
     dispatch(setDropdownVisible());
@@ -509,6 +450,9 @@ const Dashboard = () => {
  
     const handleItemVisible = () => {
       dispatch(setItemVisible());
+    };
+    const handleCreateManifest = () => {
+      dispatch(setCreatedManifest());
     };
   const handleComplainLodge = () => {
     dispatch(setComplainVisible());
@@ -520,8 +464,12 @@ const Dashboard = () => {
       dispatch(setCrimeVisible());
     };
   const handleShowAll = () => {
-    setShowAll((prev) => !prev);
+    navigate("/users/parking")
   };
+  const handleShowMorePark = () => {
+        navigate("/users/parking")
+
+  }
   const handleAllLatest = () => {
     setAllLatest((prev) => !prev);
   };
@@ -547,6 +495,23 @@ const Dashboard = () => {
     dispatch(setCreatedCrime());
   };
 
+   useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {  
+        handleCreateManifest() 
+      }
+    };
+    if (createdManifest ) {
+     
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+    
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [ createdManifest]);
+
+
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -563,6 +528,7 @@ const Dashboard = () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [ createdCrime]);
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {  
@@ -594,6 +560,7 @@ const Dashboard = () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [ createdComplain]);
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {  
@@ -704,14 +671,14 @@ const Dashboard = () => {
     };
   }, [ dropdowVisible]);
 
-  const displayedParking = showAll ? parking : parking.slice(0, 2);
-  const displayedLatest = allLatest ? latest : latest.slice(0, 1);
+  const displayedParking = showAll ? parking : parking?.slice(0, 2);
+  const displayedLatest = allLatest ? latest : latest?.slice(0, 1);
 
   const latestPage = 1;
-  const latestPages = Math.ceil(displayedLatest.length / latestPage);
+  const latestPages = Math.ceil(displayedLatest?.length / latestPage);
 
-  const rowsPerPage = 5;
-  const totalPages = Math.ceil(followers.length / rowsPerPage);
+  const rowsPerPage = 8;
+  const totalPages = Math.ceil(followers?.length / rowsPerPage);
 
   // State to track the current page
   const [currentPage, setCurrentPage] = useState(1);
@@ -732,10 +699,14 @@ const Dashboard = () => {
   // Get the rows for the current page
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = followers.slice(indexOfFirstRow, indexOfLastRow);
+  const currentRows = followers?.slice(indexOfFirstRow, indexOfLastRow);
   return (
     <DashboardRap>
-        <h2>Welcome Back, Taiwo</h2>
+        <h2 
+        style={{
+          color: backgroundChange === true ? "white" : ""
+        }}
+        >Welcome Back, {userDetails?.last_name} {userDetails?.first_name}</h2>
       <div className="dashboard">
         <div className="left-dashboard">
           <div className="map-div">
@@ -750,16 +721,18 @@ const Dashboard = () => {
                   </div>
                   <h4>Lodge Ride</h4>
                 </div>
-
-                {/* <div className="lodge-div">
+{userDetails?.account_type === "driver" || userDetails?.account_type === "company" ? (
+ <div className="lodge-div" onClick={handleCreateManifest}>
                   <div style={{ position: "relative" }} className="car">
                     <img src="/images/car.png" alt="" />
                     <div className="flag">
                       <img src="/images/flag.png" alt=".." />
                     </div>
                   </div>
-                  <h4>Flag Ride</h4>
-                </div> */}
+                  <h4>Create Manifest</h4>
+                </div>
+): ""}
+               
                 <div onClick={handleItemVisible}  className="lodge-div">
                   <div className="lodge">
                     <img src="/images/lodge.png" alt="" />
@@ -778,19 +751,19 @@ const Dashboard = () => {
                   
                 </div>
 
-                <div onClick={handleEmergencyLodge} className="lodge-div">
+                {/* <div onClick={handleEmergencyLodge} className="lodge-div">
                   <div className="lodge">
                     <img src="/images/crime.png" alt="" />
                   </div>
                   <h4>Emergency Report</h4>
-                </div>
+                </div> */}
 
-                <div onClick={handleCrimeLodge} className="lodge-div">
+                {/* <div onClick={handleCrimeLodge} className="lodge-div">
                   <div className="lodge">
                     <img src="/images/crime.png" alt="" />
                   </div>
                   <h4>Report Crime</h4>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -805,15 +778,15 @@ const Dashboard = () => {
                       <tr>
                         <th>Parking space</th>
                         <th>
-                          <Link onClick={handleShowAll} className="see-all">
-                            {showAll ? "See less" : "See all"}
-                          </Link>
+                          <button onClick={handleShowMorePark} className="see-all">
+                            See all
+                          </button>
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {displayedParking.length > 0 ? (
-                        displayedParking.map((caseItem) => (
+                      {displayedParking?.length > 0 ? (
+                        displayedParking?.map((caseItem) => (
                           <tr key={caseItem.id}>
                             <td>
                               <div className="allPark">
@@ -821,7 +794,7 @@ const Dashboard = () => {
                                   <img src="/images/space.png" alt="" />
                                 </div>
                                 <div className="parrkingName">
-                                  {caseItem.parkingName}
+                                  {caseItem.name}
                                   <span className="parkingAddress">
                                     {caseItem.status}
                                     <img
@@ -833,14 +806,14 @@ const Dashboard = () => {
                                 </div>
                               </div>
                             </td>
-                            <td className="price-td">{caseItem.price}</td>
+                            <td className="price-td">₦{caseItem.amount}</td>
                           </tr>
                         ))
                       ) : (
                         <tr>
                           <td colSpan="7" className="no-case">
                             <img src="/images/mask_img.png" alt="" />
-                            <p>You have parking space</p>
+                            <p>You have no parking space</p>
                           </td>
                         </tr>
                       )}
@@ -877,24 +850,27 @@ const Dashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentRows.length > 0 ? (
+                    {currentRows?.length > 0 ? (
                       currentRows.map((caseItem) => (
                         <tr key={caseItem.id} className="no-border-tr">
                           <td>
                             <div className="allPark">
                               <div className="follow_img">
-                                <img src="/images/folow_img.png" alt="" />
+                                <img src={`https://backoffice.rua.com.ng/${caseItem?.logo}`} alt="" />
                               </div>
                               <div className="parrkingName">
                                 {caseItem.name}
                                 <span className="parkingAddress">
-                                  {caseItem.web}
+                                  {caseItem.email}
                                 </span>
                               </div>
                             </div>
                           </td>
                           <td>
-                            <Link className="folow-btn">follow</Link>
+                            <button onClick={() => handleUnfollowFollow(caseItem.id)} className="folow-btn">
+                            {caseItem?.follow === false ?
+                            "follow" : "unfollow" }
+                            </button>
                           </td>
                         </tr>
                       ))
@@ -902,7 +878,7 @@ const Dashboard = () => {
                       <tr>
                         <td colSpan="7" className="no-case">
                           <img src="/images/mask_img.png" alt="" />
-                          <p>You have no case yet</p>
+                          <p>No agency to follow now</p>
                         </td>
                       </tr>
                     )}
@@ -924,7 +900,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="table-container">
+          {/* <div className="table-container">
             <div className="new-table-scroll">
               <div className="">
                 <table className="custom-table">
@@ -969,7 +945,6 @@ const Dashboard = () => {
                 </table>
               </div>
             </div>
-            {/* Pagination controls */}
             <div className="pagination">
               {Array.from({ length: latestPages }).map((_, index) => (
                 <div
@@ -981,13 +956,14 @@ const Dashboard = () => {
                 ></div>
               ))}
             </div>
-          </div>
+          </div> */}
         </div>
         {dropdowVisible? <div  ref={dropdownRef}>< LodgeRidePopup /> </div> : ""}
       {itemDropdown? <div  ref={dropdownRef}>< LodgeItemPopup /> </div> : ""}
       {complainDropdown? <div> <LodgeComplain /></div> : ""}
       {emergencyDropdown? <div> <EmergencyReport /> </div> : ""}
       {reportCrimeDropdown ? <div> <ReportCrimePop /> </div> : ""}
+      {createdManifest? <div> <CreateManifestPopup /> </div> : ""}
       {createdRide ? (
         <div className="dropdown-container">
           <div className="successCreation">

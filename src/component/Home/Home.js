@@ -613,6 +613,10 @@ const Home = () => {
     }); // Output like: "May, 2025"
   };
 
+   const handleGoToDetails = (id) => {
+    navigate(`/event/details/${id}`)
+  }
+
   return (
     <div>
       <HomeSection>
@@ -1787,7 +1791,7 @@ const Home = () => {
                     >
                       {items?.title}
                     </p>
-                    <button
+                    <button onClick={() => handleGoToDetails(items?.id)}
                       className="flex justify-between items-center"
                       style={{
                         background: "transparent",

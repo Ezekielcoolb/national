@@ -1,8 +1,17 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import MapRoad from "../Map";
+import {
+  fetchCompletedLodgedRide,
+  fetchLodgeRideDetails,
+  flagRideNow,
+  resetFlagRideState,
+} from "../../Redux/slices/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { fetctGeneralAllAgency } from "../../Redux/slices/homeSlice";
+import { ClipLoader } from "react-spinners";
 
 const TaskRap = styled.div`
   padding: 30px;
@@ -88,6 +97,54 @@ const TaskRap = styled.div`
   .edit-btn {
     color: #112240;
     background: #eaebee;
+  }
+  form label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 16px;
+    font-weight: 500px;
+    margin-top: 10px;
+  }
+  .successCreationAgency {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .dropdown-menu {
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    width: 390px;
+    box-shadow: 0 2px 6px rgba(17, 34, 64, 0.15);
+  }
+  textarea {
+    width: 390px;
+    border: 1px solid #1122401f;
+    height: 120px;
+    font-weight: 500;
+    color: #112240;
+    font-size: 16px;
+    border-radius: 10px;
+    padding: 0px 10px;
+    margin-top: 20px;
+  }
+  .btns {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .select-agency {
+    background: transparent;
+    border: 1px solid #1122401f;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+    width: 390px;
+    padding: 0px 10px;
+    color: #112240;
   }
   .flag-btn {
     color: #ffffff;
@@ -217,6 +274,10 @@ const TaskRap = styled.div`
     align-items: center;
     gap: 20px;
   }
+  .cancel-flag {
+    width: 184px !important;
+    height: 55px !important;
+  }
   .flag-continue,
   .cancel-continue {
     width: 336px;
@@ -249,11 +310,131 @@ const TaskRap = styled.div`
 `;
 
 const RideDetails = () => {
+  const dispatch = useDispatch();
+  const { id } = useParams();
   const [dropdownVisible, setDropdownVisisble] = useState(false);
+  const [dropdownFlagRide, setDropdownFlagRide] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { backgroundChange} = useSelector((state)=> state.app)
+
+  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+  const [selected, setSelected] = useState([]);
+
+  const [formData, setFormData] = useState({
+    lodge_ride_id: id,
+    description: "",
+    agencies: [], // will be array or string "all"
+  });
+  console.log(id);
+  const {
+    lodgeRideDetail,
+    CompletedRideDetail,
+    flagRidesuccess,
+    flagRideloading,
+    lodgeRideDetailloading,
+    error,
+  } = useSelector((state) => state.users);
+  const { agencyList, loading } = useSelector((state) => state.home || []);
+
+  console.log(lodgeRideDetail);
+
+  const handleDropFlagRide = () => {
+    setDropdownFlagRide(true);
+    setDropdownVisisble(false);
+  };
+
+  console.log(dropdownFlagRide);
+
+  const lodgeData = lodgeRideDetail?.data;
+  const rawDate = lodgeData?.created_at;
+  const date = new Date(rawDate);
+let imagesArray = [];
+
+if (lodgeData?.vehicle_images) {
+  try {
+    imagesArray = JSON.parse(lodgeData.vehicle_images);
+  } catch (err) {
+    console.error("Invalid JSON in vehicle_images:", err);
+  }
+}
+  const formatted = date.toLocaleString("en-US", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target;
+
+    if (value === "all") {
+      if (checked) {
+        // If 'all' selected, disable others by setting formData.agencies to "all"
+        setFormData((prev) => ({ ...prev, agencies: "all" }));
+      } else {
+        // 'all' unchecked, reset agencies to empty array
+        setFormData((prev) => ({ ...prev, agencies: [] }));
+      }
+    } else {
+      if (formData.agencies === "all") {
+        // Ignore other changes if 'all' is selected
+        return;
+      }
+
+      // Convert value to number here
+      const numValue = Number(value);
+
+      let newSelected = Array.isArray(formData.agencies)
+        ? [...formData.agencies]
+        : [];
+
+      if (checked) {
+        // Add number to array if not already present
+        if (!newSelected.includes(numValue)) {
+          newSelected.push(numValue);
+        }
+      } else {
+        // Remove number from array
+        newSelected = newSelected.filter((id) => id !== numValue);
+      }
+
+      setFormData((prev) => ({ ...prev, agencies: newSelected }));
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    dispatch(flagRideNow(formData));
+    setDropdownFlagRide(false);
+  };
+
+  const handleChange = (e) => {
+    const values = Array.from(e.target.selectedOptions).map((opt) => opt.value);
+
+    if (values.includes("all")) {
+      setSelected(["all"]);
+    } else {
+      setSelected(values);
+    }
+  };
 
   const handleDropFlag = () => {
     setDropdownVisisble(!dropdownVisible);
   };
+
+  useEffect(() => {
+    dispatch(fetchLodgeRideDetails(id));
+  }, [dispatch]);
+
+  const handleCompleteRide = () => {
+    dispatch(fetchCompletedLodgedRide(id));
+  };
+  useEffect(() => {
+    dispatch(fetctGeneralAllAgency());
+  }, [dispatch]);
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -277,10 +458,10 @@ const RideDetails = () => {
               icon="material-symbols-light:arrow-left-alt"
               width="13"
               height="13"
-              style={{ color: "#112240" }}
+              style={{ color: backgroundChange=== true ? "white" : "#112240" }}
             />
           </Link>
-          <h2>Ride Details</h2>
+          <h2    style={{ color: backgroundChange=== true ? "white" : "#" }}>Ride Details</h2>
         </div>
         <Link className="send-message">Send a Message</Link>
       </div>
@@ -291,48 +472,53 @@ const RideDetails = () => {
           </div>
           <div className="car-div">
             <div className="car-model">
-              <h5>Toyota Camry XLE</h5>
-              <h5>2333455600</h5>
+              <h5>
+                {lodgeData?.vehicle_name} {lodgeData?.vehicle_model}
+              </h5>
+              <h5>{lodgeData?.manifest_num}</h5>
             </div>
-            <p>20 Sep, 2024 10:00PM</p>
+            <p>{formatted}</p>
           </div>
           <div className="car-address">
             <img src="/images/address_anchor.png" alt="" />
             <div>
-              <p>289 Allen Avenue Ikeja Lagos</p>
-              <p>80 Box Lane Mary Street Lekki Ajah Express Way Lagos</p>
+              <p>{lodgeData?.departure_state}</p>
+              <p>{lodgeData?.destination_address}</p>
             </div>
           </div>
           <div className="ride-info">
             <p>
               Ride ID
-              <span>2333455600</span>
+              <span>{lodgeData?.manifest_num}</span>
             </p>
             <p>
               Vehicle Number
-              <span>LAG-565768</span>
+              <span>{lodgeData?.vehicle_number}</span>
             </p>
             <p>
               Vehicle Name
-              <span>Toyota Camry XLE</span>
+              <span>{lodgeData?.vehicle_name}</span>
             </p>
             <p>
               Driver Name
-              <span>Michael Solomon</span>
+              <span>{lodgeData?.driver_name}</span>
             </p>
           </div>
           <div className="ride-button-div">
-            <Link className="edit-btn">Edit</Link>
-            <Link onClick={handleDropFlag} className="flag-btn">
+            {/* <Link className="edit-btn">Edit</Link> */}
+            <button onClick={handleDropFlag} className="flag-btn">
               Flag Ride
-            </Link>
-            <Link className="ride-btn">Ride Complete</Link>
+            </button>
+            <button  onClick={handleCompleteRide} className="ride-btn">Ride Complete</button>
           </div>
         </div>
         <div className="right-ride-div">
           <div className="right-header">
             <h4>Next of KIN</h4>
-            <p className="status-ride">Ongoing</p>
+            <p style={{
+              color: lodgeData?.status === "active" ? "#E8A526" : "#379C0C",
+              background: lodgeData?.status === "active" ? "#FDF4E4" : "#E8FDE0"
+            }} className="status-ride">{lodgeData?.status}</p>
           </div>
           <div className="move-to-end">
             <div className="right-inne-div">
@@ -340,11 +526,11 @@ const RideDetails = () => {
               <div className="right-inner-info">
                 <p>
                   Fullname
-                  <span>Funsho Sofis</span>
+                  <span>{lodgeData?.next_of_kin_full_name}</span>
                 </p>
                 <p>
                   Phone Number
-                  <span>07066091112</span>
+                  <span>{lodgeData?.next_of_kin_phone}</span>
                 </p>
                 <p>
                   Address
@@ -353,7 +539,7 @@ const RideDetails = () => {
                       maxWidth: "116px",
                     }}
                   >
-                    70 Shitta Street Ojuelegbe Lagos
+                    {lodgeData?.next_of_kin_address}
                   </span>
                 </p>
               </div>
@@ -364,8 +550,9 @@ const RideDetails = () => {
                 <h4>Images</h4>
               </div>
               <div className="images-car">
-                <img src="/images/rides_car_1.png" alt="" />
-                <img src="/images/rides_car_2.png" alt="" />
+                {imagesArray?.map((items) => (
+                  <img src={`https://backoffice.rua.com.ng/${items}`} alt="" />
+                ))}
               </div>
             </div>
           </div>
@@ -382,13 +569,119 @@ const RideDetails = () => {
                 Are you sure you want to flag this ride, flagging the ride will
                 send a message to security officials and your Next of KIN{" "}
               </p>
-              <Link className="flag-continue">Continue</Link>
+              <button onClick={handleDropFlagRide} className="flag-continue">
+                Continue
+              </button>
               <Link
                 onClick={() => setDropdownVisisble(false)}
                 className="cancel-continue"
               >
                 Cancel
               </Link>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+
+      {dropdownFlagRide ? (
+        <div className="dropdown-container">
+          <div className="successCreationAgency">
+            <h2>You about to flag the ride</h2>
+
+            <div>
+              <form onSubmit={handleSubmit}>
+                <textarea
+                  type="text"
+                  placeholder="write short description"
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
+                ></textarea>
+                <button
+                  className="select-agency"
+                  type="button"
+                  onClick={toggleDropdown}
+                >
+                  Select Agencies
+                </button>
+
+                {dropdownOpen && (
+                  <div className="dropdown-menu">
+                    <label>
+                      <input
+                        style={{
+                          width: "14px",
+                          height: "14px",
+                        }}
+                        type="checkbox"
+                        value="all"
+                        checked={formData.agencies === "all"}
+                        onChange={handleCheckboxChange}
+                      />{" "}
+                      All
+                    </label>
+                    <hr />
+                    {agencyList?.data?.map((agency) => (
+                      <label key={agency.id}>
+                        <input
+                          style={{
+                            width: "14px",
+                            height: "14px",
+                          }}
+                          type="checkbox"
+                          value={agency.id.toString()}
+                          disabled={formData.agencies === "all"} // disable if all is selected
+                          checked={
+                            formData.agencies === "all"
+                              ? false
+                              : formData.agencies.includes(agency.id)
+                          }
+                          onChange={handleCheckboxChange}
+                        />{" "}
+                        {agency.name}
+                      </label>
+                    ))}
+                  </div>
+                )}
+                <div className="btns">
+                  <button type="submit" style={{ marginTop: "10px" }}>
+                    Submit
+                  </button>
+                  <Link
+                    onClick={() => setDropdownFlagRide(false)}
+                    className="cancel-continue cancel-flag"
+                  >
+                    Cancel
+                  </Link>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+
+      {flagRideloading ? (
+        <div className="dropdown-container">
+          <ClipLoader color="white" size={100} />
+        </div>
+      ) : null}
+
+      {flagRidesuccess ? (
+        <div className="dropdown-container">
+          <div className="successCreationAgency">
+            <p>Ride flaged successfully</p>
+            <p>It would be attended to shortly!</p>
+            <div className="button-div">
+              <button
+                onClick={() => dispatch(resetFlagRideState())}
+                className="submit-btn"
+              >
+                Continue
+              </button>
             </div>
           </div>
         </div>

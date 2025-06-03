@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import ItemLodge from "./HistoryPages/ItemLodge";
-import ComplainLodge from "./HistoryPages/ComplainLodge";
-import EmergencyReport from "./HistoryPages/EmergencyReport";
-import CrimeReport from "./HistoryPages/CrimeReport";
-import MyParking from "./PakingPages/MyParking";
-import ExploringPark from "./PakingPages/ExploringPark";
+
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useDispatch, useSelector } from "react-redux";
-import { createParkingSpace, fetchMyParkingSpace, resetParkingState } from "../Redux/slices/secondUserSlice";
 import { ClipLoader } from "react-spinners";
-import MyOutGoingParking from "./PakingPages/OutGoingParking";
-import MyIncomingParking from "./PakingPages/IncomingParking";
-import { uploadImages } from "../Redux/slices/uploadSlice";
+import { editParkingSpace, resetEditParkingState } from "../../Redux/slices/secondUserSlice";
+
 
 const HistoryRap = styled.div`
   padding: 15px;
@@ -93,7 +86,7 @@ const HistoryRap = styled.div`
   }
   .parking-dropdown-body textarea {
     width: 380px;
-    height: 120px;
+    height: 70px;
     border-radius: 10px;
     border: 1px solid #1122401f;
     padding: 15px;
@@ -102,7 +95,7 @@ const HistoryRap = styled.div`
     padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
   }
   .submit-btn {
     width: 380px;
@@ -116,9 +109,9 @@ const HistoryRap = styled.div`
   }
 `;
 
-const Parking = () => {
+const EditMyParkingParking = () => {
   const dispatch = useDispatch()
-    const { parkingloading, myparking, loading, success, error, data, parkingsuccess } = useSelector((state) => state.otherUser);
+    const { editparkingloading, myparking, loading, success, error, data, editparkingsuccess } = useSelector((state) => state.otherUser);
   
   const [activeLink, setActiveLink] = useState("mypark");
   const [parkingShow, setParkingShow] = useState(false);
@@ -130,9 +123,12 @@ const Parking = () => {
     amount: "",
     address: "",
     description: "",
+    status: "",
     image: [],
   });
-console.log(formData);
+
+console.log(formData)
+console.log(editParkingSpace);
 
 
 const isValid =
@@ -141,43 +137,43 @@ const isValid =
   formData.address.trim() !== "" &&
   formData.description.trim() !== "" ;
  
-   useEffect(() => {
-      dispatch(fetchMyParkingSpace());
-    }, [dispatch]);
+  
 
     
 
   const handleSubmit = (e) => {
         e.preventDefault();
         if (isValid) {
-          dispatch(createParkingSpace(formData));
+          dispatch(editParkingSpace(formData));
         }
       };
 
 
-const handleImageUpload = async (files) => {
-  const validFiles = files.filter(file => file.type === "image/jpeg" || file.type === "image/png");
-  if (validFiles.length === 0) {
-    console.warn("No valid image files uploaded");
-    return;
-  }
+ const handleImageUpload = (event) => {
+  const files = Array.from(event.target.files).filter(
+    (file) => file.type === "image/jpeg" || file.type === "image/png"
+  );
 
-  const resultAction = await dispatch(uploadImages({ files: validFiles, folderName: 'vehicles' }));
+  // Save preview images
+  const previewPromises = files.map((file) => {
+    const reader = new FileReader();
+    return new Promise((resolve) => {
+      reader.onload = () => resolve(reader.result);
+      reader.readAsDataURL(file);
+    });
+  });
 
-  if (uploadImages.fulfilled.match(resultAction)) {
-    const urls = resultAction.payload;
+  Promise.all(previewPromises).then((loadedImages) => {
+    setImages((prev) => [...prev, ...loadedImages]);
 
-    // Add image URLs to formData and preview
-    setFormData(prev => ({
+    // Store only file names in formData.image
+    const fileNames = files.map((file) => file.name);
+    setFormData((prev) => ({
       ...prev,
-      image: [...prev.image, ...urls],
+      image: [...prev.image, ...fileNames],
     }));
-    setImages(prev => [...prev, ...urls]);
-  } else {
-    console.error("Upload failed:", resultAction.payload);
-  }
+  });
 };
-
 
 
   const handleDragOver = (event) => {
@@ -189,19 +185,25 @@ const handleImageUpload = async (files) => {
     setDragging(false);
   };
 
- const handleDrop = (event) => {
-  event.preventDefault();
-  setDragging(false);
+  const handleDrop = (event) => {
+    event.preventDefault();
+    setDragging(false);
 
-  const files = Array.from(event.dataTransfer.files).filter(
-    (file) => file.type === "image/jpeg" || file.type === "image/png"
-  );
+    const files = Array.from(event.dataTransfer.files);
+    const newImages = files
+      .filter((file) => file.type === "image/jpeg" || file.type === "image/png")
+      .map((file) => {
+        const reader = new FileReader();
+        return new Promise((resolve) => {
+          reader.onload = () => resolve(reader.result);
+          reader.readAsDataURL(file);
+        });
+      });
 
-  if (files.length > 0) {
-    handleImageUpload(files);  // upload the images
-  }
-};
-
+    Promise.all(newImages).then((loadedImages) =>
+      setImages((prev) => [...prev, ...loadedImages])
+    );
+  };
 
   const navigate = useNavigate();
 
@@ -215,46 +217,8 @@ const handleImageUpload = async (files) => {
 
   return (
     <HistoryRap>
-      <div className="history-header">
-        <div className="upper-parking">
-          <div className="link-container">
-            <Link
-              className={`link ${activeLink === "mypark" ? "active" : ""}`}
-              onClick={() => handleLinkClick("mypark")}
-            >
-              My Parking Space
-            </Link>
-            <Link
-              className={`link ${activeLink === "explore" ? "active" : ""}`}
-              onClick={() => handleLinkClick("explore")}
-            >
-              Exploring Parking Space
-            </Link>
-            <Link
-              className={`link ${activeLink === "outgoing" ? "active" : ""}`}
-              onClick={() => handleLinkClick("outgoing")}
-            >
-              Outgoing 
-            </Link>
-             <Link
-              className={`link ${activeLink === "incoming" ? "active" : ""}`}
-              onClick={() => handleLinkClick("incoming")}
-            >
-              Incoming 
-            </Link>
-          </div>
-          <button onClick={handleParkingShow} className="create-parking">
-            Create Parking
-          </button>
-        </div>
-      </div>
-      <div style={{ marginTop: "-15px" }}>
-        {activeLink === "mypark" && <MyParking />}
-        {activeLink === "explore" && <ExploringPark />}
-        {activeLink === "outgoing" && <MyOutGoingParking />}
-        {activeLink === "incoming" && <MyIncomingParking />}
-      </div>
-      {parkingShow ? (
+     
+      
         <div className="dropdown-container">
           <div className="parking-dropdown">
             <div className="parking-dropdown-head">
@@ -296,6 +260,17 @@ const handleImageUpload = async (files) => {
                 type="text"
                 placeholder="Parking Description"
               ></textarea>
+
+                 <select
+                          value={formData.status}
+                          onChange={(e) =>
+                  setFormData({ ...formData, status: e.target.value })
+                }
+                        >
+                          <option value="">Select status</option>
+                          <option value="available">Available</option>
+                          <option value="closed">Closed</option>
+                        </select>
               <div>
                 {/* Upload Area */}
                 <div
@@ -314,57 +289,54 @@ const handleImageUpload = async (files) => {
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
                 >
-                 <label
-  htmlFor="imageUpload"
-  style={{
-    display: "block",
-    cursor: "pointer",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "10px",
-    fontFamily: "Roboto",
-    fontSize: "12px",
-    fontWeight: "400",
-    color: "#667085",
-  }}
->
-  <p
-    style={{
-      background: "#F2F4F7",
-      borderRadius: "50%",
-      width: "40px",
-      height: "40px",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-    }}
-  >
-    <img src="/images/upload_icon.png" alt="" />
-  </p>
-  <p>
-    <span
-      style={{
-        color: "#56BF2A",
-        fontWeight: "500",
-      }}
-    >
-      Click to upload
-    </span>{" "}
-    or drag and drop
-  </p>
-  <p>JPG or PNG file format only</p>
-</label>
-<input
-  id="imageUpload"
-  type="file"
-  accept="image/jpeg, image/png"
-  multiple
-  onChange={(e) => handleImageUpload(Array.from(e.target.files))}
-  style={{ display: "none" }}
-/>
-
+                  <label
+                    style={{
+                      display: "block",
+                      cursor: "pointer",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: "10px",
+                      fontFamily: "Roboto",
+                      fontSize: "12px",
+                      fontWeight: "400",
+                      color: "#667085",
+                    }}
+                  >
+                    <p
+                      style={{
+                        background: "#F2F4F7",
+                        borderRadius: "50%",
+                        width: "40px",
+                        height: "40px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <img src="/images/upload_icon.png" alt="" />
+                    </p>
+                    <p>
+                      <span
+                        style={{
+                          color: "#56BF2A",
+                          fontWeight: "500",
+                        }}
+                      >
+                        Click to upload
+                      </span>{" "}
+                      or drag and drop
+                    </p>
+                    <p>JPG or PNG file format only</p>
+                    <input
+                      type="file"
+                      accept="image/jpeg, image/png"
+                      multiple
+                      onChange={handleImageUpload}
+                      style={{ display: "none" }}
+                    />
+                  </label>
                 </div>
 
                 {/* Display Uploaded Images */}
@@ -391,7 +363,7 @@ const handleImageUpload = async (files) => {
                         }}
                       >
                         <img
-                          src={`https://backoffice.rua.com.ng/${image}`}
+                          src={image}
                           alt={`Uploaded ${index + 1}`}
                           style={{
                             width: "100%",
@@ -410,23 +382,20 @@ const handleImageUpload = async (files) => {
                     background: isValid ? "#56BF2A" : "#bdddb0"
                 }}
                 onClick={handleSubmit}>
-                  {parkingloading ? <ClipLoader color="white" size={35} /> :
+                  {editparkingloading ? <ClipLoader color="white" size={35} /> :
                   "Continue"}
                 </button>
             </div>
           </div>
         </div>
-      ) : (
-        ""
-      )}
-
-      {parkingsuccess ? (
+     
+      {editparkingsuccess ? (
                     <div className="dropdown-container">
                       <div className="cupon-drop">
                         <p>Parking space successfully</p>
                         <p></p>
                         <div className="button-div">
-                          <button onClick={() => dispatch(resetParkingState())} className="submit-btn">Continue</button>
+                          <button onClick={() => dispatch(resetEditParkingState())} className="submit-btn">Continue</button>
                           
                         </div>
                       </div>
@@ -436,4 +405,4 @@ const handleImageUpload = async (files) => {
   );
 };
 
-export default Parking;
+export default EditMyParkingParking;

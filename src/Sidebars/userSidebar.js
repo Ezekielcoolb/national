@@ -18,39 +18,52 @@ const sidebarConfig = [
     link: "/users/rides",
     title: "Rides",
   },
+  
   {
     id: 3,
-    img: "/images/history.svg",
-    link: "/users/history",
-    title: "History",
+    img: "/images/ride.png",
+    link: "/users/complain",
+    title: "Complaints",
   },
+  // {
+  //   id: 5,
+  //   img: "/images/history.svg",
+  //   link: "/users/history",
+  //   title: "History",
+  // },
   {
     id: 4,
     img: "/images/packing.png",
     link: "/users/parking",
     title: "Parking Space",
   },
-  {
+   {
     id: 5,
+    img: "/images/traffic.png",
+    link: "/users/mytraffic",
+    title: "My Traffic Update",
+  },
+  {
+    id: 7,
     img: "/images/traffic.png",
     link: "/users/traffic",
     title: "Traffic Update",
   },
 
+  // {
+  //   id: 8,
+  //   img: "/images/news.png",
+  //   link: "/users/news",
+  //   title: "News",
+  // },
   {
-    id: 6,
-    img: "/images/news.png",
-    link: "/users/news",
-    title: "News",
-  },
-  {
-    id: 7,
+    id: 8,
     img: "/images/user_mes.png",
     link: "",
     title: "Messages",
   },
   {
-    id: 8,
+    id: 9,
     img: "/images/setting.png",
     link: "/users/settings",
     title: "Settings",
@@ -61,6 +74,7 @@ const sidebarConfig = [
 export default function UserSidebar() {
   const [activeTab, setActiveTab] = useState("Dashboard");
   const { isSidebarOpen, setIsSidebarOpen, setIsProfileOpen } = useAppContext();
+  const userDetails = JSON.parse(localStorage.getItem('ruaUserDetails') || '{}');
   const navigate = useNavigate()
 
   function handleNavClick(title) {
@@ -88,7 +102,7 @@ export default function UserSidebar() {
                     <h5>User ID</h5>
                    
 
-                        <p >00-7895-66620</p>
+                        <p >{userDetails?.id}</p>
                   
                 </div>
               </div>
@@ -109,6 +123,21 @@ export default function UserSidebar() {
                   {title}
                 </Link>
               ))}
+
+              {userDetails?.account_type === "driver" || userDetails?.account_type === "company" ? 
+              
+            (
+               <Link
+                  className={`nav-link react-router-link ${
+                    activeTab === "Manifest" ? "active-tab" : ""
+                  }`}
+                  to="/users/manifest"
+                  onClick={() => handleNavClick("Manifest")}
+                >
+                  <img src="/images/ride.png" alt="..." />
+                  Manifest
+                </Link>
+            ): ""}
             </div>
           </div>
           

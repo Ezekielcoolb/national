@@ -2,15 +2,32 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Icon } from "@iconify/react";
 import { Link, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetctGeneralSetting } from "../../Redux/slices/homeSlice";
 
 
 const NavBar = () => {
+  const dispatch = useDispatch();
+      const {generalObject, loading, error } = useSelector(
+        (state) => state.home || []
+        
+      );
+
+
+      const websetting = generalObject?.data?.websetting
+      const socialLinks = generalObject?.data?.socailLinks
+         console.log(generalObject);
+   
     const [clicked, setClicked] = useState(false)
 
     const handleClick = () => {
         setClicked(!clicked)
     }
-    
+     useEffect(() => {
+               dispatch(fetctGeneralSetting()); // Call API on component mount
+             }, [dispatch]);
+
+
   const {pathname} = useLocation()
   useEffect(() => {
     setClicked(false); 
@@ -38,47 +55,22 @@ const NavBar = () => {
       >
         <div className="top-address flex justify-between items-center gap-5">
           <div>
-            <p>info@roadusersassociation.com</p>
+            <p>{websetting?.biz_email}</p>
           </div>
           <div>
-            <p>112 Allen Avenue Ikeja Lagos Nigeria</p>
+            <p>{websetting?.first_address}</p>
           </div>
         </div>
         <div className="login-div flex justify-between items-center gap-10">
           <p className=""><span><Link to="#">Complaints</Link></span> / <span><Link to="#">Login</Link></span></p>
           <div className="flex justify-between gap-3.5">
-            <Link to="#">
-            <Icon
-              icon="entypo-social:twitter"
-              width="14.36"
-              height="14"
-              style={{ color: "white",  }}
-            />
+            {socialLinks?.map((items) => (
+                <Link to={`${items?.social_url}`}>
+          <img src={`https://backoffice.rua.com.ng/${items?.link_image}`} alt="" />
             </Link>
-            <Link to="#">
-            <Icon
-              icon="mdi:facebook"
-              width="14.36"
-              height="14"
-              style={{ color: "white" }}
-            />
-            </Link>
-            <Link to="#">
-            <Icon
-              icon="mdi:instagram"
-              width="14.36"
-              height="14"
-              style={{ color: "white" }}
-            />
-            </Link>
-            <Link to="#">
-            <Icon
-              icon="ph:pinterest-logo"
-              width="14.36"
-              height="14"
-              style={{ color: "white" }}
-            />
-            </Link>
+            ))}
+          
+           
           </div>
         </div>
       </div>
@@ -106,7 +98,7 @@ const NavBar = () => {
               display: "block",
               objectPosition: "top",
             }}
-            src="./images/Frame.png"
+            src={`https://backoffice.rua.com.ng/${websetting?.logo_url}`} 
             alt="..."
           />
           </Link>
@@ -119,8 +111,8 @@ const NavBar = () => {
             <Link to="/" ><p className="nav-link-border">Home</p></Link>
             <Link to="/about" ><p className="nav-link-border">About us</p></Link>
             <Link to="/members" > <p className="nav-link-border">Membership</p></Link>
-            <Link to="/news&media" ><p className="nav-link-border">News & Media</p></Link>
-            <Link to="/contact" > <p className="nav-link-border">Contact</p></Link>
+            <Link to="/news&events" ><p className="nav-link-border">News & Media</p></Link>
+            <Link to="/contact" > <p className="nav-link-border">Contact us</p></Link>
             <div id="nav-call-hidden" className="flex justify-center items-center nav-contact">
             <div >
               <Icon
@@ -140,7 +132,7 @@ const NavBar = () => {
                 }}
                 href=""
               >
-                +234 812354656
+               {websetting?.biz_phone}
               </a>
             </div>
             </div>
@@ -169,11 +161,11 @@ const NavBar = () => {
                 }}
                 href=""
               >
-                +234 812354656
+                 {websetting?.biz_phone}
               </a>
             </div>
           </div>
-          <Link to="/admin/dashboard">
+          {/* <Link to="/admin/dashboard">
             <div
               className="p-5 flex justify-center items-center join "
               style={{
@@ -187,8 +179,8 @@ const NavBar = () => {
             >
               Admin
             </div>
-          </Link>
-          <Link to="/users/dashboard">
+          </Link> */}
+          <Link to="/usersLogin">
             <div
               className="p-5 flex justify-center items-center join "
               style={{

@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Icon } from "@iconify/react";
+import { fetchEventDetails } from "../../Redux/slices/homeSlice";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 const EventRap = styled.div`
   button:hover {
@@ -18,6 +21,36 @@ const EventRap = styled.div`
 `;
 
 const EventsDetails = () => {
+  const {id} = useParams()
+    const dispatch = useDispatch();
+
+
+    const { eventDetail, loading, error } = useSelector(
+        (state) => state.home || []
+        
+      );
+      console.log(eventDetail);
+      
+
+      const blog = eventDetail?.blog || [];
+      
+      const callToAction = eventDetail?.callToAction || [];
+
+const date = new Date(blog?.created_at);
+
+const formatted = date.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "short", // "Apr"
+  day: "2-digit",
+}).toUpperCase();
+
+   useEffect(() => {
+      if (id) {
+        dispatch(fetchEventDetails(id));
+      }
+    }, [dispatch, id]);
+
+
   return (
     <EventRap>
       <div>
@@ -39,7 +72,7 @@ const EventsDetails = () => {
                 textAlign: "center",
               }}
             >
-              ADMIN - BLOG - APR 26, 2021
+              {blog?.author} - BLOG - {formatted}
             </p>
             <h2
               style={{
@@ -52,7 +85,7 @@ const EventsDetails = () => {
                 marginTop: "30px",
               }}
             >
-              A clunky customer experience threatens your bottom line
+           {blog?.title }
             </h2>
           </div>
         </div>
@@ -80,64 +113,12 @@ const EventsDetails = () => {
                   objectFit: "cover",
                   borderRadius: "12px",
                 }}
-                src="./images/image_14.png"
+                src={`https://backoffice.rua.com.ng/${blog?.banner}`}
                 alt="..."
               />
             </div>
-            <p>
-              Lorem ipsum dolor sit amet consectetur. Adipiscing tortor
-              fringilla maecenas enim lectus. Non quis tortor malesuada massa.
-              Nibh volutpat mattis mauris molestie ullamcorper. Vel neque
-              pellentesque nam aliquam. Dictum amet dui nullam ultricies nibh.
-              At bibendum amet urna interdum leo. Arcu diam elementum nec leo
-              fermentum sed facilisis non non. Ornare in nec sit placerat
-              malesuada. Enim erat sociis enim nunc amet. Facilisis hac sagittis
-              pharetra vitae quis.
-            </p>
-            <h2
-              style={{
-                fontFamily: "Bricolage Grotesque",
-                fontWeight: "700",
-                fontSize: "24px",
-                lineHeight: "30px",
-                color: "#112240",
-                maxWidth: "492px",
-              }}
-            >
-              A clunky customer experience threatens your bottom line
-            </h2>
-            <p>
-              We’ve all been there as customers: Painstakingly inputting all of
-              our personal data, often redundantly, from one form to the next —
-              all in a desperate bid to get the product or service we need. Not
-              only is this frustrating for customers, it’s also frustrating for
-              you as a business, as there are often manual, redundant processes
-              rife with errors.
-            </p>
-            <p>
-              Expecting your customers to just put up with this poor experience
-              is a surefire way to frustrate and ultimately lose them down the
-              line, especially if the competition has a more streamlined,
-              user-friendly agreement process.
-            </p>
-            <p>
-              And all those errors? They lead to delays as you send back
-              documents for correction, which inevitably adds to your cost of
-              acquisition and causes further frustration and possible
-              abandonment from your customers. Deloitte released a new
-              report that identifies the costly and negative impacts of poor
-              agreement processes and tools on customer experience. It shows
-              that inefficient agreement management processes lead to a nearly
-              $2 trillion loss in annual global economic value with 66% of
-              customer support survey respondents reporting inefficient
-              agreement workflows as a driver for negative customer satisfaction
-            </p>
-            <p>
-              Expecting your customers to just put up with this poor experience
-              is a surefire way to frustrate and ultimately lose them down the
-              line, especially if the competition has a more streamlined,
-              user-friendly agreement process.
-            </p>
+          <div dangerouslySetInnerHTML={{ __html: blog?.description }} />
+            
           </div>
           <div className="event-block-2 flex flex-col gap-2" style={{ fontFamily: "Roboto" }}>
             <div className="flex flex-col gap-2">
@@ -155,7 +136,7 @@ const EventsDetails = () => {
                   color: "#112240",
                 }}
               >
-                Admin
+                {blog?.author}
               </p>
               <p className="publish"
                 style={{
@@ -172,7 +153,7 @@ const EventsDetails = () => {
                   color: "#112240",
                 }}
               >
-                May 30, 2024
+               {formatted}
               </p>
             </div>
             <div className="flex flex-col gap-2">
@@ -294,7 +275,7 @@ const EventsDetails = () => {
                 textAlign: "center",
               }}
             >
-              Join us, become a member today.
+            {callToAction?.title }
             </h2>
             <p
               style={{
@@ -305,8 +286,7 @@ const EventsDetails = () => {
                 textAlign: "center",
               }}
             >
-              Embrace holistic development and support for employee the aim of
-              being a first-choice
+                      {callToAction?.sub_title }
             </p>
             <div className="flex gap-4 join-btn">
               <button

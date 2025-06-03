@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { useDispatch, useSelector } from "react-redux";
+import { fetctGeneralSetting } from "../../Redux/slices/homeSlice";
 
 const ContactRap = styled.div`
   .media-dot {
@@ -24,6 +26,18 @@ const ContactRap = styled.div`
 `;
 
 const Contact = () => {
+    const dispatch = useDispatch();
+        const {generalObject, loading, error } = useSelector(
+          (state) => state.home || []
+          
+        );
+  
+  
+        const websetting = generalObject?.data?.websetting
+
+        useEffect(() => {
+                       dispatch(fetctGeneralSetting()); // Call API on component mount
+                     }, [dispatch]);
   return (
     <ContactRap>
       <div style={{ position: "relative" }}>
@@ -66,7 +80,7 @@ const Contact = () => {
                     src="./images/comment.png"
                   />
                 </div>
-                <p>285 Brandon Avenue, Texas, New York</p>
+                <p>{websetting?.first_address}</p>
               </div>
               <div className="flex items-center gap-3">
                 <div style={{ width: "60px", height: "60px" }}>
@@ -79,7 +93,7 @@ const Contact = () => {
                     src="./images/phone.png"
                   />
                 </div>
-                <p>+1 (124) 556 879, +1 (124) 556 879</p>
+                <p>{websetting?.biz_phone}, {websetting?.biz_phone_two}</p>
               </div>
               <div className="flex items-center gap-3">
                 <div style={{ width: "60px", height: "60px" }}>
@@ -92,7 +106,7 @@ const Contact = () => {
                     src="./images/message.png"
                   />
                 </div>
-                <p>info@disciplinedynamics.com</p>
+                <p>{websetting?.biz_email}</p>
               </div>
             </div>
           </div>

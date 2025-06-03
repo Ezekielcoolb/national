@@ -1,7 +1,14 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
+import {
+  bookParkSpace,
+  fetchMyParkinSpaceDetails,
+  resetBookingState,
+} from "../../Redux/slices/secondUserSlice";
+import { ClipLoader } from "react-spinners";
 
 const TrafficDetaiRap = styled.div`
   width: 100%;
@@ -14,7 +21,7 @@ const TrafficDetaiRap = styled.div`
     color: #667085;
   }
   h2 {
-    color: #112240 !important;
+    color: #112240 ;
     max-width: 383px;
     font-size: 24px;
     font-weight: 700;
@@ -55,7 +62,7 @@ const TrafficDetaiRap = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    color:  #359742;
+    color: #359742;
     font-size: 10px;
     font-weight: 400;
   }
@@ -86,39 +93,80 @@ const TrafficDetaiRap = styled.div`
     width: 100%;
     padding: 20px;
   }
-   .rating-star {
+  .rating-star {
     display: flex;
     align-items: center;
     flex-direction: row !important;
     gap: 5px;
-   }
-    .parking-images {
-        width: 150px;
-        border-radius: 10px;
-        height: 100px;
-    }
-   .parking-images {
+  }
+  .parking-images {
+    width: 150px;
+    border-radius: 10px;
+    height: 100px;
+  }
+  .parking-images {
     display: flex;
     gap: 20px;
-   }
-   .book-now {
-     width: 120px;
+  }
+  .book-now {
+    width: 120px;
     height: 40px;
     border-radius: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #56BF2A;
+    border: 1px solid #56bf2a;
     text-decoration: none;
-    color: #56BF2A;
+    color: #56bf2a;
     font-size: 12px;
     font-weight: 500;
     cursor: pointer;
     background: transparent;
-   }
+  }
 `;
 
 const GeneralParkingDetials = () => {
+  const { id } = useParams();
+  const { backgroundChange} = useSelector((state)=> state.app)
+
+  const dispatch = useDispatch();
+  const {
+    bookparking,
+    loading,
+    myParkDetails,
+    bookparkingsuccess,
+    error,
+    bookingloading,
+  } = useSelector((state) => state.otherUser);
+  console.log(bookparkingsuccess);
+
+  const handleBBookParkSpace = () => {
+    if (id) {
+      dispatch(bookParkSpace(id));
+    }
+  };
+
+  console.log(myParkDetails);
+
+  const details = myParkDetails?.data;
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchMyParkinSpaceDetails(id));
+    }
+  }, [dispatch, id]);
+
+  const getStatusColor = (status) => {
+    if (status === "pending") return "#359742";
+    if (status === "accepted") return "green";
+    if (status === "available") return "green";
+    if (status === "cancelled") return "red";
+    if (status === "declined") return "red";
+    if (status === "closed") return "red";
+    if (status === "completed") return "green";
+    return "#112240"; // Default color if priority is missing or unrecognized
+  };
+
   return (
     <TrafficDetaiRap>
       <div className="icon-header">
@@ -128,10 +176,12 @@ const GeneralParkingDetials = () => {
             icon="material-symbols-light:arrow-left-alt"
             width="13"
             height="13"
-            style={{ color: "#112240" }}
+          style={{ color: backgroundChange=== true ? "white" : "#112240" }}
           />
         </Link>
-        <h2>Parking Details</h2>
+        <h2
+         style={{ color: backgroundChange=== true ? "white !important" : "" }}
+        >Parking Details</h2>
       </div>
       <div className="traffic-detalis-all-divs">
         <div className="all-details-divs">
@@ -139,40 +189,12 @@ const GeneralParkingDetials = () => {
           <div className="tech-div">
             <p className="tech">Pending</p>
             <div className="rating-star">
-                 <Icon
-              icon="material-symbols:star-rounded"
-              width="20"
-              height="20"
-              style={{ color: "orange" }}
-            />
-                 <Icon
-              icon="material-symbols:star-rounded"
-              width="20"
-              height="20"
-              style={{ color: "orange" }}
-            />
-                 <Icon
-              icon="material-symbols:star-rounded"
-              width="20"
-              height="20"
-              style={{ color: "orange" }}
-            />
-                 <Icon
-              icon="material-symbols:star-rounded"
-              width="20"
-              height="20"
-              style={{ color: "orange" }}
-            />
-                 <Icon
-              icon="material-symbols:star-rounded"
-              width="20"
-              height="20"
-              style={{ color: "orange" }}
-            />
-            
+              <span style={{ color: getStatusColor(details?.status) }}>
+                {details?.status}
+              </span>
             </div>
           </div>
-          <h2>Phantom Space</h2>
+          <h2>{details?.name}</h2>
           <div className="lasma">
             <img src="/images/traffic_person.png" alt="" />
             <p>Owner: Lionel Messi</p>
@@ -184,24 +206,43 @@ const GeneralParkingDetials = () => {
               height="20"
               style={{ color: "#66708580" }}
             />{" "}
-            <p>28 Allen Avenue, Ikeja Lagos</p>
+            <p>{details?.address}</p>
           </div>
-          <p>
-            Lorem ipsum dolor sit amet consectetur. Porttitor viverra facilisis
-            sit purus integer consectetur eros. Risus imperdiet faucibus mollis
-            vel cursus dolor pretium tincidunt. Vitae vivamus sem a nisi porta
-            in ultrices in. Aenean convallis morbi pretium egestas neque.
-            Malesuada sed faucibus tristique sed fames vulputate. Volutpat porta
-            amet suspendisse volutpat tellus. Sit dis vestibulum proin sed diam
-            nulla nibh diam scelerisque.
-          </p>
+          <p>{details?.description}</p>
           <div className="parking-images">
             <img src="/images/traffic-2.png" alt="" />
             <img src="/images/traffic-2.png" alt="" />
           </div>
-          <button className="book-now">Book now</button>
+          <button onClick={handleBBookParkSpace} className="book-now">
+            {bookingloading ? (
+              <ClipLoader color="green" size={35} />
+            ) : (
+              "Book now"
+            )}
+          </button>
         </div>
       </div>
+
+      {bookparkingsuccess ? (
+        <div className="dropdown-container">
+          <div className="cupon-drop">
+            <p>Parking space booked successfully</p>
+            <p>
+              Please wait until the owner accept the booking. <br /> Thanks!
+            </p>
+            <div className="button-div">
+              <button
+                onClick={() => dispatch(resetBookingState())}
+                className="submit-btn"
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
     </TrafficDetaiRap>
   );
 };
