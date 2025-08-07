@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setBackgroundChange, setBackgroundChangeToOriginal, setOpenSideBar } from "../Redux/appSlice";
 import styled from "styled-components";
+import { resetUserState } from "../Redux/slices/AuthSlice";
 
 const UserNavRap = styled.div`
 color:  #112240;
@@ -196,6 +197,8 @@ const [dropdownVisibility, setDropdownVisibility] = useState(false)
 
 
 const handleLogOut =  () => {
+    dispatch(resetUserState())
+  
     navigate("/usersLogin");
 
   localStorage.removeItem("ruaUserToken");
@@ -231,7 +234,7 @@ const handleLogOut =  () => {
         </div>
 
         <div className="usernav-2">
-          <div
+          {/* <div
             style={{
               display: "flex",
               justifyContent: "center",
@@ -289,7 +292,7 @@ onClick={() => {
             >
               Dark
             </button>
-          </div>
+          </div> */}
           <div onClick={handleToogleDrop} className="notification-icon">
             <img src="/images/cation.png" />
           </div>

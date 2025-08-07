@@ -1,7 +1,9 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { adminListOfComplain } from "../Redux/slices/adminSlice";
 
 const TaskRap = styled.div`
 
@@ -34,6 +36,21 @@ const TaskRap = styled.div`
 
 const Complaints = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+    
+        const { adminComplainData, currentPage, totalPages, loading, error } = useSelector((state) => state.admin);
+        const [page, setPage] = useState(1);
+        console.log(adminComplainData);
+    
+        const rides = adminComplainData?.data?.data
+  
+        
+    
+  useEffect(() => {
+    dispatch(adminListOfComplain({ page }));
+  }, [dispatch, page]);
+
+
   const complains = [
     {
       id: 1,
@@ -135,34 +152,21 @@ const Complaints = () => {
       status: "Completed",
     },
   ];
-  const handleRowClick = () => {
-    navigate("/admin/complaintsDetails");
+  const handleRowClick = (id) => {
+    navigate(`/admin/complaintsDetails/${id}`);
   };
   //   pagination
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 10;
-
-  // Pagination Logic
-  const totalPages = Math.ceil(complains.length / rowsPerPage);
-  const indexOfLastCase = currentPage * rowsPerPage;
-  const indexOfFirstCase = indexOfLastCase - rowsPerPage;
-  const CurrentComplains = complains.slice(indexOfFirstCase, indexOfLastCase);
-
-  const handlePageChange = (pageNumber) => {
-    if (pageNumber > 0 && pageNumber <= totalPages) {
-      setCurrentPage(pageNumber);
-    }
-  };
+  
 
   const getStatusColor = (status) => {
-    if (status === "Ongoing") return "#E8A526";
-    if (status === "Completed") return "#379C0C";
+    if (status === "active") return "#E8A526";
+    if (status === "completed") return "#379C0C";
     return "#112240"; // Default color if priority is missing or unrecognized
   };
   const getStatusBackground = (status) => {
-    if (status === "Ongoing") return "#FDF4E4";
-    if (status === "Completed") return "#E8FDE0";
+    if (status === "active") return "#FDF4E4";
+    if (status === "completed") return "#E8FDE0";
     return "#112240"; // Default color if priority is missing or unrecognized
   };
 
@@ -199,32 +203,39 @@ const Complaints = () => {
                   <tr>
                     <th style={{ width: "30px" }}>S/N</th>
 
-                    <th>COMPLAIN ID </th>
+                    <th>COMPLAIN  </th>
                     <th>DATE</th>
-                    <th>COMPLAIN</th>
+                    <th>ROLE</th>
+                    <th>NAME</th>
                     <th>COMPLAIN TYPE</th>
-                    <th>COMPLAINER</th>
                   
                     <th>STATUS</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {CurrentComplains ? (
-                    CurrentComplains.map((caseItem, index) => {
+                  {rides ? (
+                    rides?.map((caseItem, index) => {
                       return (
                         <tr
                           className="table-row"
                           key={caseItem.id}
-                          onClick={() => handleRowClick(caseItem)}
+                          onClick={() => handleRowClick(caseItem.id)}
                           style={{ cursor: "pointer" }}
                         >
                           <td>{index + 1}</td>
 
-                          <td>{caseItem.lodgeNo}</td>
-                          <td>{caseItem.date}</td>
-                          <td>{caseItem.complain}</td>
-                          <td>{caseItem.complainType}</td>
-                          <td>{caseItem.complainer}</td>
+                          <td>{caseItem.complain_title}</td>
+                          <td>{new Date(caseItem.created_at).toLocaleDateString(
+                              "en-US",
+                              {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              }
+                            )}</td>
+                          <td>{caseItem.role?.charAt(0).toUpperCase() + caseItem?.type?.slice(1)}</td>
+                          <td>{caseItem?.name?.charAt(0).toUpperCase() + caseItem?.role?.slice(1)}</td>
+                           <td>{caseItem?.type?.charAt(0).toUpperCase() + caseItem?.name?.slice(1)}</td>
                          
                           <td>
                             <div
@@ -261,50 +272,32 @@ const Complaints = () => {
             </div>
           </div>
           {/* Pagination Controls */}
-          <div className="pagination-div">
+             <div className="pagination-div">
             <Link
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
               className="next-page-link"
+              onClick={() => setPage((p) => p - 1)}
+              style={{ pointerEvents: page === 1 ? "none" : "auto", opacity: page === 1 ? 0.5 : 1 }}
             >
-              <Icon
-                className="pages-icon"
-                icon="solar:alt-arrow-left-linear"
-                width="16"
-                height="16"
-                style={{ color: "#667085" }}
-              />
+              Previous
             </Link>
-            <div>
-              {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-                (pageNumber) => (
-                  <Link
-                    className="paginations"
-                    key={pageNumber}
-                    onClick={() => handlePageChange(pageNumber)}
-                    style={{
-                      color: pageNumber === currentPage ? "#ffffff" : "#667085",
-                      background:
-                        pageNumber === currentPage ? "#112240" : "#1122400D",
-                    }}
-                  >
-                    {pageNumber}
-                  </Link>
-                )
-              )}
-            </div>
-            <Link
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className="next-page-link"
+          
+            <span className="paginations"
+          
+              style={{
+                color: page === currentPage ? "#ffffff" : "#667085",
+                background: page === currentPage ? "#112240" : "#1122400D",
+               
+              }}
             >
-              <Icon
-                className="pages-icon"
-                icon="iconamoon:arrow-right-2-light"
-                width="16"
-                height="16"
-                style={{ color: "#667085" }}
-              />
+              {page} 
+            </span>
+          
+            <Link
+              className="next-page-link"
+              onClick={() => setPage((p) => p + 1)}
+              style={{ pointerEvents: page === totalPages ? "none" : "auto", opacity: page === totalPages ? 0.5 : 1 }}
+            >
+              Next
             </Link>
           </div>
         </div>

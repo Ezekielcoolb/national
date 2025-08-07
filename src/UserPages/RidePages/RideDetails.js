@@ -28,6 +28,15 @@ const TaskRap = styled.div`
     font-size: 18px;
     font-weight: 600;
   }
+  .offical-images {
+    display: flex;
+  }
+  .offical-images  img {
+     margin-right: -10px;
+     width: 40px;
+    height: 40px;
+    border-radius: 100px;
+  }
   h4 {
     color: #112240;
     font-size: 16px;
@@ -291,6 +300,10 @@ const TaskRap = styled.div`
     justify-content: center;
     align-items: center;
   }
+  .descript-max {
+    max-width: 250px;
+    line-height: 19px;
+  }
   .cancel-continue {
     background: #6670851f !important;
     color: #112240 !important;
@@ -331,6 +344,7 @@ const RideDetails = () => {
     CompletedRideDetail,
     flagRidesuccess,
     flagRideloading,
+    completeLodgeLoading,
     lodgeRideDetailloading,
     error,
   } = useSelector((state) => state.users);
@@ -365,6 +379,8 @@ if (lodgeData?.vehicle_images) {
     minute: "2-digit",
     hour12: true,
   });
+
+  
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
 
@@ -504,12 +520,43 @@ if (lodgeData?.vehicle_images) {
               <span>{lodgeData?.driver_name}</span>
             </p>
           </div>
+
+
+{lodgeData?.flag_info ? (
+  <>
+  <div className="ride-info">
+            <p>
+              Tagged Officals
+              <span className="offical-images">
+                {lodgeData?.flag_info?.agency?.map(( items) => (
+              <img src={`https://backoffice.rua.com.ng/${items.logo}`} alt="" />
+                ))}
+             
+              </span>
+            </p>
+            <p>
+              Flag Reason
+              <span className="descript-max">{lodgeData?.flag_info?.description}</span>
+            </p>
+            
+          </div>
+  </>
+): ""}
+
           <div className="ride-button-div">
             {/* <Link className="edit-btn">Edit</Link> */}
+               {lodgeData?.flaged !== "1" ? (
             <button onClick={handleDropFlag} className="flag-btn">
               Flag Ride
             </button>
-            <button  onClick={handleCompleteRide} className="ride-btn">Ride Complete</button>
+               ): ""}
+                {lodgeData?.status === "active" ? (
+            <button  onClick={handleCompleteRide} className="ride-btn">
+              {completeLodgeLoading ? <ClipLoader color="white" size={35} /> : 
+             " Ride Complete"
+                }
+              </button>
+              ): ""}
           </div>
         </div>
         <div className="right-ride-div">

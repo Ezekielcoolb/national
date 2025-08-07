@@ -1,25 +1,14 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import AdminLodgeRidePopup from "./AdminRidePop";
-import { useDispatch, useSelector } from "react-redux";
-import { setDropdownVisibleTwo } from "../Redux/appSlice";
-import { fetchAdminFlagRides } from "../Redux/slices/adminSlice";
+import { fetchFlagedRideByUser } from "../../Redux/slices/secondUserSlice";
 
 const TaskRap = styled.div`
   
   width: 100%;
   font-family: "Roboto";
-  .next-page-link {
-    border: 1px solid black;
-    width: 100px;
-    border-radius: 10px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
   h4 {
     font-size: 16px;
     font-weight: 600;
@@ -34,7 +23,35 @@ const TaskRap = styled.div`
     color: #667085;
 
   }
+.link-container {
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
 
+  .link {
+    padding: 20px 20px;
+    text-decoration: none;
+    color: #667085;
+white-space: nowrap;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    border-bottom: 2px solid transparent; /* Default underline */
+    transition: all 0.3s ease;
+  }
+
+  .link.active {
+    font-weight: 600;
+    font-size: 14px;
+    border-bottom: 2px solid black; /* Black underline for the active link */
+    color: #112240;
+
+  }
+
+  .link:hover {
+    color: #555; /* Optional hover effect */
+  }
   label {
     font-size: 14;
     color: #60667a;
@@ -44,61 +61,54 @@ const TaskRap = styled.div`
     font-weight: 700;
     color: red;
   }
-.lodge-ride {
-    width: 150px;
-    height: 45px;
-    border: 1px solid blue;
-    color: blue;
-    background: transparent;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 100px;
-}
+
  
 `;
 
-const AdminRide = () => {
-
-   const dispatch = useDispatch();
+const FlagedRide = () => {
+    const [activeLink, setActiveLink] = useState("item")
   
-      const { flagData, currentPage, totalPages, loading, error } = useSelector((state) => state.admin);
-      const [page, setPage] = useState(1);
-      console.log(flagData);
-  
-      const rides = flagData?.data?.data
-
-      
-  
-useEffect(() => {
-  dispatch(fetchAdminFlagRides({ page }));
-}, [dispatch, page]);
-
-
-
-
+    const handleLinkClick = (link) => {
+      setActiveLink(link)
+    }
+    
     const navigate = useNavigate();
-
-    
-      const { dropdowVisibleTwo,  createdRide } = useSelector((state) => state.app);
-    
-    const [rideShow, setRideShow] = useState(false)
-const handleRideShow = () => {
-   dispatch(setDropdownVisibleTwo())
-}
-
  
-  
+  const dispatch = useDispatch();
+
+    const { listOfUserFlagedRide, loading, error } = useSelector((state) => state.otherUser);
+    console.log(listOfUserFlagedRide);
+
+    const rides = listOfUserFlagedRide?.data?.data
+
+      useEffect(() => {
+        dispatch(fetchFlagedRideByUser());
+      }, [dispatch]);
+
   const handleRowClick = (id) => {
     
-    navigate(`/admin/rides/details/${id}`);
+    navigate(`/users/ridesDetails/${id}`);
   };
   //   pagination
 
- 
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 10;
+
+  // Pagination Logic
+  const totalPages = Math.ceil(rides?.length / rowsPerPage);
+  const indexOfLastCase = currentPage * rowsPerPage;
+  const indexOfFirstCase = indexOfLastCase - rowsPerPage;
+  const CurrentRides = rides?.slice(indexOfFirstCase, indexOfLastCase);
+
+  const handlePageChange = (pageNumber) => {
+    if (pageNumber > 0 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
+  };
 
   const getStatusColor = (status) => {
     if (status === "active") return "#E8A526";
-    if (status === "completed") return "#379C0C";
+    if (status === "Completed") return "#379C0C";
     return "#112240"; // Default color if priority is missing or unrecognized
   };
   const getStatusBackground = (status) => {
@@ -107,13 +117,14 @@ const handleRideShow = () => {
     return "#112240"; // Default color if priority is missing or unrecognized
   };
 
-
-
   return (
     <TaskRap>
       <div>
+          
+
         <div className="table-container ">
           <div className="find-lawyer-header">
+           
             <div className="search-divs">
               <input type="text" placeholder="search" />
               <Icon
@@ -124,6 +135,17 @@ const handleRideShow = () => {
                 style={{ color: "#9499AC" }}
               />
             </div>
+            <div className="status-pick-div">
+                <p>Status: </p>
+                <span>All</span>
+                <Icon
+                  icon="ep:arrow-down"
+                  width="16"
+                  height="16"
+                  style={{ color: "#667085" }}
+                />
+            </div>
+         
           </div>
           <div className="new-table-scroll">
             <div className="table-div-con">
@@ -134,32 +156,43 @@ const handleRideShow = () => {
                      S/N
                     </th>
 
+                    
                     <th>RIDE ID</th>
                     <th>VEHICLE NUMBER</th>
                     <th>VEHICLE NAME</th>
+                    <th>VEHICLE MODEL</th>
                     <th>DRIVER NAME</th>
-                    <th>DESTINATION</th>
+                    <th>DEPARTURE STATE</th>
+                    <th>DESTINATION ADDRESS</th>
+                   
+                    <th>PARK NAME</th>
+                    <th>DATE CREATED</th>
                     <th>STATUS</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {rides ? (
-                    rides?.map((caseItem, index) => {
+                  {CurrentRides ? (
+                    CurrentRides.map((caseItem, index) => {
                       return (
                         <tr className="table-row"
                           key={caseItem.id}
-                          onClick={() => handleRowClick(caseItem.id)}
+                          onClick={() => handleRowClick(caseItem?.lodge_ride_id)}
                           style={{ cursor: "pointer" }}
                         >
                           <td>
                           {index + 1}
                           </td>
 
-                          <td >{caseItem.ride_id}</td>
-                          <td>{caseItem.vehicle_number}</td>
-                          <td>{caseItem.vehicle_name}</td>
-                          <td>{caseItem.driver_name}</td>
-                          <td className="destination-wide">{caseItem.destination_address}</td>
+                           <td>{caseItem.lodge_ride.manifest_num}</td>
+                          <td>{caseItem.lodge_ride.vehicle_number}</td>
+                          <td>{caseItem.lodge_ride.vehicle_name}</td>
+                          <td>{caseItem.lodge_ride.vehicle_model}</td>
+                          <td>{caseItem.lodge_ride.driver_name}</td>
+                          <td>{caseItem.lodge_ride.departure_state}</td>
+                          <td>{caseItem.lodge_ride.destination_address}</td>
+                          
+                          <td>{caseItem.lodge_ride.park_name}</td>
+                          <td className="destination-wide">{caseItem.lodge_ride.destination}</td>
                           <td>
                             <div
                               style={{
@@ -170,13 +203,13 @@ const handleRideShow = () => {
                                 justifyContent: "center",
                                 borderRadius: "16px",
                                 gap: "8px",
-                                color: getStatusColor(caseItem.status),
+                                color: getStatusColor(caseItem.lodge_ride.status),
                                 backgroundColor: getStatusBackground(
-                                  caseItem.status
+                                  caseItem.lodge_ride.status
                                 ),
                               }}
                             >
-                              {caseItem.status}
+                              {caseItem.lodge_ride.status}
                             </div>
                           </td>
                         </tr>
@@ -196,7 +229,7 @@ const handleRideShow = () => {
             </div>
           </div>
           {/* Pagination Controls */}
-          {/* <div className="pagination-div">
+          <div className="pagination-div">
             <Link
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
@@ -228,8 +261,8 @@ const handleRideShow = () => {
               )}
             </div>
             <Link
-               onClick={() => dispatch(fetchAdminFlagRides({ page: currentPage + 1 }))}
-                disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
               className="next-page-link"
             >
             
@@ -240,42 +273,10 @@ const handleRideShow = () => {
                 style={{ color: "#667085" }}
               />
             </Link>
-          </div> */}
-
-    <div className="pagination-div">
-  <Link
-    className="next-page-link"
-    onClick={() => setPage((p) => p - 1)}
-    style={{ pointerEvents: page === 1 ? "none" : "auto", opacity: page === 1 ? 0.5 : 1 }}
-  >
-    Previous
-  </Link>
-
-  <span className="paginations"
-
-    style={{
-      color: page === currentPage ? "#ffffff" : "#667085",
-      background: page === currentPage ? "#112240" : "#1122400D",
-     
-    }}
-  >
-    {page} 
-  </span>
-
-  <Link
-    className="next-page-link"
-    onClick={() => setPage((p) => p + 1)}
-    style={{ pointerEvents: page === totalPages ? "none" : "auto", opacity: page === totalPages ? 0.5 : 1 }}
-  >
-    Next
-  </Link>
-</div>
-
-
+          </div>
         </div>
       </div>
-      {dropdowVisibleTwo ? <AdminLodgeRidePopup /> : ""}
     </TaskRap>
   );
 };
-export default AdminRide;
+export default FlagedRide;

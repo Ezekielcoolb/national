@@ -126,7 +126,10 @@ padding: 30px;
     display: flex;
   }
   .offical-images  img {
-    margin-right: -5px;
+     margin-right: -10px;
+     width: 40px;
+    height: 40px;
+    border-radius: 100px;
   }
   .all-complain {
     border: 1px solid #1122401F;

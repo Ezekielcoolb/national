@@ -2,9 +2,12 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import MapRoad from "../UserPages/Map";
+
 import { useDispatch, useSelector } from "react-redux";
-import { fetchLodgeRideDetails } from "../Redux/slices/userSlice";
+import { ClipLoader } from "react-spinners";
+import { fetchCompletedLodgedItem, fetchLodgedItemDetailsUser } from "../Redux/slices/secondUserSlice";
+import { fetctGeneralAllAgency } from "../Redux/slices/homeSlice";
+import MapRoad from "../UserPages/Map";
 
 const TaskRap = styled.div`
   padding: 30px;
@@ -44,7 +47,7 @@ const TaskRap = styled.div`
     justify-content: space-between;
     align-items: center;
   }
-    .offical-images {
+     .offical-images {
     display: flex;
   }
   .offical-images  img {
@@ -104,6 +107,54 @@ const TaskRap = styled.div`
     color: #112240;
     background: #eaebee;
   }
+  form label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 16px;
+    font-weight: 500px;
+    margin-top: 10px;
+  }
+  .successCreationAgency {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .dropdown-menu {
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    width: 390px;
+    box-shadow: 0 2px 6px rgba(17, 34, 64, 0.15);
+  }
+  textarea {
+    width: 390px;
+    border: 1px solid #1122401f;
+    height: 120px;
+    font-weight: 500;
+    color: #112240;
+    font-size: 16px;
+    border-radius: 10px;
+    padding: 0px 10px;
+    margin-top: 20px;
+  }
+  .btns {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .select-agency {
+    background: transparent;
+    border: 1px solid #1122401f;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+    width: 390px;
+    padding: 0px 10px;
+    color: #112240;
+  }
   .flag-btn {
     color: #ffffff;
     background: #e72121;
@@ -152,7 +203,7 @@ const TaskRap = styled.div`
   }
   .move-to-end {
     display: flex;
-    gap: 150px;
+    gap: 30px;
     flex-direction: column;
     justify-content: space-between;
   }
@@ -171,6 +222,12 @@ const TaskRap = styled.div`
     display: flex;
     gap: 10px;
     padding: 15px;
+    flex-wrap: wrap;
+  }
+  .images-car img {
+    width: 200px;
+    height: 150px;
+    border-radius: 10px;
   }
   .right-ride-div {
     display: flex;
@@ -232,6 +289,10 @@ const TaskRap = styled.div`
     align-items: center;
     gap: 20px;
   }
+  .cancel-flag {
+    width: 184px !important;
+    height: 55px !important;
+  }
   .flag-continue,
   .cancel-continue {
     width: 336px;
@@ -263,28 +324,50 @@ const TaskRap = styled.div`
   }
 `;
 
-const AdminRideDetails = () => {
-    const { id } = useParams();
-    const dispatch = useDispatch();
-
+const AdminFlagedItemDetails = () => {
+  const dispatch = useDispatch();
+  const { id } = useParams();
   const [dropdownVisible, setDropdownVisisble] = useState(false);
- const {
-    lodgeRideDetail,
-    loading,
+  const [dropdownFlagRide, setDropdownFlagRide] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { backgroundChange} = useSelector((state)=> state.app)
+
+  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+  const [selected, setSelected] = useState([]);
+
+  const [formData, setFormData] = useState({
+    item_id: Number(id),
+    description: "",
+    agencies: [], // will be array or string "all"
+  });
+  console.log(id, formData);
+  const {
+    lodgedItemDetails,
+   
+    itemCompleteLoading,
+    flagItemloading,
+   flagItemsuccess,
     error,
-  } = useSelector((state) => state.users);
+  } = useSelector((state) => state.otherUser);
+  const { agencyList, loading } = useSelector((state) => state.home || []);
 
-  console.log(lodgeRideDetail);
+  console.log(lodgedItemDetails);
 
-  const details = lodgeRideDetail?.data
+  const handleDropFlagRide = () => {
+    setDropdownFlagRide(true);
+    setDropdownVisisble(false);
+  };
 
-    const rawDate = details?.created_at;
+  console.log(dropdownFlagRide);
+
+  const lodgeData = lodgedItemDetails?.data;
+  const rawDate = lodgeData?.created_at;
   const date = new Date(rawDate);
 let imagesArray = [];
 
-if (details?.vehicle_images) {
+if (lodgeData?.images) {
   try {
-    imagesArray = JSON.parse(details.vehicle_images);
+    imagesArray = JSON.parse(lodgeData?.images);
   } catch (err) {
     console.error("Invalid JSON in vehicle_images:", err);
   }
@@ -299,16 +382,78 @@ if (details?.vehicle_images) {
   });
 
   
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target;
 
-   useEffect(() => {
-    if(id) {
-      dispatch(fetchLodgeRideDetails(id));
+    if (value === "all") {
+      if (checked) {
+        // If 'all' selected, disable others by setting formData.agencies to "all"
+        setFormData((prev) => ({ ...prev, agencies: "all" }));
+      } else {
+        // 'all' unchecked, reset agencies to empty array
+        setFormData((prev) => ({ ...prev, agencies: [] }));
+      }
+    } else {
+      if (formData.agencies === "all") {
+        // Ignore other changes if 'all' is selected
+        return;
+      }
+
+      // Convert value to number here
+      const numValue = Number(value);
+
+      let newSelected = Array.isArray(formData.agencies)
+        ? [...formData.agencies]
+        : [];
+
+      if (checked) {
+        // Add number to array if not already present
+        if (!newSelected.includes(numValue)) {
+          newSelected.push(numValue);
+        }
+      } else {
+        // Remove number from array
+        newSelected = newSelected.filter((id) => id !== numValue);
+      }
+
+      setFormData((prev) => ({ ...prev, agencies: newSelected }));
     }
-    }, [dispatch, id]);
+  };
+
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+
+//     dispatch(flagItemNow(formData));
+//     setDropdownFlagRide(false);
+//   };
+
+  const handleChange = (e) => {
+    const values = Array.from(e.target.selectedOptions).map((opt) => opt.value);
+
+    if (values.includes("all")) {
+      setSelected(["all"]);
+    } else {
+      setSelected(values);
+    }
+  };
 
   const handleDropFlag = () => {
     setDropdownVisisble(!dropdownVisible);
   };
+
+  useEffect(() => {
+    dispatch(fetchLodgedItemDetailsUser(id));
+  }, [dispatch]);
+
+//   const handleCompleteRide = () => {
+//     dispatch(fetchCompletedLodgedItem(id));
+//   };
+
+
+  useEffect(() => {
+    dispatch(fetctGeneralAllAgency());
+  }, [dispatch]);
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -326,18 +471,18 @@ if (details?.vehicle_images) {
     <TaskRap>
       <div className="ride-detail-header">
         <div className="icon-header">
-          <Link to="/admin/rides">
+          <Link to="/admin/flagedItems">
             <Icon
               className="back-arrow-left"
               icon="material-symbols-light:arrow-left-alt"
               width="13"
               height="13"
-              style={{ color: "#112240" }}
+              style={{ color: backgroundChange=== true ? "white" : "#112240" }}
             />
           </Link>
-          <h2>Ride Details</h2>
+          <h2    style={{ color: backgroundChange=== true ? "white" : "#" }}>Item Details</h2>
         </div>
-        {/* <Link className="send-message">Send a Message</Link> */}
+        <Link className="send-message">Send a Message</Link>
       </div>
       <div className="all-rides-details">
         <div className="left-ride-div">
@@ -346,43 +491,57 @@ if (details?.vehicle_images) {
           </div>
           <div className="car-div">
             <div className="car-model">
-              <h5>{details?.vehicle_model}</h5>
-              <h5>{details?.vehicle_number}</h5>
+              <h5>
+                {lodgeData?.vehicle_name} {lodgeData?.vehicle_model}
+              </h5>
+              <h5>{lodgeData?.manifest_num}</h5>
             </div>
             <p>{formatted}</p>
           </div>
           <div className="car-address">
             <img src="/images/address_anchor.png" alt="" />
             <div>
-              <p>{details?.departure_state}</p>
-              <p>{details?.destination_address}</p>
+              <p>{lodgeData?.departure_state}</p>
+              <p>{lodgeData?.destination_address}</p>
             </div>
           </div>
           <div className="ride-info">
             <p>
-              Ride ID
-              <span>{details?.ride_id}</span>
+              Item ID
+              <span>{lodgeData?.item_ref}</span>
             </p>
             <p>
-              Vehicle Number
-              <span>{details?.vehicle_number}</span>
+              Item Name
+              <span>{lodgeData?.item_name}</span>
             </p>
             <p>
-              Vehicle Name
-              <span>{details?.vehicle_name}</span>
+              Vehicle or Bike Number
+              <span>{lodgeData?.vehicle_bike_number}</span>
+            </p>
+            <p>
+              Transport Means
+              <span>{lodgeData?.transport_means}</span>
+            </p>
+            <p>
+              Rider Comapny
+              <span>{lodgeData?.rider_company}</span>
             </p>
             <p>
               Driver Name
-              <span>{details?.drive_name}</span>
+              <span>{lodgeData?.driver_name}</span>
+            </p>
+            <p>
+              Driver Number
+              <span>{lodgeData?.rider_phone_number}</span>
             </p>
           </div>
-         {details?.flag_info ? (
+{lodgeData?.flag_info ? (
   <>
   <div className="ride-info">
             <p>
               Tagged Officals
               <span className="offical-images">
-                {details?.flag_info?.agency?.map(( items) => (
+                {lodgeData?.flag_info?.agency?.map(( items) => (
               <img src={`https://backoffice.rua.com.ng/${items.logo}`} alt="" />
                 ))}
              
@@ -390,49 +549,47 @@ if (details?.vehicle_images) {
             </p>
             <p>
               Flag Reason
-              <span className="descript-max">{details?.flag_info?.description}</span>
+              <span className="descript-max">{lodgeData?.flag_info?.description}</span>
             </p>
             
           </div>
   </>
 ): ""}
+
+          <div className="ride-button-div">
+            {/* <Link className="edit-btn">Edit</Link> */}
+            {/* {lodgeData?.flag !== "1" ? (
+            <button onClick={handleDropFlag} className="flag-btn">
+              Flag Item
+            </button>
+            ): ""}
+            {lodgeData?.status === "ongoing" ? (
+            <button  onClick={handleCompleteRide} className="ride-btn">
+              {itemCompleteLoading ? <ClipLoader color="white" size={35} /> : 
+              
+              "Item Recieved" }</button>
+          ): ""} */}
+            </div>
         </div>
         <div className="right-ride-div">
           <div className="right-header">
-            <h4>Next of KIN</h4>
-            <p className="status-ride">{details?.status}</p>
+            <h4>Description</h4>
+            <p style={{
+              color: lodgeData?.status === "active" ? "#E8A526" : "#379C0C",
+              background: lodgeData?.status === "active" ? "#FDF4E4" : "#E8FDE0"
+            }} className="status-ride">{lodgeData?.status}</p>
           </div>
           <div className="move-to-end">
-            <div className="right-inne-div">
-              <img src="/images/ride-pic.png" alt="" />
-              <div className="right-inner-info">
-                <p>
-                  Fullname
-                  <span>{details?.user?.last_name} {details?.user?.first_name}</span>
-                </p>
-                <p>
-                  Phone Number
-                  <span>{details?.phone}</span>
-                </p>
-                <p>
-                  Address
-                  <span
-                    style={{
-                      maxWidth: "116px",
-                    }}
-                  >
-                    {details?.user?.address}
-                  </span>
-                </p>
-              </div>
+             <div className="right-inne-div">
+             <p>{lodgeData?.description}</p>
             </div>
 
             <div>
               <div className="right-head">
-                <h4>Images</h4>
+                <h4 style={{marginTop: "20px"}}>Images</h4>
               </div>
               <div className="images-car">
-                 {imagesArray?.map((items) => (
+                {imagesArray?.map((items) => (
                   <img src={`https://backoffice.rua.com.ng/${items}`} alt="" />
                 ))}
               </div>
@@ -441,8 +598,11 @@ if (details?.vehicle_images) {
         </div>
       </div>
 
+      
+
+
     
     </TaskRap>
   );
 };
-export default AdminRideDetails;
+export default AdminFlagedItemDetails;

@@ -48,80 +48,101 @@ import UserComplaintsDetails from "../UserPages/UserComplainDetails";
 import MyTraffic from "../UserPages/TrafficPages/MyTrafficPage";
 import MyTrafficDetials from "../UserPages/TrafficPages/MyTrafficPageDetails";
 import UserPrivateRoutes from "../UserPages/UserPrivateRoutes";
+import UserLodgedItem from "../UserPages/UserLodgedItem";
+import AdminFlagItem from "../Admin/AdminFlagItems";
+import AdminFlagedItemDetails from "../Admin/FlagedItemDetails";
+import UserMessage from "../UserPages/UserMessage";
+import PrivateTerm from "../component/PrivateTerm";
+import TermsConditions from "../component/TermsCondition";
 
-
-
-
-export default function Routers () {
-    return (
-        useRoutes(
-            [
-                {
-                    path : "/",
-                    element: <General />,
-                    children:  [
-                        {path: "/", element: <Home />},
-                        {path: "/about", element: <About />},
-                        {path: "/members", element: <Members />},
-                        {path: "/news&media", element: <NewsMedia />},
-                        {path: "/news&events", element: <Events />},
-                        {path: "/event/details/:id", element: <EventsDetails />},
-                        {path: "/news&others", element: <Project />},
-                        {path: "/contact", element: <Contact />},
-                        {path: "/project/:id", element: <MoreProject />}
-                    ]
-                },
-                {
-                    path : "/users",
-                    element: <UserPrivateRoutes />,
-                    children:  [
-                        {path: "/users/dashboard", element: <UserDashboard />},
-                        {path: "/users/test", element: <AgencySelector />},
-                        {path: "/users/rides", element: <Ride />},
-                         {path: "/users/manifest", element: <Manifest />},
-                        {path: "/users/ridesDetails/:id", element: <RideDetails />},
-                        {path: "/users/history", element: <History />},
-                        {path: "/users/itemDetails", element: <ItemDetails />},
-                        {path: "/users/complainDetails", element: <ComplainDetails />},
-                        {path: "/users/emergencyDetails", element: <EmergencyDetails />},
-                        {path: "/users/crimeDetails", element: <CrimeReportDetails />},
-                        {path: "/users/traffic", element: <Traffic />},
-                        {path: "/users/mytraffic", element: <MyTraffic />},
-                        {path: "/users/trafficDetails/:id", element: <TrafficDetials />},
-                        {path: "/users/mytraffic/details/:id", element: <MyTrafficDetials />},
-                        {path: "/users/news", element: <News />},
-                        {path: "/users/newsDetails", element: <NewsDetails />},
-                        {path: "/users/settings", element: <Settings />},
-                        {path: "/users/parking", element: <Parking />},
-                         {path: "/users/complain", element: <UserComplain />},
-                          {path: "/users/complain/details/:id", element: <UserComplaintsDetails />},
-                        {path: "/users/parking/details/:id", element: <ParkingDetials />},
-                         {path: "/users/incoming/parking/details/:id", element: <IncomingParkingDetials />},
-                        {path: "/users/explore-parking/details/:id", element: <GeneralParkingDetials />},
-
-                    ]
-                },
-                {
-                    path : "/admin",
-                    element: <AdminDashboardLayout />,
-                    children:  [
-                        {path: "/admin/dashboard", element: <AdminDashboard />},
-                         {path: "/admin/rides", element: <AdminRide />},
-                         {path: "/admin/rides/details", element: <AdminRideDetails />},
-                        {path: "/admin/complaints", element: <Complaints />},
-                        {path: "/admin/complaintsDetails", element: <ComplaintsDetails />},
-                        {path: "/admin/settings", element: <AdminSetting />},
-                      
-                    ]
-                },
-                {path: "/usersLogin", element: <UserLogin />},
-                {path: "/usersSignup", element: <UserSignUP />},
-                 {path: "/usersEmailVerification", element: <UserSignVerification />},
-                  {path: "/usersPersonalDetails", element: <UserPersonalInfo />},
-                   {path: "/usersPasswordCreation", element: <UserPasswordCreation/>},
-                    {path: "/usersForgetPassword", element: <UserForgetPassword/>},
-                   {path: "/usersForgetPasswordVerification", element: <UserForgetPasswordVerification/>},
-            ]
-        )
-    )
+export default function Routers() {
+  return useRoutes([
+    {
+      path: "/",
+      element: <General />,
+      children: [
+        { path: "/", element: <Home /> },
+        { path: "/about", element: <About /> },
+        { path: "/members", element: <Members /> },
+        // {path: "/news&media", element: <NewsMedia />},
+        { path: "/news&events", element: <Events /> },
+        { path: "/event/details/:id", element: <EventsDetails /> },
+        { path: "/news&others", element: <Project /> },
+        { path: "/contact-us", element: <Contact /> },
+        { path: "/project/:id", element: <MoreProject /> },
+        { path: "/privacy-policy", element: <PrivateTerm /> },
+        { path: "/terms-condition", element: <TermsConditions /> },
+      ],
+    },
+    {
+      path: "/users",
+      element: <UserPrivateRoutes />,
+      children: [
+        { path: "/users/dashboard", element: <UserDashboard /> },
+        { path: "/users/test", element: <AgencySelector /> },
+        { path: "/users/rides", element: <Ride /> },
+        { path: "/users/manifest", element: <Manifest /> },
+        { path: "/users/ridesDetails/:id", element: <RideDetails /> },
+        { path: "/users/lodgedItem", element: <UserLodgedItem /> },
+        { path: "/users/history", element: <History /> },
+        { path: "/users/itemDetails/:id", element: <ItemDetails /> },
+        { path: "/users/complainDetails", element: <ComplainDetails /> },
+        { path: "/users/emergencyDetails", element: <EmergencyDetails /> },
+        { path: "/users/crimeDetails", element: <CrimeReportDetails /> },
+        { path: "/users/traffic", element: <Traffic /> },
+        { path: "/users/mytraffic", element: <MyTraffic /> },
+        { path: "/users/trafficDetails/:id", element: <TrafficDetials /> },
+        { path: "/users/mytraffic/details/:id", element: <MyTrafficDetials /> },
+        { path: "/users/news", element: <News /> },
+        { path: "/users/newsDetails", element: <NewsDetails /> },
+        { path: "/users/settings", element: <Settings /> },
+        { path: "/users/parking", element: <Parking /> },
+        { path: "/users/messages", element: <UserMessage /> },
+        { path: "/users/complain", element: <UserComplain /> },
+        {
+          path: "/users/complain/details/:id",
+          element: <UserComplaintsDetails />,
+        },
+        { path: "/users/parking/details/:id", element: <ParkingDetials /> },
+        {
+          path: "/users/incoming/parking/details/:id",
+          element: <IncomingParkingDetials />,
+        },
+        {
+          path: "/users/explore-parking/details/:id",
+          element: <GeneralParkingDetials />,
+        },
+      ],
+    },
+    {
+      path: "/admin",
+      element: <AdminDashboardLayout />,
+      children: [
+        { path: "/admin/dashboard", element: <AdminDashboard /> },
+        { path: "/admin/rides", element: <AdminRide /> },
+        { path: "/admin/rides/details/:id", element: <AdminRideDetails /> },
+        { path: "/admin/complaints", element: <Complaints /> },
+        { path: "/admin/flagedItems", element: <AdminFlagItem /> },
+        {
+          path: "/admin/flagedItems/details/:id",
+          element: <AdminFlagedItemDetails />,
+        },
+        {
+          path: "/admin/complaintsDetails/:id",
+          element: <ComplaintsDetails />,
+        },
+        { path: "/admin/settings", element: <AdminSetting /> },
+      ],
+    },
+    { path: "/usersLogin", element: <UserLogin /> },
+    { path: "/usersSignup", element: <UserSignUP /> },
+    { path: "/usersEmailVerification", element: <UserSignVerification /> },
+    { path: "/usersPersonalDetails", element: <UserPersonalInfo /> },
+    { path: "/usersPasswordCreation", element: <UserPasswordCreation /> },
+    { path: "/usersForgetPassword", element: <UserForgetPassword /> },
+    {
+      path: "/usersForgetPasswordVerification",
+      element: <UserForgetPasswordVerification />,
+    },
+  ]);
 }

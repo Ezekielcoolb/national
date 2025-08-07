@@ -469,6 +469,166 @@ export const followOrUnfollowAgency = createAsyncThunk(
   }
 );
 
+export const lodgeItem = createAsyncThunk(
+  "lodge/lodgeItem",
+  async (formData, { rejectWithValue, getState }) => {
+    try {
+      const token = localStorage.getItem("ruaUserToken");
+
+      const response = await axios.post(
+        "https://backoffice.rua.com.ng/api/user/lodge-item/create",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Optional: remove if no auth required
+          },
+        }
+      );
+      console.log(response.data);
+
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
+export const fetchLodgedItemUser = createAsyncThunk(
+  "manifest/fetchLodgedItemUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("ruaUserToken");
+
+      const response = await axios.get(
+        "https://backoffice.rua.com.ng/api/user/lodge-item?status=all",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data);
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchLodgedItemDetailsUser = createAsyncThunk(
+  "booking/fetchLodgedItemDetailsUser",
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("ruaUserToken");
+
+      const response = await axios.get(
+        `https://backoffice.rua.com.ng/api/user/lodge-item/details/${id}}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || "An error occurred");
+    }
+  }
+);
+
+export const flagItemNow = createAsyncThunk(
+  'manifest/flagItemNow',
+  async (formData, { rejectWithValue, getState }) => {
+    try {
+      const token = localStorage.getItem('ruaUserToken');
+
+      const response = await axios.post(
+        'https://backoffice.rua.com.ng/api/user/lodge-item/flag/create',
+        formData,
+        {
+          headers: {
+             'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`, // Optional: remove if no auth required
+          },
+        }
+      );
+console.log(response.data);
+
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
+export const fetchCompletedLodgedItem = createAsyncThunk(
+  'manifest/fetchCompletedLodgedItem',
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('ruaUserToken');
+
+      const response = await axios.get(`https://backoffice.rua.com.ng/api/user/lodge-item/complete/end/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data);
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+
+export const fetchFlagedRideByUser = createAsyncThunk(
+  "booking/fetchFlagedRideByUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("ruaUserToken");
+
+      const response = await axios.get(
+        `https://backoffice.rua.com.ng/api/user/lodge-ride/flag?status=all`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || "An error occurred");
+    }
+  }
+);
+
+export const fetchFlagedItemsByUser = createAsyncThunk(
+  "booking/fetchFlagedItemsByUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("ruaUserToken");
+
+      const response = await axios.get(
+        `https://backoffice.rua.com.ng/api/user/lodge-item/flag?status=all`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || "An error occurred");
+    }
+  }
+);
 
 const secondUserSlice = createSlice({
   name: "manifest",
@@ -478,19 +638,28 @@ const secondUserSlice = createSlice({
     error: null,
     myparking: null,
     myParkDetails: null,
+    listOfUserFlagedRide: null,
     bookedstatusparking: null,
     bookedstatusloading: false,
+    lodgeItemloading: false,
+    lodgeItemsuccess: null,
     parkingloading: false,
     parkingsuccess: null,
+    listOfUserFlagedItems: null,
     trafficData: null,
+    flagItemloading: false,
     exploreTrafficData: null,
     exploreparking: null,
+    flagItemsuccess: null,
     bookingloading: false,
     complainloading: false,
+    itemCompleteLoading: false,
     trafficloading: false,
     trafficsuccess: null,
     trafficDetailsMy: null,
     editparkingsuccess: null,
+    lodgedItemDetails: null,
+    lodgedItemUser: null,
     complainsuccess: null,
     editparkingloading: false,
     cancelBookingloading: false,
@@ -506,6 +675,12 @@ const secondUserSlice = createSlice({
     },
      resetTrafficState: (state) => {
       state.trafficsuccess = null;
+    },
+    resetFlagItemState: (state) => {
+      state.flagItemsuccess = null;
+    },
+     resetLodgeItemState: (state) => {
+      state.lodgeItemsuccess = null;
     },
      resetComplainState: (state) => {
       state.complainsuccess = null;
@@ -537,6 +712,121 @@ const secondUserSlice = createSlice({
       })
       .addCase(createParkingSpace.rejected, (state, action) => {
         state.parkingloading = false;
+        state.error = action.payload;
+      });
+
+         builder
+            .addCase(flagItemNow.pending, (state) => {
+              state.flagItemloading = true;
+              state.flagItemsuccess = null;
+              state.error = null;
+            })
+            .addCase(flagItemNow.fulfilled, (state, action) => {
+              state.flagItemloading = false;
+              state.flagItemsuccess = action.payload.status;
+              state.data = action.payload;
+            })
+            .addCase(flagItemNow.rejected, (state, action) => {
+              state.flagItemloading = false;
+              state.error = action.payload;
+            });
+
+
+           builder
+            .addCase(fetchCompletedLodgedItem.pending, (state) => {
+              state.itemCompleteLoading = true;
+              state.error = null;
+            })
+            .addCase(fetchCompletedLodgedItem.fulfilled, (state, action) => {
+              state.itemCompleteLoading = false;
+              state.itemComplete = action.payload;
+            })
+            .addCase(fetchCompletedLodgedItem.rejected, (state, action) => {
+              state.itemCompleteLoading = false;
+              state.error = action.payload || 'Failed to fetch manifest';
+            });
+
+
+          builder
+      .addCase(lodgeItem.pending, (state) => {
+        state.lodgeItemloading = true;
+        state.lodgeItemsuccess = null;
+        state.error = null;
+      })
+      .addCase(lodgeItem.fulfilled, (state, action) => {
+        state.lodgeItemloading = false;
+        state.lodgeItemsuccess = action.payload.status;
+        state.data = action.payload;
+      })
+      .addCase(lodgeItem.rejected, (state, action) => {
+        state.lodgeItemloading = false;
+        state.error = action.payload;
+      });
+
+          builder
+      .addCase(fetchLodgedItemDetailsUser.pending, (state) => {
+        state.loading = true;
+        state.success = null;
+        state.error = null;
+      })
+      .addCase(fetchLodgedItemDetailsUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = action.payload.status;
+        state.lodgedItemDetails = action.payload;
+      })
+      .addCase(fetchLodgedItemDetailsUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+
+           builder
+      .addCase(fetchFlagedRideByUser.pending, (state) => {
+        state.loading = true;
+        state.success = null;
+        state.error = null;
+      })
+      .addCase(fetchFlagedRideByUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = action.payload.status;
+        state.listOfUserFlagedRide = action.payload;
+      })
+      .addCase(fetchFlagedRideByUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+      
+           builder
+      .addCase(fetchFlagedItemsByUser.pending, (state) => {
+        state.loading = true;
+        state.success = null;
+        state.error = null;
+      })
+      .addCase(fetchFlagedItemsByUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = action.payload.status;
+        state.listOfUserFlagedItems = action.payload;
+      })
+      .addCase(fetchFlagedItemsByUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+
+        builder
+      .addCase(fetchLodgedItemUser.pending, (state) => {
+        state.loading = true;
+        state.success = null;
+        state.error = null;
+      })
+      .addCase(fetchLodgedItemUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = action.payload.status;
+        state.lodgedItemUser = action.payload;
+      })
+      .addCase(fetchLodgedItemUser.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.payload;
       });
 
@@ -829,9 +1119,11 @@ export const {
   resetParkingState,
   resetBookingStatusState,
   resetCancelBookingState,
+  resetFlagItemState,
   resetBookingState,
   resetEditParkingState,
   resetComplainState,
+  resetLodgeItemState,
   resetTrafficState,
 } = secondUserSlice.actions;
 export default secondUserSlice.reducer;

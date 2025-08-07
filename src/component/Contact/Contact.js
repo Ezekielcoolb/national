@@ -1,345 +1,433 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useDispatch, useSelector } from "react-redux";
-import { fetctGeneralSetting } from "../../Redux/slices/homeSlice";
+import {
+  fetchHomepage,
+  fetctGeneralSetting,
+  resetMessageContact,
+  submitContactForm,
+} from "../../Redux/slices/homeSlice";
+import { ClipLoader } from "react-spinners";
 
 const ContactRap = styled.div`
-  .media-dot {
+  .contact-container {
+    background: #56bf2a;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+    padding-right: 80px;
+  }
+
+  .left-triangle {
+    clip-path: polygon(0 4%, 0 78%, 98% 39%);
     position: absolute;
     top: 0;
-    width: 100%;
-    height: 300px;
-
-    background: url("../images/media_dot.png");
-    z-index: 1; /* Ensure it stays below the content */
+    left: 0;
+    width: 50%;
+    height: 100vh;
+    background-color: #ffffff;
   }
-  .dot-now {
+  .right-triangle {
+    clip-path: polygon(24% 38%, 0 100%, 100% 100%);
     position: absolute;
-    top: -120px;
-    width: 100%;
-    height: 200px;
-
-    background: url("../images/new-dot.png");
-    z-index: 1; /* Ensure it stays below the content */
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100vh;
+    background-color: #ffffff;
   }
+   .right-polygon {
+clip-path: polygon(87% 0, 100% 0%, 14% 100%, 0% 100%);
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 50vh;
+    background-color: #ffffff;
+  }
+
+  .contact-form-div {
+    display: flex;
+    z-index: 1000;
+    position: relative;
+    margin-right: 100px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  }
+  .contact-form-div img {
+    width: 300px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+  }
+  .contact-form {
+    background: #ffffff;
+    width: 500px;
+    padding: 30px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+  .contact-form h1 {
+    color: #000000;
+    font-size: 30px;
+    font-weight: 600;
+  }
+
+  .contact-form label {
+    color: #5a5959ff;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  input,
+  textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    background: #d7d0d0;
+    border: none;
+    border-radius: 5px;
+  }
+  button {
+    width: 100%;
+  }
+  .contact-icon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #000000;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0px;
+  }
+  .contact-info p {
+    color: #5a5959ff;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0px;
+    max-width: 180px;
+margin-left: 30px;
+  }
+    .contact-info h4 {
+    color: #000000;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0px;
+    }
+  .contact-info  {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .contact-info-div {
+    padding: 30px;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+background: #ffffff;
+position: absolute;
+left: -160px;
+top: 50px;
+border-radius: 20px;
+z-index: 9999;
+  }
+  .all-contact-form {
+    position: relative;
+  }
+
+ .dropdown-contain {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+  }
+
+  .dropdown-div {
+    background: #ffffff;
+    width: fit-content;
+    height: fit-content;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+  .cancel-btn {
+    width: 150px;
+    height: 50px;
+    background: #160009;
+    color: #ffffff;
+    border: none;
+    border-radius: 100px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .dropdown-div p {
+    font-size: 20px;
+    color: #34302f;
+    font-weight: 500;
+    max-width: 400px;
+    text-align: center;
+  }
+  @media (max-width: 1200px)  {
+ .contact-info-div {
+
+  left: -100px;
+ }
+  .contact-form-div {
+    margin-right: 60px;
+
+  }
+  }
+
+  @media (max-width: 1050px) {
+.contact-info-div {
+  left: 10px;
+}
+
+  .contact-form-div {
+    margin-right: 0px;
+    margin-left: 70px;
+
+  }
+  }
+    @media (max-width: 992px) {
+  .contact-form {
+    background: #ffffff;
+    width: 400px;
+  }
+  .contact-form-div img {
+    width: 250px;
+  }
+  }
+     @media (max-width: 800px) {
+ .contact-form-div img, .contact-info-div {
+  display: none;
+ }
+
+    .contact-container {
+  
+    justify-content: center;
+    }
+
+  
+  .contact-form {
+   
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    
+        border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+  }
+  }
+ @media (max-width: 450px) {
+ .contact-form {
+  width: 300px;
+ }
+ }
+  @media (max-width: 350px) {
+ .contact-form {
+  width: 260px;
+ }
+ }
 `;
 
 const Contact = () => {
-    const dispatch = useDispatch();
-        const {generalObject, loading, error } = useSelector(
-          (state) => state.home || []
-          
-        );
-  
-  
-        const websetting = generalObject?.data?.websetting
+  const dispatch = useDispatch();
+  const {
+    generalObject,
+    errorContactMessage,
+    successContact,
+    submitloading,
+    homeObject,
+    loading,
+    error,
+  } = useSelector((state) => state.home || []);
 
-        useEffect(() => {
-                       dispatch(fetctGeneralSetting()); // Call API on component mount
-                     }, [dispatch]);
+  const [form, setForm] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    message: "",
+  });
+
+  const callToAction = homeObject?.data?.callToAction;
+
+  const websetting = generalObject?.data?.websetting;
+
+  useEffect(() => {
+    dispatch(fetchHomepage()); // Call API on component mount
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetctGeneralSetting()); // Call API on component mount
+  }, [dispatch]);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(submitContactForm(form));
+  };
+
+  const handleRest = () => {
+    dispatch(resetMessageContact());
+    setForm({
+      first_name: "",
+      last_name: "",
+      email: "",
+      message: "",
+    });
+  };
   return (
     <ContactRap>
-      <div style={{ position: "relative" }}>
-        <div className="media-dot"></div>
-        <div className=" containers contact-block flex justify-between items-center  py-28 gap-3">
-          <div>
-            <div className="flex flex-col gap-3">
-              <p
-                style={{
-                  fontFamily: "Roboto",
-                  fontWeight: "600",
-                  fontSize: "14px",
-                  color: "#56bf2a",
-                }}
-              >
-                CONTACT US
-              </p>
-              <h2
-                style={{
-                  fontFamily: "Bricolage Grotesque",
-                  fontSize: "45px",
-                  lineHeight: "55px",
-                  fontWeight: "700",
-                  color: "#112240",
-                  maxWidth: "452px",
-                }}
-              >
-                Do you need help? contact with us now!
-              </h2>
-            </div>
-            <div className="flex flex-col gap-5 mt-10">
-              <div className="flex items-center gap-3">
-                <div style={{ width: "60px", height: "60px" }}>
-                  <img
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                    src="./images/comment.png"
-                  />
-                </div>
-                <p>{websetting?.first_address}</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <div style={{ width: "60px", height: "60px" }}>
-                  <img
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                    src="./images/phone.png"
-                  />
-                </div>
-                <p>{websetting?.biz_phone}, {websetting?.biz_phone_two}</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <div style={{ width: "60px", height: "60px" }}>
-                  <img
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                    src="./images/message.png"
-                  />
-                </div>
-                <p>{websetting?.biz_email}</p>
-              </div>
-            </div>
-          </div>
-          <div 
-            className="py-10 contact-div"
-            style={{
-              width: "500px",
-              height: "588px",
-              border: "1px solid #1122401F",
-              borderRadius: "12px",
-            }}
-          >
-            <div className="flex flex-col justify-center items-center">
-              <h3
-                style={{
-                  fontFamily: "Bricolage Grotesque",
-                  fontSize: "28px",
-                  fontWeight: "700",
-                  textAlign: "center",
-                  color: "#112240",
-                }}
-              >
-                Get in touch with us
-              </h3>
-              <p
-                style={{
-                  fontFamily: "Roboto",
-                  fontSize: "16px",
-                  textAlign: "center",
-                  color: "#5c6a7f",
-                }}
-              >
-                Enter your message details below
-              </p>
-            </div>
-            <div>
-              <form
-                style={{ gap: "25px" }}
-                className="py-10 flex flex-col justify-center items-center"
-              >
-                <div
-                  className="contact-input flex flex-col"
-                  style={{ gap: "20px", width: "398px", height: "65.59px" }}
-                >
-                  <label
-                    style={{
-                      fontFamily: "Roboto",
-                      fontSize: "16px",
-                      lineHeight: "18.75px",
-                      color: "#5C6A7F80",
-                    }}
-                  >
-                    Name
+      <div className="contact-container">
+        <div className="left-triangle"></div>
+        <div className="right-triangle"></div>
+        <div className="right-polygon"></div>
+        <div className="all-contact-form">
+          <div className="contact-form-div">
+            <img src="/images/contact-road.jpg" alt="Contact Us" />
+            <div className="contact-form">
+              <h1>Contact Us</h1>
+              <form onSubmit={handleSubmit}>
+                <div className="input-div">
+                  <label>
+                    First Name
+                    <input
+                      type="text"
+                      name="first_name"
+                      placeholder="First Name"
+                      value={form.first_name}
+                      onChange={handleChange}
+                      required
+                    />
                   </label>
-                  <input className="contact-input"
-                    style={{
-                      width: "398px",
-                      height: "26.59px",
-                      borderBottom: "1px solid #1122401F",
-                    }}
-                    type="text"
-                  />
+                  <label>
+                    Last Name
+                    <input
+                      type="text"
+                      name="last_name"
+                      placeholder="Last Name"
+                      value={form.last_name}
+                      onChange={handleChange}
+                      required
+                    />
+                  </label>
                 </div>
-                <div
-                  className="contact-input flex flex-col"
-                  style={{ gap: "20px", width: "398px", height: "65.59px" }}
-                >
-                  <label
-                    style={{
-                      fontFamily: "Roboto",
-                      fontSize: "16px",
-                      lineHeight: "18.75px",
-                      color: "#5C6A7F80",
-                    }}
-                  >
+                <div className="input-div">
+                  <label>
                     Email Address
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="Email Address"
+                      value={form.email}
+                      onChange={handleChange}
+                      required
+                    />
                   </label>
-                  <input className="contact-input"
-                    style={{
-                      width: "398px",
-                      height: "26.59px",
-                      borderBottom: "1px solid #1122401F",
-                    }}
-                    type="text"
-                  />
                 </div>
-                <div
-                  className="contact-input flex flex-col justify-between"
-                  style={{ gap: "20px", width: "398px", height: "100.59px" }}
-                >
-                  <label
-                    style={{
-                      fontFamily: "Roboto",
-                      fontSize: "16px",
-                      lineHeight: "18.75px",
-                      color: "#5C6A7F80",
-                    }}
-                  >
-                    Messages
+                <div className="input-div">
+                  <label>
+                    Message
+                    <textarea
+                      name="message"
+                      placeholder="Message"
+                      value={form.message}
+                      onChange={handleChange}
+                      required
+                    ></textarea>
                   </label>
-                  <input className="contact-input"
-                    style={{
-                      width: "398px",
-                      height: "26.59px",
-                      borderBottom: "1px solid #1122401F",
-                    }}
-                    type="text"
-                  />
                 </div>
-                <button
-                  className="flex flex justify-center items-center contact-btn"
-                  style={{
-                    marginTop: "20px",
-                    width: "397px",
-                    height: "55px",
-                    borderRadius: "100px",
-                    background:
-                      "linear-gradient(0deg, #56BF2A, #56BF2A), linear-gradient(0deg, rgba(22, 0, 9, 0), rgba(22, 0, 9, 0))",
-                  }}
-                >
-                  <p
-                    style={{
-                      fontFamily: "Roboto",
-                      fontSize: "16px",
-                      textAlign: "center",
-                      fontWeight: "600",
-                    }}
-                  >
-                    Submit
-                  </p>
-                </button>
+                
+                  <button type="submit">
+                    {submitloading ? (
+                  <ClipLoader color="#fff" size={30} />
+                ) : (
+                    
+                    "Submit"
+                )} </button>
               </form>
+            </div>
+            {errorContactMessage && (
+              <p className="error-message">{errorContactMessage}</p>
+            )}
+          </div>
+          <div className="contact-info-div">
+            <div className="contact-info">
+              <div className="contact-icon">
+                <Icon
+                  icon="mingcute:location-line"
+                  width="20"
+                  height="20"
+                  style={{ color: "#56BF2A" }}
+                />
+                Location
+              </div>
+              <p>{websetting?.first_address}</p>
+            </div>
+
+            <div className="contact-info">
+              <div className="contact-icon">
+                <Icon
+                  icon="ic:outline-email"
+                  width="20"
+                  height="20"
+                  style={{ color: "#56BF2A" }}
+                />
+                Email
+              </div>
+                              <p>{websetting?.biz_email}</p>
+
+            </div>
+            <div className="contact-info">
+              <div className="contact-icon">
+                <Icon
+                  icon="solar:phone-calling-linear"
+                  width="20"
+                  height="20"
+                  style={{ color: "#56BF2A" }}
+                />
+                Call Us
+              </div>
+                              <p>{websetting?.biz_phone}</p>
+
             </div>
           </div>
         </div>
-        <div
-            className="flex flex-col justify-center items-center"
-            style={{
-              height: "357px",
-              background: "#eef5ff",
-              marginTop: "220px",
-              position: "relative",
-            }}
-          >
-            <div className="dot-now"></div>
-            <div
-              className="flex flex-col justify-center items-center gap-6"
-              style={{
-                color: "white",
-                background: "#56bf2a",
-                width: "1170px",
-                height: "367px",
-                borderRadius: "12px",
-                position: "absolute",
-                top: "-120px",
-              }}
-            >
-              <h2 
-              className="join-div-h2"
-                style={{
-                  fontFamily: "Bricolage Grotesque",
-                  fontWeight: "600",
-                  fontSize: "50px",
-                  width: "412px",
-                  lineHeight: "54.57px",
-                  textAlign: "center",
-                }}
-              >
-                Join us, become a member today.
-              </h2>
-              <p className=""
-                style={{
-                  width: "412px",
-                  fontFamily: "Roboto",
-                  fontSize: "18px",
-                  lineHeight: "26px",
-                  textAlign: "center",
-                }}
-              >
-                Embrace holistic development and support for employee the aim of
-                being a first-choice
-              </p>
-              <div className="flex gap-4 join-btn">
-                <button
-                  className="flex justify-between items-center gap-2"
-                  style={{
-                    background: "#1c4f96",
-                    width: "237px",
-                    height: "55px",
-                    borderRadius: "700px",
-                  }}
-                >
-                  <p style={{
-                    fontFamily: "Roboto",
-                    fontSize: "16px",
-                    fontWeight: "500"
-                  }}>Become a Member </p>
-                  <div
-                    className="flex justify-center items-center"
-                    style={{
-                      backgroundColor: "white",
-                      width: "24px",
-                      height: "24px",
-                      borderRadius: "50%",
-                    }}
-                  >
-                    <Icon
-                      icon="weui:arrow-filled"
-                      width="5.56"
-                      height="14"
-                      style={{ color: "#56bf2a" }}
-                    />
-                  </div>
-                </button>
-                <button
-                  style={{
-                    color: "#56bf2a",
-                    background: "white",
-                    width: "200px",
-                    height: "55px",
-                    borderRadius: "700px",
-                  }}
-                >
-                  <p style={{
-                    fontFamily: "Roboto",
-                    fontSize: "16px",
-                    fontWeight: "500"
-                  }}>Get in Touch </p>
-                </button>
-              </div>
-            </div>
-          </div>
       </div>
+      {successContact ? (
+        <div className="dropdown-contain">
+          <div className="dropdown-div">
+            <p>Thank you for contacting us! We will get back to you soon.</p>
+            <button onClick={handleRest} className="cancel-btn">
+              Close
+            </button>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
     </ContactRap>
   );
 };

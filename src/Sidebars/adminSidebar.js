@@ -16,26 +16,32 @@ const sidebarConfig = [
     id: 2,
     img: "/images/complain.png",
     link: "/admin/rides",
-    title: "Ride",
+    title: "Flag Ride",
+  },
+  {
+    id: 3,
+    img: "/images/complain.png",
+    link: "/admin/flagedItems",
+    title: "Flag Item",
   },
    {
-    id: 3,
+    id: 4,
     img: "/images/complain.png",
     link: "/admin/complaints",
     title: "Complaints",
   },
   {
-    id: 4,
+    id: 5,
     img: "/images/user_mes.png",
     link: "",
     title: "Messages",
   },
-  {
-    id: 5,
-    img: "/images/news.png",
-    link: "",
-    title: "News",
-  },
+  // {
+  //   id: 6,
+  //   img: "/images/news.png",
+  //   link: "",
+  //   title: "News",
+  // },
  
   {
     id: 6,
@@ -50,6 +56,8 @@ export default function UserSidebar() {
   const [activeTab, setActiveTab] = useState("Dashboard");
   const { isSidebarOpen, setIsSidebarOpen, setIsProfileOpen } = useAppContext();
   const navigate = useNavigate()
+    const userDetails = JSON.parse(localStorage.getItem('ruaUserDetails') || '{}');
+
 
   function handleNavClick(title) {
     setActiveTab(title);
@@ -73,10 +81,10 @@ export default function UserSidebar() {
               </Link>
               <div className="user-all-div">
                 <div className="userName">
-                    <h5>Organization ID:</h5>
+                    <h5>Organization </h5>
                    
 
-                        <p >00-7895-66620</p>
+                        <p >{userDetails?.account_type.charAt(0).toUpperCase() + userDetails?.account_type?.slice(1)}</p>
                   
                 </div>
               </div>

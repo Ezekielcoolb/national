@@ -174,8 +174,7 @@ const LoginRap = styled.div`
     color: #56bf2a;
     margin-left: 5px;
   }
-  .login-right-lower {
-  }
+  
   .login-left-all {
     width: 30%;
     background: #11224014;
@@ -299,7 +298,7 @@ const UserSignUP = () => {
     if (user && user?.data?.email) {
       localStorage.setItem("ruauserregisteredEmail", user.data.email);
       localStorage.setItem("ruaUserToken", user.data.api_token);
-      navigate("/usersEmailVerification");
+      navigate("/usersPersonalDetails");
     }
   }, [user, navigate]);
 
@@ -348,7 +347,9 @@ const UserSignUP = () => {
         </div>
         <div className="login-right-all">
           <div className="login-right">
+          
             <img className="logo-frame" src="/images/Frame.png" alt="" />
+         
             <div className="login-right-upper">
               <h3>Create Account!</h3>
               <p>Create account with easy steps</p>

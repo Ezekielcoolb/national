@@ -5,6 +5,9 @@ import ItemLodge from "./HistoryPages/ItemLodge";
 import ComplainLodge from "./HistoryPages/ComplainLodge";
 import EmergencyReport from "./HistoryPages/EmergencyReport";
 import CrimeReport from "./HistoryPages/CrimeReport";
+import UserLodgedItem from "./UserLodgedItem";
+import UserComplain from "./UserComplain";
+import UserFlagedItem from "./ListItemFlaged";
 
 const HistoryRap = styled.div`
  padding: 15px;
@@ -65,26 +68,20 @@ const History = () => {
             >
               Complain Lodge
             </Link>
-            <Link
-              className={`link ${activeLink === "emergency" ? "active" : ""}`}
-              onClick={() => handleLinkClick("emergency")}
+             <Link
+              className={`link ${activeLink === "flaged" ? "active" : ""}`}
+              onClick={() => handleLinkClick("flaged")}
             >
-              Emergency Report
+              Item Flaged
             </Link>
-            <Link
-              className={`link ${activeLink === "crime" ? "active" : ""}`}
-              onClick={() => handleLinkClick("crime")}
-            >
-              Crime Report
-            </Link>
+           
           </div>
          
       </div>
       <div style={{marginTop: "-15px"}}>
-            {activeLink==="item" && <ItemLodge />}
-            {activeLink==="complain" && <ComplainLodge />}
-            {activeLink==="emergency" && <EmergencyReport />}
-            {activeLink==="crime" && <CrimeReport />}
+            {activeLink==="item" && <UserLodgedItem />}
+            {activeLink==="complain" && <UserComplain />}
+          {activeLink==="flaged" && <UserFlagedItem />}
           </div>
     </HistoryRap>
   );

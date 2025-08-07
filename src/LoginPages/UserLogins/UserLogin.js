@@ -280,7 +280,16 @@ console.log(loginErroMessage);
 }, [slides.length]);
 
  useEffect(() => {
-    if (user && user?.data?.email) {
+
+  if(user && user?.data?.account_type === "government-agency") {
+     localStorage.setItem("ruauserregisteredEmail", user.data.email);
+      localStorage.setItem("ruaUserToken", user.data.api_token);
+      localStorage.setItem('ruaUserDetails', JSON.stringify(user?.data));      
+
+      navigate("/admin/dashboard");
+  }
+  
+    else if (user && user?.data?.email) {
       localStorage.setItem("ruauserregisteredEmail", user.data.email);
       localStorage.setItem("ruaUserToken", user.data.api_token);
       localStorage.setItem('ruaUserDetails', JSON.stringify(user?.data));      
@@ -353,7 +362,9 @@ console.log(loginErroMessage);
         </div>
         <div className="login-right-all">
           <div className="login-right">
+            <Link to="/">
             <img className="logo-frame" src="/images/Frame.png" alt="" />
+            </Link>
             <div className="login-right-upper">
               <h3>Welcome back!</h3>
               <p>Securely login to your account</p>

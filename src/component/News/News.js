@@ -1353,7 +1353,7 @@ const NewsMedia = () => {
                   fontFamily: "Bricolage Grotesque",
                   fontWeight: "600",
                   fontSize: "50px",
-                  width: "412px",
+                  maxWidth: "600px",
                   lineHeight: "54.57px",
                   textAlign: "center",
                 }}
@@ -1362,7 +1362,7 @@ const NewsMedia = () => {
               </h2>
               <p className=""
                 style={{
-                  width: "412px",
+                  maxWidth: "600px",
                   fontFamily: "Roboto",
                   fontSize: "18px",
                   lineHeight: "26px",

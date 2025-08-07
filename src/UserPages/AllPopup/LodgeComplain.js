@@ -328,15 +328,18 @@ const LodgeComplain = () => {
     city: "",
     description: "",
     agencies: [], // will be array or string "all"
-        complain: "",
+        complain_title: "",
 
         ride_id: "",
 
   });
+  console.log(formData);
+  
 
 const isValid =
   formData.role.trim() !== "" &&
   formData.type.trim() !== "" &&
+  formData.complain_title.trim() !== "" &&
   formData.name.trim() !== "" &&
   formData.state.trim() !== "" &&
   formData.city.trim() !== "" &&
@@ -455,9 +458,9 @@ const isValid =
                   <label>
                     Complain <br />
                     <input 
-                          value={formData.complain}
+                          value={formData.complain_title}
                           onChange={(e) =>
-                  setFormData({ ...formData, complain: e.target.value })}
+                  setFormData({ ...formData, complain_title: e.target.value })}
                     type="text" placeholder="" />
                   </label>
                 </div>

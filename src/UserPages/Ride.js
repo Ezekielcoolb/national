@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { fetchLodgedRide } from "../Redux/slices/userSlice";
+import FlagedRide from "./RidePages/FlagedRide";
 
 const TaskRap = styled.div`
   
@@ -23,7 +24,35 @@ const TaskRap = styled.div`
     color: #667085;
 
   }
+.link-container {
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
 
+  .link {
+    padding: 20px 20px;
+    text-decoration: none;
+    color: #667085;
+white-space: nowrap;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    border-bottom: 2px solid transparent; /* Default underline */
+    transition: all 0.3s ease;
+  }
+
+  .link.active {
+    font-weight: 600;
+    font-size: 14px;
+    border-bottom: 2px solid black; /* Black underline for the active link */
+    color: #112240;
+
+  }
+
+  .link:hover {
+    color: #555; /* Optional hover effect */
+  }
   label {
     font-size: 14;
     color: #60667a;
@@ -38,6 +67,12 @@ const TaskRap = styled.div`
 `;
 
 const Ride = () => {
+    const [activeLink, setActiveLink] = useState("item")
+  
+    const handleLinkClick = (link) => {
+      setActiveLink(link)
+    }
+    
     const navigate = useNavigate();
  
   const dispatch = useDispatch();
@@ -86,8 +121,26 @@ const Ride = () => {
   return (
     <TaskRap>
       <div>
+          
+
         <div className="table-container ">
           <div className="find-lawyer-header">
+             <div className="link-container">
+                    <Link
+                      className={`link ${activeLink === "item" ? "active" : ""}`}
+                      onClick={() => handleLinkClick("item")}
+                    >
+                     Ride
+                    </Link>
+                    <Link
+                      className={`link ${activeLink === "complain" ? "active" : ""}`}
+                      onClick={() => handleLinkClick("complain")}
+                    >
+                      Flaged Ride
+                    </Link>
+                   
+                  </div>
+                   {activeLink === "item" && (<>
             <div className="search-divs">
               <input type="text" placeholder="search" />
               <Icon
@@ -108,7 +161,9 @@ const Ride = () => {
                   style={{ color: "#667085" }}
                 />
             </div>
+            </>)}
           </div>
+          {activeLink === "item" && (<>
           <div className="new-table-scroll">
             <div className="table-div-con">
               <table className="custom-table">
@@ -236,7 +291,9 @@ const Ride = () => {
               />
             </Link>
           </div>
+</>)}
 
+{activeLink==="complain" && <FlagedRide />}
         </div>
       </div>
     </TaskRap>

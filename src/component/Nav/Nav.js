@@ -112,7 +112,7 @@ const NavBar = () => {
             <Link to="/about" ><p className="nav-link-border">About us</p></Link>
             <Link to="/members" > <p className="nav-link-border">Membership</p></Link>
             <Link to="/news&events" ><p className="nav-link-border">News & Media</p></Link>
-            <Link to="/contact" > <p className="nav-link-border">Contact us</p></Link>
+            <Link to="/contact-us" > <p className="nav-link-border">Contact us</p></Link>
             <div id="nav-call-hidden" className="flex justify-center items-center nav-contact">
             <div >
               <Icon

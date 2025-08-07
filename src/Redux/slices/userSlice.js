@@ -197,6 +197,7 @@ const userSlice = createSlice({
     CompletedRideDetail: null,
     lodgeRideDetail: null,
     logRideloading: false,
+    completeLodgeLoading: false,
     flagRidesuccess: null,
     flagRideloading: false,
     lodgeRideDetailloading: false,
@@ -329,15 +330,15 @@ const userSlice = createSlice({
 
          builder
       .addCase(fetchCompletedLodgedRide.pending, (state) => {
-        state.lodgeRideDetailloading = true;
+        state.completeLodgeLoading = true;
         state.error = null;
       })
       .addCase(fetchCompletedLodgedRide.fulfilled, (state, action) => {
-        state.lodgeRideDetailloading = false;
+        state.completeLodgeLoading = false;
         state.CompletedRideDetail = action.payload;
       })
       .addCase(fetchCompletedLodgedRide.rejected, (state, action) => {
-        state.lodgeRideDetailloading = false;
+        state.completeLodgeLoading = false;
         state.error = action.payload || 'Failed to fetch manifest';
       });
   },

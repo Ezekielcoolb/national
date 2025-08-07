@@ -19,18 +19,13 @@ const sidebarConfig = [
     title: "Rides",
   },
   
+ 
   {
     id: 3,
-    img: "/images/ride.png",
-    link: "/users/complain",
-    title: "Complaints",
+    img: "/images/history.svg",
+    link: "/users/history",
+    title: "History",
   },
-  // {
-  //   id: 5,
-  //   img: "/images/history.svg",
-  //   link: "/users/history",
-  //   title: "History",
-  // },
   {
     id: 4,
     img: "/images/packing.png",
@@ -44,7 +39,7 @@ const sidebarConfig = [
     title: "My Traffic Update",
   },
   {
-    id: 7,
+    id: 6,
     img: "/images/traffic.png",
     link: "/users/traffic",
     title: "Traffic Update",
@@ -56,14 +51,14 @@ const sidebarConfig = [
   //   link: "/users/news",
   //   title: "News",
   // },
+  // {
+  //   id: 7,
+  //   img: "/images/user_mes.png",
+  //   link: "/users/messages",
+  //   title: "Messages",
+  // },
   {
-    id: 8,
-    img: "/images/user_mes.png",
-    link: "",
-    title: "Messages",
-  },
-  {
-    id: 9,
+    id: 7,
     img: "/images/setting.png",
     link: "/users/settings",
     title: "Settings",
@@ -99,10 +94,10 @@ export default function UserSidebar() {
               </Link>
               <div className="user-all-div">
                 <div className="userName">
-                    <h5>User ID</h5>
+                    <h5>User </h5>
                    
 
-                        <p >{userDetails?.id}</p>
+                        <p >{userDetails?.account_type.charAt(0).toUpperCase() + userDetails?.account_type?.slice(1)}</p>
                   
                 </div>
               </div>

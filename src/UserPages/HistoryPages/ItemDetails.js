@@ -1,8 +1,14 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import MapRoad from "../Map";
+
+import { useDispatch, useSelector } from "react-redux";
+import { fetctGeneralAllAgency } from "../../Redux/slices/homeSlice";
+import { ClipLoader } from "react-spinners";
+import { fetchCompletedLodgedItem, fetchLodgedItemDetailsUser, flagItemNow, resetFlagItemState } from "../../Redux/slices/secondUserSlice";
+import { resetFlagRideState } from "../../Redux/slices/userSlice";
 
 const TaskRap = styled.div`
   padding: 30px;
@@ -36,6 +42,19 @@ const TaskRap = styled.div`
   }
   .ride-map {
     height: 263px !important;
+  }
+   .offical-images {
+    display: flex;
+  }
+  .offical-images  img {
+    margin-right: -10px;
+     width: 40px;
+    height: 40px;
+    border-radius: 100px;
+  }
+    .descript-max {
+    max-width: 250px;
+    line-height: 19px;
   }
   .car-model {
     display: flex;
@@ -89,6 +108,54 @@ const TaskRap = styled.div`
     color: #112240;
     background: #eaebee;
   }
+  form label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 16px;
+    font-weight: 500px;
+    margin-top: 10px;
+  }
+  .successCreationAgency {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .dropdown-menu {
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    width: 390px;
+    box-shadow: 0 2px 6px rgba(17, 34, 64, 0.15);
+  }
+  textarea {
+    width: 390px;
+    border: 1px solid #1122401f;
+    height: 120px;
+    font-weight: 500;
+    color: #112240;
+    font-size: 16px;
+    border-radius: 10px;
+    padding: 0px 10px;
+    margin-top: 20px;
+  }
+  .btns {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .select-agency {
+    background: transparent;
+    border: 1px solid #1122401f;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+    width: 390px;
+    padding: 0px 10px;
+    color: #112240;
+  }
   .flag-btn {
     color: #ffffff;
     background: #e72121;
@@ -128,13 +195,18 @@ const TaskRap = styled.div`
     justify-content: space-between;
     align-items: center;
   }
-
   .right-inne-div {
     display: flex;
     flex-direction: column;
     gap: 40px;
-    padding: 10px;
+
     align-items: center;
+  }
+  .move-to-end {
+    display: flex;
+    gap: 30px;
+    flex-direction: column;
+    justify-content: space-between;
   }
   .right-inner-info p {
     display: flex;
@@ -151,6 +223,12 @@ const TaskRap = styled.div`
     display: flex;
     gap: 10px;
     padding: 15px;
+    flex-wrap: wrap;
+  }
+  .images-car img {
+    width: 200px;
+    height: 150px;
+    border-radius: 10px;
   }
   .right-ride-div {
     display: flex;
@@ -212,6 +290,10 @@ const TaskRap = styled.div`
     align-items: center;
     gap: 20px;
   }
+  .cancel-flag {
+    width: 184px !important;
+    height: 55px !important;
+  }
   .flag-continue,
   .cancel-continue {
     width: 336px;
@@ -229,12 +311,6 @@ const TaskRap = styled.div`
     background: #6670851f !important;
     color: #112240 !important;
   }
-  .move-to-end {
-    display: flex;
-    flex-direction: column;
-    gap: 200px;
-    justify-content: space-between;
-  }
   @media (max-width: 992px) {
     .all-rides-details {
       flex-direction: column;
@@ -250,11 +326,135 @@ const TaskRap = styled.div`
 `;
 
 const ItemDetails = () => {
+  const dispatch = useDispatch();
+  const { id } = useParams();
   const [dropdownVisible, setDropdownVisisble] = useState(false);
+  const [dropdownFlagRide, setDropdownFlagRide] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { backgroundChange} = useSelector((state)=> state.app)
+
+  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+  const [selected, setSelected] = useState([]);
+
+  const [formData, setFormData] = useState({
+    item_id: Number(id),
+    description: "",
+    agencies: [], // will be array or string "all"
+  });
+  console.log(id, formData);
+  const {
+    lodgedItemDetails,
+   
+    itemCompleteLoading,
+    flagItemloading,
+   flagItemsuccess,
+    error,
+  } = useSelector((state) => state.otherUser);
+  const { agencyList, loading } = useSelector((state) => state.home || []);
+
+  console.log(lodgedItemDetails);
+
+  const handleDropFlagRide = () => {
+    setDropdownFlagRide(true);
+    setDropdownVisisble(false);
+  };
+
+  console.log(dropdownFlagRide);
+
+  const lodgeData = lodgedItemDetails?.data;
+  const rawDate = lodgeData?.created_at;
+  const date = new Date(rawDate);
+let imagesArray = [];
+
+if (lodgeData?.images) {
+  try {
+    imagesArray = JSON.parse(lodgeData?.images);
+  } catch (err) {
+    console.error("Invalid JSON in vehicle_images:", err);
+  }
+}
+  const formatted = date.toLocaleString("en-US", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target;
+
+    if (value === "all") {
+      if (checked) {
+        // If 'all' selected, disable others by setting formData.agencies to "all"
+        setFormData((prev) => ({ ...prev, agencies: "all" }));
+      } else {
+        // 'all' unchecked, reset agencies to empty array
+        setFormData((prev) => ({ ...prev, agencies: [] }));
+      }
+    } else {
+      if (formData.agencies === "all") {
+        // Ignore other changes if 'all' is selected
+        return;
+      }
+
+      // Convert value to number here
+      const numValue = Number(value);
+
+      let newSelected = Array.isArray(formData.agencies)
+        ? [...formData.agencies]
+        : [];
+
+      if (checked) {
+        // Add number to array if not already present
+        if (!newSelected.includes(numValue)) {
+          newSelected.push(numValue);
+        }
+      } else {
+        // Remove number from array
+        newSelected = newSelected.filter((id) => id !== numValue);
+      }
+
+      setFormData((prev) => ({ ...prev, agencies: newSelected }));
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    dispatch(flagItemNow(formData));
+    setDropdownFlagRide(false);
+  };
+
+  const handleChange = (e) => {
+    const values = Array.from(e.target.selectedOptions).map((opt) => opt.value);
+
+    if (values.includes("all")) {
+      setSelected(["all"]);
+    } else {
+      setSelected(values);
+    }
+  };
 
   const handleDropFlag = () => {
     setDropdownVisisble(!dropdownVisible);
   };
+
+  useEffect(() => {
+    dispatch(fetchLodgedItemDetailsUser(id));
+  }, [dispatch]);
+
+  const handleCompleteRide = () => {
+    dispatch(fetchCompletedLodgedItem(id));
+  };
+
+
+  useEffect(() => {
+    dispatch(fetctGeneralAllAgency());
+  }, [dispatch]);
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -278,10 +478,10 @@ const ItemDetails = () => {
               icon="material-symbols-light:arrow-left-alt"
               width="13"
               height="13"
-              style={{ color: "#112240" }}
+              style={{ color: backgroundChange=== true ? "white" : "#112240" }}
             />
           </Link>
-          <h2>Lodge Details</h2>
+          <h2    style={{ color: backgroundChange=== true ? "white" : "#" }}>Item Details</h2>
         </div>
         <Link className="send-message">Send a Message</Link>
       </div>
@@ -292,64 +492,106 @@ const ItemDetails = () => {
           </div>
           <div className="car-div">
             <div className="car-model">
-              <h5>Toyota Camry XLE</h5>
-              <h5>2333455600</h5>
+              <h5>
+                {lodgeData?.vehicle_name} {lodgeData?.vehicle_model}
+              </h5>
+              <h5>{lodgeData?.manifest_num}</h5>
             </div>
-            <p>20 Sep, 2024 10:00PM</p>
+            <p>{formatted}</p>
           </div>
           <div className="car-address">
             <img src="/images/address_anchor.png" alt="" />
             <div>
-              <p>289 Allen Avenue Ikeja Lagos</p>
-              <p>80 Box Lane Mary Street Lekki Ajah Express Way Lagos</p>
+              <p>{lodgeData?.departure_state}</p>
+              <p>{lodgeData?.destination_address}</p>
             </div>
           </div>
           <div className="ride-info">
             <p>
-              Lodge ID
-              <span>2333455600</span>
+              Item ID
+              <span>{lodgeData?.item_ref}</span>
             </p>
             <p>
-              Vehicle Name
-              <span>Toyota Camry XLE</span>
+              Item Name
+              <span>{lodgeData?.item_name}</span>
             </p>
             <p>
-              Vehicle Number
-              <span>LAG-565768</span>
+              Vehicle or Bike Number
+              <span>{lodgeData?.vehicle_bike_number}</span>
+            </p>
+            <p>
+              Transport Means
+              <span>{lodgeData?.transport_means}</span>
+            </p>
+            <p>
+              Rider Comapny
+              <span>{lodgeData?.rider_company}</span>
             </p>
             <p>
               Driver Name
-              <span>Michael Solomon</span>
+              <span>{lodgeData?.driver_name}</span>
+            </p>
+            <p>
+              Driver Number
+              <span>{lodgeData?.rider_phone_number}</span>
             </p>
           </div>
-          <div className="ride-button-div">
-            <Link className="edit-btn">Edit</Link>
-            <Link onClick={handleDropFlag} className="flag-btn">
-              Flag Ride
-            </Link>
-            <Link className="ride-btn">Ride Complete</Link>
+          {lodgeData?.flag_info ? (
+  <>
+  <div className="ride-info">
+            <p>
+              Tagged Officals
+              <span className="offical-images">
+                {lodgeData?.flag_info?.agency?.map(( items) => (
+              <img src={`https://backoffice.rua.com.ng/${items.logo}`} alt="" />
+                ))}
+             
+              </span>
+            </p>
+            <p>
+              Flag Reason
+              <span className="descript-max">{lodgeData?.flag_info?.description}</span>
+            </p>
+            
           </div>
+  </>
+): ""}
+          <div className="ride-button-div">
+            {/* <Link className="edit-btn">Edit</Link> */}
+            {lodgeData?.flag !== "1" ? (
+            <button onClick={handleDropFlag} className="flag-btn">
+              Flag Item
+            </button>
+            ): ""}
+            {lodgeData?.status === "ongoing" ? (
+            <button  onClick={handleCompleteRide} className="ride-btn">
+              {itemCompleteLoading ? <ClipLoader color="white" size={35} /> : 
+              
+              "Item Recieved" }</button>
+          ): ""}
+            </div>
         </div>
         <div className="right-ride-div">
           <div className="right-header">
             <h4>Description</h4>
-            <p className="status-ride">Ongoing</p>
+            <p style={{
+              color: lodgeData?.status === "active" ? "#E8A526" : "#379C0C",
+              background: lodgeData?.status === "active" ? "#FDF4E4" : "#E8FDE0"
+            }} className="status-ride">{lodgeData?.status}</p>
           </div>
           <div className="move-to-end">
-            <div className="right-inne-div">
-              <p style={{ maxWidth: "367px" }}>
-                Lorem ipsum dolor sit amet consectetur. Ipsum urna aliquet eget
-                amet urna. Neque mattis dui imperdiet proin dignissim. Cursus
-                congue tellus velit et. Neque id.
-              </p>
+             <div className="right-inne-div">
+             <p>{lodgeData?.description}</p>
             </div>
 
             <div>
               <div className="right-head">
-                <h4>Images</h4>
+                <h4 style={{marginTop: "20px"}}>Images</h4>
               </div>
               <div className="images-car">
-                <img src="/images/tv_img.png" alt="" />
+                {imagesArray?.map((items) => (
+                  <img src={`https://backoffice.rua.com.ng/${items}`} alt="" />
+                ))}
               </div>
             </div>
           </div>
@@ -361,18 +603,124 @@ const ItemDetails = () => {
           <div className="successCreation">
             <div>
               <img src="/images/flag_warn.png" alt="" />
-              <h2>Flag Ride</h2>
+              <h2>Flag Item</h2>
               <p>
-                Are you sure you want to flag this ride, flagging the ride will
+                Are you sure you want to flag this item, flagging the item will
                 send a message to security officials and your Next of KIN{" "}
               </p>
-              <Link className="flag-continue">Continue</Link>
+              <button onClick={handleDropFlagRide} className="flag-continue">
+                Continue
+              </button>
               <Link
                 onClick={() => setDropdownVisisble(false)}
                 className="cancel-continue"
               >
                 Cancel
               </Link>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+
+      {dropdownFlagRide ? (
+        <div className="dropdown-container">
+          <div className="successCreationAgency">
+            <h2>You about to flag the item</h2>
+
+            <div>
+              <form onSubmit={handleSubmit}>
+                <textarea
+                  type="text"
+                  placeholder="write short description"
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
+                ></textarea>
+                <button
+                  className="select-agency"
+                  type="button"
+                  onClick={toggleDropdown}
+                >
+                  Select Agencies
+                </button>
+
+                {dropdownOpen && (
+                  <div className="dropdown-menu">
+                    <label>
+                      <input
+                        style={{
+                          width: "14px",
+                          height: "14px",
+                        }}
+                        type="checkbox"
+                        value="all"
+                        checked={formData.agencies === "all"}
+                        onChange={handleCheckboxChange}
+                      />{" "}
+                      All
+                    </label>
+                    <hr />
+                    {agencyList?.data?.map((agency) => (
+                      <label key={agency.id}>
+                        <input
+                          style={{
+                            width: "14px",
+                            height: "14px",
+                          }}
+                          type="checkbox"
+                          value={agency.id.toString()}
+                          disabled={formData.agencies === "all"} // disable if all is selected
+                          checked={
+                            formData.agencies === "all"
+                              ? false
+                              : formData.agencies.includes(agency.id)
+                          }
+                          onChange={handleCheckboxChange}
+                        />{" "}
+                        {agency.name}
+                      </label>
+                    ))}
+                  </div>
+                )}
+                <div className="btns">
+                  <button type="submit" style={{ marginTop: "10px" }}>
+                    Submit
+                  </button>
+                  <Link
+                    onClick={() => setDropdownFlagRide(false)}
+                    className="cancel-continue cancel-flag"
+                  >
+                    Cancel
+                  </Link>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+
+      {flagItemloading ? (
+        <div className="dropdown-container">
+          <ClipLoader color="white" size={100} />
+        </div>
+      ) : null}
+
+      {flagItemsuccess ? (
+        <div className="dropdown-container">
+          <div className="successCreationAgency">
+            <p>Item flaged successfully</p>
+            <p>It would be attended to shortly!</p>
+            <div className="button-div">
+              <button
+                onClick={() => dispatch(resetFlagItemState())}
+                className="submit-btn"
+              >
+                Continue
+              </button>
             </div>
           </div>
         </div>

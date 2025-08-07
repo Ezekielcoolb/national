@@ -1,8 +1,9 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { fetchComplainDetails } from "../Redux/slices/secondUserSlice";
 
 const ComplainRap = styled.div`
 width: 100%;
@@ -127,7 +128,10 @@ padding: 30px;
     display: flex;
   }
   .offical-images  img {
-    margin-right: -5px;
+    margin-right: -10px;
+     width: 40px;
+    height: 40px;
+    border-radius: 100px;
   }
   .all-complain {
     border: 1px solid #1122401F;
@@ -187,10 +191,31 @@ flex-direction: column;
 `;
 
 const ComplaintsDetails = () => {
-  const {id} = useParams()
-  const dispatch = useDispatch()
 
-  
+    const {id} = useParams()
+    const dispatch = useDispatch()
+        const { complainDetails, loading, success, error } = useSelector((state) => state.otherUser);
+  const { backgroundChange} = useSelector((state)=> state.app)
+
+console.log(complainDetails);
+
+
+    
+      useEffect(() => {
+        if(id) {
+          dispatch(fetchComplainDetails(id));
+        }
+        }, [dispatch, id]);
+
+
+        const formattedDate = new Date(complainDetails?.data?.created_at).toLocaleString('en-US', {
+  day: '2-digit',
+  month: 'short',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: true,
+});
   return (
     <ComplainRap>
       <div className="ride-detail-header">
@@ -201,10 +226,12 @@ const ComplaintsDetails = () => {
               icon="material-symbols-light:arrow-left-alt"
               width="13"
               height="13"
-              style={{ color: "#112240" }}
+             style={{ color: backgroundChange=== true ? "white" : "#112240" }}
             />
           </Link>
-          <h2>Complain Details</h2>
+          <h2 
+           style={{ color: backgroundChange=== true ? "white" : "" }}
+          >Complain Details</h2>
         </div>
        
       </div>
@@ -212,32 +239,33 @@ const ComplaintsDetails = () => {
         <div className="all-complain">
           <div className="complain-1">
             <div className="environ">
-              <h4>Pregnancy Complications</h4>
-              <p className="p-text">20 Sep, 2024 10:00PM</p>
+              <h4>  {complainDetails?.data?.complain_title}</h4>
+              <p className="p-text">{formattedDate}</p>
               <p className="p-color">
                 <img src="/images/location_icon.png" alt="" />
-                289 BIT Close, Mary Avenu Ikaja Lagos</p>
+                {complainDetails?.data?.city} {complainDetails?.data?.state}</p>
             </div>
             <img src="/images/baby.png" alt="" />
           </div>
           <div className="ride-info">
             <p>
               Complain ID
-              <span>2333455600</span>
+              <span>{complainDetails?.data?.id}</span>
             </p>
             <p>
-              Complainer
-              <span>Michael Solomon</span>
+              Role
+              <span>{complainDetails?.data?.role}</span>
             </p>
             <p>
-              Phone Number
-              <span>0810000000</span>
+              Name
+              <span>{complainDetails?.data?.name}</span>
             </p>
             <p>
               Tagged Officals
               <span className="offical-images">
-              <img src="/images/esevr.png" alt="" />
-              <img src="/images/firs.png" alt="" />
+                {complainDetails?.data?.agency?.map(( items) => (
+              <img src={`https://backoffice.rua.com.ng/${items.logo}`} alt="" />
+                ))}
              
               </span>
             </p>
@@ -246,23 +274,13 @@ const ComplaintsDetails = () => {
           <div className="complain-2">
             <h5>Description</h5>
             <p style={{maxWidth: "367px"}}>
-            Lorem ipsum dolor sit amet consectetur. Ipsum urna aliquet eget amet urna. Neque mattis dui imperdiet proin dignissim.
-             Cursus congue tellus velit et. Neque id.
+           {complainDetails?.data?.description}
             </p>
           </div>
           <div>
-              <div className="right-head">
-                <h5>Images</h5>
-              </div>
-              <div className="images-car">
-                <img src="/images/place.png" alt="" />
-                <img src="/images/place_1.png" alt="" />
-              </div>
+              
             </div>
-            <div className="complain-btn">
-                <Link className="edit-complain-btn">Send a Message</Link>
-                <Link className="emergency-complain-btn">Complain Resolved</Link>
-            </div>
+           
         </div>
       </div>
     </ComplainRap>

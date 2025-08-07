@@ -610,7 +610,7 @@ const AdminDashboard = () => {
   const latestPage = 1;
   const latestPages = Math.ceil(displayedLatest.length / latestPage);
 
-  const rowsPerPage = 5;
+  const rowsPerPage = 8;
   const totalPages = Math.ceil(followers.length / rowsPerPage);
 
   // State to track the current page
@@ -749,7 +749,7 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          <div className="table-container">
+          {/* <div className="table-container">
             <div className="new-table-scroll">
               <div className="">
                 <table className="custom-table">
@@ -794,7 +794,6 @@ const AdminDashboard = () => {
                 </table>
               </div>
             </div>
-            {/* Pagination controls */}
             <div className="pagination">
               {Array.from({ length: latestPages }).map((_, index) => (
                 <div
@@ -806,7 +805,7 @@ const AdminDashboard = () => {
                 ></div>
               ))}
             </div>
-          </div>
+          </div> */}
         </div>
        
       

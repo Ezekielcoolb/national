@@ -128,7 +128,10 @@ padding: 30px;
     display: flex;
   }
   .offical-images  img {
-    margin-right: -5px;
+    margin-right: -10px;
+     width: 40px;
+    height: 40px;
+    border-radius: 100px;
   }
   .all-complain {
     border: 1px solid #1122401F;
@@ -217,7 +220,7 @@ console.log(complainDetails);
     <ComplainRap>
       <div className="ride-detail-header">
         <div className="icon-header">
-          <Link to="/users/complain">
+          <Link to="/users/history">
             <Icon
               className="back-arrow-left"
               icon="material-symbols-light:arrow-left-alt"
@@ -236,7 +239,7 @@ console.log(complainDetails);
         <div className="all-complain">
           <div className="complain-1">
             <div className="environ">
-              <h4>Pregnancy Complications</h4>
+              <h4>  {complainDetails?.data?.complain_title}</h4>
               <p className="p-text">{formattedDate}</p>
               <p className="p-color">
                 <img src="/images/location_icon.png" alt="" />
@@ -260,8 +263,9 @@ console.log(complainDetails);
             <p>
               Tagged Officals
               <span className="offical-images">
-              <img src="/images/esevr.png" alt="" />
-              <img src="/images/firs.png" alt="" />
+                {complainDetails?.data?.agency?.map(( items) => (
+              <img src={`https://backoffice.rua.com.ng/${items.logo}`} alt="" />
+                ))}
              
               </span>
             </p>

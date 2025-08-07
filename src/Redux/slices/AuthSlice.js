@@ -161,6 +161,9 @@ userDetails: null,
     resetverifyemailerrorMessage: (state) => {
     state.verifyemailerrorMessage = null;
   },
+     resetUserState: (state) => {
+    state.user = null;
+  },
   },
 
   extraReducers: (builder) => {
@@ -302,6 +305,7 @@ builder
 
 export const {
   resetverifyemailerrorMessage,
+  resetUserState,
 } = authSlice.actions;
 
 export default authSlice.reducer;

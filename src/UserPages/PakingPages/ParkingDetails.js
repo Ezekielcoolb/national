@@ -355,7 +355,7 @@ const handleEditParkingShow = () => {
           <h2>{details?.name}</h2>
           <div className="lasma">
             <img src="/images/traffic_person.png" alt="" />
-            <p>Owner: Lionel Messi</p>
+            <p>Owner: Personal</p>
           </div>
           <div className="lasma">
             <Icon

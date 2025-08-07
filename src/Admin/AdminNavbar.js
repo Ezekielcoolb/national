@@ -1,9 +1,10 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { setOpenSideBar } from "../Redux/appSlice";
 import styled from "styled-components";
+import { resetUserState } from "../Redux/slices/AuthSlice";
 
 const UserNavRap = styled.div`
 color:  #112240;
@@ -22,6 +23,16 @@ color:  #112240;
   }
   .search-bar-div {
     position: relative;
+  }
+    .logOut {
+        border: 1px solid #1122401a;
+color: #112240;
+background: transparent;
+height: 35px;
+width: 120px;
+display: flex;
+align-items: center;
+justify-content: center;
   }
   .search-bar-div input {
     width: 341px;
@@ -134,6 +145,8 @@ color:  #112240;
 `;
 
 const AdminNav = () => {
+    const navigate = useNavigate()
+  
   const dropdownRef = useRef(null);
   const { openSideBar } = useSelector((state) => state.app);
   const dispatch = useDispatch();
@@ -176,6 +189,18 @@ const [dropdownVisibility, setDropdownVisibility] = useState(false)
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [dropdownVisibility]);
+
+  
+const handleLogOut =  () => {
+  dispatch(resetUserState())
+    navigate("/usersLogin");
+
+  localStorage.removeItem("ruaUserToken");
+  localStorage.removeItem("ruauserregisteredEmail");
+  localStorage.removeItem("ruaUserDetails");
+
+
+};
   return (
     <UserNavRap>
       <div className="userNavbar">
@@ -202,7 +227,7 @@ const [dropdownVisibility, setDropdownVisibility] = useState(false)
         </div>
 
         <div className="usernav-2">
-          <div
+          {/* <div
             style={{
               display: "flex",
               justifyContent: "center",
@@ -255,7 +280,7 @@ const [dropdownVisibility, setDropdownVisibility] = useState(false)
             >
               Dark
             </button>
-          </div>
+          </div> */}
           <div onClick={handleToogleDrop} className="notification-icon">
             <img src="/images/cation.png" />
           </div>
@@ -293,7 +318,7 @@ const [dropdownVisibility, setDropdownVisibility] = useState(false)
               </div>
             </div>
               : ""}
-          <select className="nav-select"></select>
+          <button onClick={handleLogOut} className="logOut"> Log out</button>
         </div>
       </div>
     </UserNavRap>

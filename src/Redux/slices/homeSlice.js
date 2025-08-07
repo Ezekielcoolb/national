@@ -156,7 +156,35 @@ export const fetchAboutpage = createAsyncThunk(
     }
   );
 
+      export const TermsAndPrivacy= createAsyncThunk(
+    "content/TermsAndPrivacy",
+    async (_, { rejectWithValue }) => {
+      try {
+        const response = await axios.get("https://backoffice.rua.com.ng/api/request/web-pages");
+        console.log(response.data);
+        
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching about data:", error);
+        return rejectWithValue(error.response?.data || "An error occurred while fetching Home data");
+      }
+    }
+  );
 
+export const submitContactForm = createAsyncThunk(
+  'contact/submit',
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        'https://backoffice.rua.com.ng/api/request/contact-us',
+        formData
+      );
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
 
 
 const homeSlice = createSlice({
@@ -169,10 +197,13 @@ const homeSlice = createSlice({
     agencyList: null,
     projectDetail: null,
     generalObject: null,
+    successContact: null,
+    errorContactMessage: null,
     projectDetailloading: false,
     newsObject: null,
     mediaObject: null,
     eventObject: null,
+    submitloading: false,
     projectObject: null,
     eventDetailloading: false,
     eventloading: false,
@@ -181,11 +212,17 @@ const homeSlice = createSlice({
     aboutloading: false,
     memberloading: false,
     aboutObject: null,
-    
+    privacyTerms: null,
     loading: false,
     error: null,
   },
-  reducers: {}, // No synchronous reducers
+  reducers: {
+
+     resetMessageContact: (state) => {
+      state.successContact = null;
+      state.errorContactMessage = null;
+    }
+  }, // No synchronous reducers
   extraReducers: (builder) => {
     builder
       // Fetch Home Data
@@ -202,6 +239,23 @@ const homeSlice = createSlice({
         state.error = action.payload;
       });
 
+
+        builder
+      .addCase(submitContactForm.pending, (state) => {
+        state.submitloading = true;
+        state.success = false;
+        state.errorContactMessage = null;
+         state.successContact = null;
+      })
+      .addCase(submitContactForm.fulfilled, (state, action) => {
+        state.submitloading = false;
+        state.success = true;
+        state.successContact = action.payload.data
+      })
+      .addCase(submitContactForm.rejected, (state, action) => {
+        state.submitloading = false;
+        state.errorContactMessage = action.payload.message || 'Something went wrong';
+      });
 
 
       builder
@@ -221,121 +275,136 @@ const homeSlice = createSlice({
 
       builder
       // Fetch Home Data
+      .addCase(TermsAndPrivacy.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(TermsAndPrivacy.fulfilled, (state, action) => {
+        state.loading = false;
+        state.privacyTerms = action.payload;
+      })
+      .addCase(TermsAndPrivacy.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+      builder
+      // Fetch Home Data
       .addCase(fetchAboutpage.pending, (state) => {
-        state.aboutloading = true;
+        state.loading = true;
         state.error = null;
       })
       .addCase(fetchAboutpage.fulfilled, (state, action) => {
-        state.aboutloading = false;
+        state.loading = false;
         state.aboutObject = action.payload;
       })
       .addCase(fetchAboutpage.rejected, (state, action) => {
-        state.aboutloading = false;
+        state.loading = false;
         state.error = action.payload;
       });
 
           builder
       // Fetch Home Data
       .addCase(fetchEventDetails.pending, (state) => {
-        state.eventDetailloading = true;
+        state.loading = true;
         state.error = null;
       })
       .addCase(fetchEventDetails.fulfilled, (state, action) => {
-        state.eventDetailloading = false;
+        state.loading = false;
         state.eventDetail = action.payload;
       })
       .addCase(fetchEventDetails.rejected, (state, action) => {
-        state.eventDetailloading = false;
+        state.loading = false;
         state.error = action.payload;
       });
 
               builder
       // Fetch Home Data
       .addCase(fetctGeneralSetting.pending, (state) => {
-        state.generalloading = true;
+        state.loading = true;
         state.error = null;
       })
       .addCase(fetctGeneralSetting.fulfilled, (state, action) => {
-        state.generalloading = false;
+        state.loading = false;
         state.generalObject = action.payload;
       })
       .addCase(fetctGeneralSetting.rejected, (state, action) => {
-        state.generalloading = false;
+        state.loading = false;
         state.error = action.payload;
       });
 
    builder
       // Fetch Home Data
       .addCase(fetchProjectDetails.pending, (state) => {
-        state.projectDetailloading = true;
+        state.loading = true;
         state.error = null;
       })
       .addCase(fetchProjectDetails.fulfilled, (state, action) => {
-        state.projectDetailloading = false;
+        state.loading = false;
         state.projectDetail = action.payload;
       })
       .addCase(fetchProjectDetails.rejected, (state, action) => {
-        state.projectDetailloading = false;
+        state.loading = false;
         state.error = action.payload;
       });
       
       builder
       // Fetch Home Data
       .addCase(fetctEventpage.pending, (state) => {
-        state.eventloading = true;
+        state.loading = true;
         state.error = null;
       })
       .addCase(fetctEventpage.fulfilled, (state, action) => {
-        state.eventloading = false;
+        state.loading = false;
         state.eventObject = action.payload;
       })
       .addCase(fetctEventpage.rejected, (state, action) => {
-        state.eventloading = false;
+        state.loading = false;
         state.error = action.payload;
       });
         
       builder
       // Fetch Home Data
       .addCase(fetctProjectpage.pending, (state) => {
-        state.projectloading = true;
+        state.loading = true;
         state.error = null;
       })
       .addCase(fetctProjectpage.fulfilled, (state, action) => {
-        state.projectloading = false;
+        state.loading = false;
         state.projectObject = action.payload;
       })
       .addCase(fetctProjectpage.rejected, (state, action) => {
-        state.projectloading = false;
+        state.loading = false;
         state.error = action.payload;
       });
 
        builder
       // Fetch Home Data
       .addCase(fetctNewspage.pending, (state) => {
-        state.newsloading = true;
+        state.loading = true;
         state.error = null;
       })
       .addCase(fetctNewspage.fulfilled, (state, action) => {
-        state.newsloading = false;
+        state.loading = false;
         state.newsObject = action.payload;
       })
       .addCase(fetctNewspage.rejected, (state, action) => {
-        state.newsloading = false;
+        state.loading = false;
         state.error = action.payload;
       });
 
         builder
       // Fetch Home Data
       .addCase(fetctMediapage.pending, (state) => {
-        state.medialoading = true;
+        state.loading = true;
         state.error = null;
       })
       .addCase(fetctMediapage.fulfilled, (state, action) => {
-        state.medialoading = false;
+        state.loading = false;
         state.mediaObject = action.payload;
       })
       .addCase(fetctMediapage.rejected, (state, action) => {
-        state.medialoading = false;
+        state.loading = false;
         state.error = action.payload;
       });
 
@@ -343,19 +412,19 @@ const homeSlice = createSlice({
       builder
       // Fetch Home Data
       .addCase(fetctMemberpage.pending, (state) => {
-        state.memberloading = true;
+        state.loading = true;
         state.error = null;
       })
       .addCase(fetctMemberpage.fulfilled, (state, action) => {
-        state.memberloading = false;
+        state.loading = false;
         state.memberObject = action.payload;
       })
       .addCase(fetctMemberpage.rejected, (state, action) => {
-        state.memberloading = false;
+        state.loading = false;
         state.error = action.payload;
       });
 
   },
 });
-
+export const {resetMessageContact } = homeSlice.actions;
 export default homeSlice.reducer;

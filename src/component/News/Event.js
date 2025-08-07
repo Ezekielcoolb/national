@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useDispatch, useSelector } from "react-redux";
-import { fetctEventpage, fetctMediapage, fetctNewspage } from "../../Redux/slices/homeSlice";
+import { fetchHomepage, fetctEventpage, fetctMediapage, fetctNewspage } from "../../Redux/slices/homeSlice";
 import EventList from "./EventList";
 import MediaList from "./MediaList";
 import Project from "./Project";
@@ -34,13 +34,14 @@ const Event = () => {
   const [content, setContent] = useState(null); // Display content for "news" or "media"
   const navigate = useNavigate();
 const dispatch = useDispatch();
-    const {newsObject, mediaObject, eventObject, loading, error } = useSelector(
+    const {newsObject, homeObject, mediaObject, eventObject, loading, error } = useSelector(
       (state) => state.home || []
       
     );
 
     console.log(activeLink);
-    
+      const callToAction = homeObject?.data?.callToAction;
+
 
 const blog = newsObject?.data?.blog || [];
     console.log(newsObject);
@@ -54,6 +55,9 @@ const blog = newsObject?.data?.blog || [];
          useEffect(() => {
            dispatch(fetctEventpage()); // Call API on component mount
          }, [dispatch]);
+           useEffect(() => {
+             dispatch(fetchHomepage()); // Call API on component mount
+           }, [dispatch]);
 
   useEffect(() => {
     handleClick("news"); // Set "news" as the default content on load
@@ -215,24 +219,23 @@ const blog = newsObject?.data?.blog || [];
                   fontFamily: "Bricolage Grotesque",
                   fontWeight: "600",
                   fontSize: "50px",
-                  width: "412px",
+                   maxWidth: "600px",
                   lineHeight: "54.57px",
                   textAlign: "center",
                 }}
               >
-                Join us, become a member today.
+               {callToAction?.title}
               </h2>
               <p className=""
                 style={{
-                  width: "412px",
+                   maxWidth: "600px",
                   fontFamily: "Roboto",
                   fontSize: "18px",
                   lineHeight: "26px",
                   textAlign: "center",
                 }}
               >
-                Embrace holistic development and support for employee the aim of
-                being a first-choice
+              {callToAction?.content}
               </p>
               <div className="flex gap-4 join-btn">
                 <button
